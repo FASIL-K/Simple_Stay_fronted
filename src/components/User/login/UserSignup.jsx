@@ -3,6 +3,8 @@ import React, { useState, useRef } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import logoImage from "../../../assets/main-logo.svg"; // Adjust the path accordingly
+
 
 function UserSignup() {
   const navigate = useNavigate();
@@ -81,6 +83,8 @@ function UserSignup() {
     <div className="bg-cover bg-center min-h-screen" style={backgroundStyle}>
       <div className="flex justify-center items-center min-h-screen">
         <div className="w-96">
+        <img src={logoImage} alt="Logo" className="mx-auto " />
+
           <div className="bg-white shadow-lg rounded p-8">
             <div className="mb-4">
               <h3 className="text-center text-2xl font-semibold">User Signup</h3>
@@ -131,7 +135,7 @@ function UserSignup() {
                 />
               </div>
               <div className="text-center">
-                <button type="submit" className="bg-black text-white py-2 px-4 w-1/2 rounded">
+                <button type="submit" className="bg-yellow-400 text-white py-2 px-4 w-1/2 rounded">
                   {submitting ? 'Signing Up...' : 'Sign Up'}
                 </button>
               </div>

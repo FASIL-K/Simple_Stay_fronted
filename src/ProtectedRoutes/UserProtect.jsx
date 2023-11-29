@@ -1,5 +1,5 @@
 import React from 'react'
-import jwtDecode from 'jwt-decode'
+import * as jwtDecode from 'jwt-decode';
 import { Outlet } from 'react-router-dom'
 import AdminHomePage from '../pages/Admin/AdminHomePage'
 import OwnerHomePage from '../pages/Owner/OwnerHomePage'

@@ -4,7 +4,7 @@ import UserLoginPage from "../pages/User/UserLoginPage";
 import UserSignupPage from '../pages/User/UserSignupPage'
 import PrivateRoute from '../ProtectedRoutes/PrivateRoute';
 import UserProtect from '../ProtectedRoutes/UserProtect';
-import OwnerHomePage from '../pages/Owner/OwnerHomePage';
+import UserHomePage from '../pages/User/UserHomePage';
 
 function UsersRoutes() {
     return (

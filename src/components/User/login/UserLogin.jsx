@@ -9,6 +9,7 @@ import { UserGoogleSignup, userSignin } from "../../../services/userApi";
 import axios from "axios";
 import * as jwtDecode from 'jwt-decode';
 import { Auth_url } from "../../../constants/constants";
+import logoImage from "../../../assets/main-logo.svg"; 
 
 
 
@@ -17,7 +18,7 @@ function UserLogin() {
   const [user, setUser] = useState({ email: "", password: "" });
   const emailInputRef = useRef(null);
   const passInputRef = useRef(null);
-
+  
   // Validations
   const Validation = () => {
     if (user.email.trim() === "") {
@@ -67,6 +68,8 @@ function UserLogin() {
     backgroundSize: "cover",
     backgroundPosition: "center",
     minHeight: "100vh",
+    overflow: "hidden",
+   
     
   };
 
@@ -114,21 +117,24 @@ function UserLogin() {
         className="google-logo img-fluid"
         width="22"
         height="22"
+        
       />
       <span className="button-text ms-2">Continue with Google</span>
     </button>
   );
 
   return (
-    <div className="bg-cover bg-center min-h-screen bg" style={backgroundStyle}>
-      <div className="flex justify-center items-center min-h-screen">
+    <div  className="bg-cover bg-center bg " style={backgroundStyle} >
+      <div className="flex justify-center items-center min-h-screen mb-2">
         <div className="w-96">
-          <div className="bg-white shadow-lg rounded p-8">
+        <img src={logoImage} alt="Logo" className="mx-auto " />
+
+          <div className="bg-white shadow-lg rounded p-8 ">
             <div className="mb-4">
               <h3 className="text-center text-2xl font-semibold">User Login</h3>
             </div>
             <ToastContainer />
-            <form onSubmit={FormHandlerLogin}>
+            <form onSubmit={FormHandlerLogin}  className="mb-2">
               <div className="mb-3 text-center">
                 <p className="text-gray-600">Please enter your email and password</p>
               </div>
@@ -162,7 +168,7 @@ function UserLogin() {
               <div className="text-center">
                 <button
                   type="submit"
-                  className="bg-black text-white py-2 px-4 w-1/2 rounded"
+                  className="bg-yellow-400 text-white py-2 px-4 w-1/2 rounded"
                 >
                   Sign In
                 </button>
@@ -182,7 +188,7 @@ function UserLogin() {
             <div className="text-center mt-3">
               <p className="text-gray-600">
                 Don't have an account?{" "}
-                <Link to="/user/signup" className="text-blue-500">
+                <Link to="/usertype" className="text-blue-500">
                   Sign up
                 </Link>
               </p>

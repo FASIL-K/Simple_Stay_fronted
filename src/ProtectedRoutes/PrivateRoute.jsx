@@ -8,28 +8,27 @@ import UserLoginPage from "../pages/User/UserLoginPage"
 import OwnerHomePage from "../pages/Owner/OwnerHomePage"
 
 function PrivateRoute() {
-    const token = localStorage.getItem('token')
-
-
-
-    if (token){
-        const decode = jwt_decode(token)
-        if (decode.user_type === 'admin' ){
-            return <AdminHomePage/>
-        }
-        else if(decode.user_type === 'owner'){
-            return <OwnerHomePage/>
-        }
-        else if(decode.user_type === 'user'){
-            return <UserLoginPage/>
-        }
-        else{
-            console.log(decode.user_type)
-            return <Outlet/>
-        }
+    const token = localStorage.getItem('token');
+  
+    if (!token) {
+      // Redirect unauthenticated users to the login page
+      return <Navigate to="/login" />;
     }
-    return <Outlet/> 
-}
+  
+    const decode = jwt_decode(token);
+  
+    if (decode.user_type === 'admin') {
+      return <AdminHomePage />;
+    } else if (decode.user_type === 'owner') {
+      return <OwnerHomePage />;
+    } else if (decode.user_type === 'user') {
+      // User is already authenticated, no need to render a login page here
+      return <Navigate to="/user" />;
+    } else {
+      console.log(decode.user_type);
+      return <Navigate to="/" />;
+    }
+  }
 
 
 export default PrivateRoute
