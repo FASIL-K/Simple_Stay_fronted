@@ -1,15 +1,16 @@
-import React from 'react'
-import UserHome from '../../components/User/pages/UserHome'
-import { Navbar } from '@material-tailwind/react'
-import { StickyNavbar } from '../../components/Layout/Navbar/UserNavbar'
+import React from 'react';
+import UserHome from '../../components/User/pages/UserHome';
+import { StickyNavbar } from '../../components/Layout/Navbar/UserNavbar';
+import Footer from '../../components/Layout/Footer/Footer';
 
 function UserHomePage() {
   return (
     <div>
-      <StickyNavbar/>
-        <UserHome/>
+      <StickyNavbar isHomePage={true} />
+      <UserHome />
+      <Footer />
     </div>
-  )
+  );
 }
 
-export default UserHomePage
+export default UserHomePage;
