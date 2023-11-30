@@ -20,7 +20,7 @@ const currentYear = new Date().getFullYear();
 
 function Footer() {
     return (
-        <footer className="relative w-full bg-gray-950">
+        <footer className="relative w-full bg-gray-900 ">
           <div className="mx-auto w-full max-w-7xl px-8">
             <div className="grid grid-cols-1 justify-between gap-4 md:grid-cols-2">
             <div className="flex items-center">
@@ -55,12 +55,12 @@ function Footer() {
             <div className="mt-12 flex w-full flex-col items-center justify-center border-t border-blue-gray-50 py-4 md:flex-row md:justify-between">
               <Typography
                 variant="small"
-                className="mb-4 text-center font-normal text-blue-gray-900 md:mb-0 text-white"
+                className="mb-4 text-center font-normal  md:mb-0 text-white"
               >
                 &copy; {currentYear} <a href="">SimpleStay</a>. All
                 Rights Reserved.
               </Typography>
-              <div className="flex gap-4 text-blue-gray-900 sm:justify-center">
+              <div className="flex gap-4 text-white sm:justify-center">
                 <Typography as="a" href="#" className="opacity-80 transition-opacity hover:opacity-100 text-slate-200">
                   <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path

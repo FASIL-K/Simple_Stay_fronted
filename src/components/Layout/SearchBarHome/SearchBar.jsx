@@ -4,7 +4,7 @@ import React from "react";
 function SearchBar() {
   return (
     <>
-      <div className="relative h-32 rounded-[2rem] overflow-hidden">
+      <div className="relative h-32 xl:w-[53rem] md:w-[40rem]  rounded-[2rem] overflow-hidden">
         <div className="h-full w-full bg-black absolute opacity-40 z-10"></div>
 
         <div className="h-[50%] flex justify-start items-center gap-4 ml-16 relative z-20">
