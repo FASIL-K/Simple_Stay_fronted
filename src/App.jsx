@@ -5,6 +5,8 @@ import OwnersRoutes from "./routes/Owners";
 import UsersRoutes from "./routes/Users";
 import UserHomePage from "./pages/User/UserHomePage";
 import UserType from "./components/User/login/UserType";
+import OwnerHomePage from "./pages/Owner/OwnerHomePage";
+
 
 function App() {
   
@@ -17,6 +19,7 @@ function App() {
           <Route path="/owner/*" element={<OwnersRoutes />} />
           <Route path="/user/*" element={<UsersRoutes />} />
           <Route path="/usertype" element={<UserType />} />
+
 
         </Routes>
       </Router>

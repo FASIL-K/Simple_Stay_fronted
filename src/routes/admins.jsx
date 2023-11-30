@@ -9,12 +9,12 @@ import PrivateRoute from '../ProtectedRoutes/PrivateRoute'
 function AdminsRoute() {
     return (
         <Routes>
-            <Route element={<PrivateRoute/>}>
+            
               <Route path='/login' element={<AdminLoginPage/>} />
-            </Route>
-            <Route element={<AdminProtect/>}>
-              <Route path='/' element={<AdminHomePage />} />
-            </Route>
+          
+            
+              <Route path='/dashboard' element={<AdminHomePage />} />
+            
         </Routes>
     )
 }

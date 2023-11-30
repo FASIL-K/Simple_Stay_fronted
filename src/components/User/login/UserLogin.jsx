@@ -53,6 +53,7 @@ function UserLogin() {
             localStorage.setItem("token", token);
             toast.success("Login successful");
             navigate("/user/");
+            console.log(res.data,'uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu');
           } else {
             toast.error("Invalid login credentials");
           }

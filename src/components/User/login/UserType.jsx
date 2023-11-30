@@ -11,7 +11,7 @@ function UserType() {
   const handleSignup = (userType) => {
     // Redirect based on user type selected during signup
     if (userType === "owner") {
-      navigate("/owner/signup");
+      navigate("/user/signup");
     } else if (userType === "user") {
       navigate("/user/signup");
     }

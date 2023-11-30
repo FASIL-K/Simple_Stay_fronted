@@ -1,9 +1,15 @@
 import React from 'react'
+import Navbar from '../../components/Owner/Pages/Layouts/Navbar'
+import OwnerHome from '../../components/Owner/Pages/OwnerHome'
 
 function OwnerHomePage() {
   return (
     <div>
-        <h1>Owner HomePage</h1>
+     
+      <Navbar/>
+      <OwnerHome/>
+      
+
       
     </div>
   )
