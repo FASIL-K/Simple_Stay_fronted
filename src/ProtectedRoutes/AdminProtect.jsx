@@ -3,16 +3,14 @@ import * as jwtDecode from 'jwt-decode';
 
 
 import { Outlet } from "react-router-dom";
-// import company home page 
-// import user home page
-// import Dashboard from "../components/admin/pages/dashboard";
+
 import UserHomePage from "../pages/User/UserHomePage";
 import OwnerHomePage from "../pages/Owner/OwnerHomePage";
 
 
 function AdminProtect() {
     const token = localStorage.getItem('token')
-    console.log(token,'daxo')
+    console.log(token,'zrrrr')
 
     if (token) {
         const decode = jwtDecode(token)

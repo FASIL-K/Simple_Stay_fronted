@@ -8,9 +8,16 @@ import UserHomePage from '../pages/User/UserHomePage';
 
 function UsersRoutes() {
     return (
-        <Routes element={<PrivateRoute/>}>
-          <Route path="/signup" element={<UserSignupPage />} />
-          <Route path="/login" element={<UserLoginPage />} />
+        <Routes >
+         <Route exact element = {<PrivateRoute/>}>
+            <Route path='/login/' element={<UserLoginPage/>}/> 
+            <Route path='/signup/' element={<UserSignupPage/>}/> 
+        </Route>
+        <Route exact element = {<UserProtect/>}>
+
+            <Route path='/userhome/' element = {<UserHomePage/>}/>
+           
+        </Route>
          
         </Routes>
         

@@ -1,7 +1,7 @@
-import { loginAxiosInstant } from "../utils/axiosUtils";
+import { AdminAxiosInstant } from "../utils/axiosUtils";
 // ---------------------------------------Post Methoda-------------------------------//
 const AdminSignin = (values) => {
-  return loginAxiosInstant
+  return AdminAxiosInstant
     .post("token/", values, { withCredentials: true })
     .catch((error) => {
       throw error;

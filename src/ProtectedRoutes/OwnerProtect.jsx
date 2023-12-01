@@ -5,7 +5,6 @@ import React from 'react'
 import UserHomePage from '../pages/User/UserHomePage';
 import { Outlet } from 'react-router-dom';
 import AdminHomePage from '../pages/Admin/AdminHomePage';
-import OwnerHomePage from '../pages/Owner/OwnerHomePage';
 
 
 function OwnerProtect() {
@@ -17,17 +16,11 @@ function OwnerProtect() {
             return <UserHomePage/>
         }
          else if (decode.user_type === "owner") {
-            // if (!decode.is_completed) {                                  once the is_completed field to validate the customer done use this and delete the older return <Cus.../>
-            //     // return <CustomerCreation/>                                        
-            //     console.log(decode, "to be fixed ")
-            // } else {
-            //     return <Outlet/>
-            // }
-            return <OwnerHomePage/>
+            
+            return <Outlet/>
         } else if (decode.user_type === "admin") {
             return <AdminHomePage />
         } else {
-            // return <UnknownHomePage/>                                      use this once this page is created
             console.log(decode, "the else case of Customer Protected")
         }
 

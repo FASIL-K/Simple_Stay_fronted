@@ -12,12 +12,7 @@ function UserProtect() {
         if (decode.user_type === 'user') {
             return <Outlet/>
         } else if (decode.user_type === 'owner') {
-            // if (!decode.is_completed) {                                  once the is_completed field to validate the customer done use this and delete the older return <Cus.../>
-            //     // return <CustomerCreation/>                                        
-            //     console.log(decode, "to be fixed ")
-            // } else {
-            //     return <Outlet/>
-            // }
+           
             return <OwnerHomePage/>
         }else if (decode.user_type === 'admin'){
             return <AdminHomePage/>

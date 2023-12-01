@@ -5,10 +5,10 @@ import "react-toastify/dist/ReactToastify.css";
 // import backgroundImage from "../../../assets/login.jpg";
 import googlelogo from '../../../assets/google-logo.png'
 import { useGoogleLogin } from '@react-oauth/google';
-import { UserGoogleSignup, userSignin } from "../../../services/userApi";
+import { UserGoogleSignup} from "../../../services/userApi";
 import axios from "axios";
 import * as jwtDecode from 'jwt-decode';
-import { Auth_url } from "../../../constants/constants";
+import { UserUrl } from "../../../constants/constants/"
 import logoImage from "../../../assets/main-logo.svg"; 
 
 
@@ -46,7 +46,7 @@ function UserLogin() {
   const FormHandlerLogin = async (e) => {
     e.preventDefault();
     if (Validation()) {
-      await axios.post(`${Auth_url}token/`, user)
+      await axios.post(`${UserUrl}token/`, user)
         .then((res) => {
           if (res.status === 200) {
             const token = JSON.stringify(res.data);
@@ -88,9 +88,9 @@ function UserLogin() {
       axios
         .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${guser.access_token}`)
         .then((res) => {
-          UserGoogleSignup(res.data).then((gres) => {
-            if (gres.status === 201) {
-              const token = JSON.stringify(gres.data.token);
+          UserGoogleSignup(res.data).then((guser) => {
+            if (guser.status === 201) {
+              const token = JSON.stringify(guser.data.token);
               localStorage.setItem("token", token);
               toast.success("Login successful");
               navigate("/");

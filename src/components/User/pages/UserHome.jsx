@@ -1,5 +1,5 @@
 import React from 'react'
-import TemporaryDrawer from '../../Layout/SidebarHome/SideBar'
+import TemporaryDrawer from '../../User/Layout/SidebarHome/SideBar'
 // import { StickyNavbar } from '../../Layout/Navbar/UserNavbar'
 // import { CustomNavbar } from '../../Layout/HomepageNav.jsx/Navbar'
 

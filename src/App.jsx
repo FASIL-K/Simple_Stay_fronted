@@ -3,24 +3,28 @@ import AdminsRoute from "./routes/admins";
 import "bootstrap/dist/css/bootstrap.min.css";
 import OwnersRoutes from "./routes/Owners";
 import UsersRoutes from "./routes/Users";
-import UserHomePage from "./pages/User/UserHomePage";
 import UserType from "./components/User/login/UserType";
-import OwnerHomePage from "./pages/Owner/OwnerHomePage";
-
+import PrivateRoute from "./ProtectedRoutes/PrivateRoute";
+import UserLoginPage from "./pages/User/UserLoginPage";
+import UserSignupPage from "./pages/User/UserSignupPage";
 
 function App() {
-  
   return (
     <div>
       <Router>
         <Routes>
-          <Route path="/" element={<UserHomePage />} />
+
+
+          <Route element={<PrivateRoute />}>
+            <Route path="/" exact element={<UserLoginPage />} />
+            <Route path="/login/" exact element={<UserLoginPage />} />
+            <Route path="/signup/" exact element={<UserSignupPage />} />
+            <Route path="/usertype/" exact element={<UserType />} />
+          </Route>
+
           <Route path="/admin/*" element={<AdminsRoute />} />
           <Route path="/owner/*" element={<OwnersRoutes />} />
           <Route path="/user/*" element={<UsersRoutes />} />
-          <Route path="/usertype" element={<UserType />} />
-
-
         </Routes>
       </Router>
     </div>

@@ -51,7 +51,7 @@ function UserSignup() {
       try {
         
         const response = await axios.post(
-          `${import.meta.env.VITE_AUTH_URL}UserRegister/`,
+          `${import.meta.env.VITE_USER_URL}register/`,
           user
         );
 
