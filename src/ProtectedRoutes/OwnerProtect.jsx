@@ -1,5 +1,5 @@
 
-import * as jwtDecode from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 
 import React from 'react'
 import UserHomePage from '../pages/User/UserHomePage';

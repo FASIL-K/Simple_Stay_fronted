@@ -14,7 +14,7 @@ function OwnersRoutes() {
         </Route>
         <Route exact element = {<OwnerProtect/>}>
 
-            <Route path='/home/' element = {<OwnerHomePage/>}/>
+            <Route path='/ownerhome/' element = {<OwnerHomePage/>}/>
             
         </Route>
     </Routes>

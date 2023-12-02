@@ -5,12 +5,12 @@ import "react-toastify/dist/ReactToastify.css";
 // import backgroundImage from "../../../assets/login.jpg";
 import googlelogo from '../../../assets/google-logo.png'
 import { useGoogleLogin } from '@react-oauth/google';
-import { UserGoogleSignup} from "../../../services/userApi";
+import { UserGoogleSignin, UserGoogleSignup, UserSignin} from "../../../services/userApi";
 import axios from "axios";
-import * as jwtDecode from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 import { UserUrl } from "../../../constants/constants/"
 import logoImage from "../../../assets/main-logo.svg"; 
-
+import {Loader} from '../../Loader/Loading'
 
 
 function UserLogin() {
@@ -18,6 +18,11 @@ function UserLogin() {
   const [user, setUser] = useState({ email: "", password: "" });
   const emailInputRef = useRef(null);
   const passInputRef = useRef(null);
+  const [loading, setLoading] = useState(false);
+  const handleLoading = () => setLoading((cur) => !cur);
+  const [guser,setGuser] = useState()
+  
+
   
   // Validations
   const Validation = () => {
@@ -41,28 +46,54 @@ function UserLogin() {
     const Regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     return Regex.test(email);
   }
+  UserUrl
 
   // After form submission
   const FormHandlerLogin = async (e) => {
     e.preventDefault();
     if (Validation()) {
-      await axios.post(`${UserUrl}token/`, user)
-        .then((res) => {
-          if (res.status === 200) {
-            const token = JSON.stringify(res.data);
-            localStorage.setItem("token", token);
-            toast.success("Login successful");
-            navigate("/user/");
-            console.log(res.data,'uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu');
-          } else {
-            toast.error("Invalid login credentials");
+      handleLoading();
+  
+      try {
+        const res = await UserSignin(user);
+        console.log(res,'fedscdfcsax');
+  
+        if (res.status === 200) {
+          const token = JSON.stringify(res.data);
+          const decoded = jwtDecode(token);
+  
+          localStorage.setItem('token', token);
+  
+          if (decoded.user_type === "user") {
+            if (decoded.is_active) {
+              navigate("/user/userhome/");
+            } else {
+              toast.error("Your account is not active, please try again later");
+              navigate("/login/");
+            }
+          } else if (decoded.user_type === 'owner') {
+            if (decoded.is_active) {
+              navigate("/owner/ownerhome/");
+            } else {
+              toast.error("Your account is inactive, please try again later");
+              navigate("/login/");
+            }
           }
-        })
-        .catch((error) => {
-          toast.error("Login failed");
-        });
+        } else {
+
+          toast.error(
+            "Invalid login credentials, please verify your email and password."
+          );
+        }
+      } catch (error) {
+        console.error("An error occurred during login:", error);
+        toast.error("An error occurred during login.");
+      } finally {
+        handleLoading();
+      }
     }
   };
+  
 
   const backgroundStyle = {
     backgroundImage: `url()`,
@@ -74,42 +105,72 @@ function UserLogin() {
     
   };
 
-  const [guser, setgUser] = useState([]);
 
-  const handleGoogleLogin = useGoogleLogin({
+  
+  useEffect(() => {
+    
+    document.title = "Login | DecorConnect";
+
+    const GoogleAuth = async () => {
+      try {
+        
+        if (!guser) return;
+  
+        const response = await axios.get(
+          `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${guser.access_token}`,
+          {
+            headers: {
+              Authorization: `Bearer ${guser.access_token}`,
+              Accept: "application/json",
+            },
+          }
+        );
+  
+        const res = await UserGoogleSignin(response.data);
+        const token = JSON.stringify(res.data);
+        const decoded = jwtDecode(token);
+        if (decoded.role === "user") {
+      
+          localStorage.setItem("token", token);
+          navigate("/user/userhome");
+        } else if (decoded.role === "owner") {
+          localStorage.setItem("token", token);
+          navigate("/owner/ownerhome/");
+        }
+        
+      } catch (error) {
+        if (error.response) {
+          toast.error(error.response.data.detail);
+        } else {
+          toast.error("An error occurred during signup.");
+        }
+      }
+    };
+
+    if (guser){
+      GoogleAuth();
+    }
+    
+  }, [guser]);
+
+
+  // GOOGLE AUTHENTICATION
+
+  const login = useGoogleLogin({
     onSuccess: (codeResponse) => {
-      setgUser(codeResponse);
+      setGuser(codeResponse);
+      
     },
     onError: (error) => console.log("Login Failed:", error),
   });
 
-  useEffect(() => {
-    if (guser) {
-      axios
-        .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${guser.access_token}`)
-        .then((res) => {
-          UserGoogleSignup(res.data).then((guser) => {
-            if (guser.status === 201) {
-              const token = JSON.stringify(guser.data.token);
-              localStorage.setItem("token", token);
-              toast.success("Login successful");
-              navigate("/");
-            } else {
-              toast.error("Invalid login credentials");
-            }
-          });
-        })
-        .catch((err) => console.log(err));
-        
-    }
-  }, [guser]);
-  
+
   // Google signIn button design
   const customGoogleLoginButton = (
     <button
       type="button"
       className="flex items-center bg-light px-4 py-2 rounded"
-      onClick={()=>handleGoogleLogin()}
+      onClick={()=>login()}
       
     >
       <img
@@ -125,6 +186,9 @@ function UserLogin() {
   );
 
   return (
+    <>
+    {loading && <Loader/>}
+    
     <div  className="bg-cover bg-center bg " style={backgroundStyle} >
       <div className="flex justify-center items-center min-h-screen mb-2">
         <div className="w-96">
@@ -198,6 +262,7 @@ function UserLogin() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

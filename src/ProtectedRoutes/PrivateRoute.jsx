@@ -1,5 +1,5 @@
 import React from 'react';
-import * as jwt_decode from 'jwt-decode';
+import { jwtDecode } from "jwt-decode";
 import {  Navigate, Outlet } from 'react-router-dom';
 
 import AdminHomePage from '../pages/Admin/AdminHomePage';
@@ -8,10 +8,10 @@ import UserHomePage from '../pages/User/UserHomePage';
 
 function PrivateRoute() {
   const token = localStorage.getItem("token");
-  console.log(token,'ascdvwedcss');
+  console.log(token,'ascdvwedcs');
 
   if (token) {
-    const decode = jwt_decode(token);
+    const decode = jwtDecode(token);
     if (decode.role === "owner") {
       return <OwnerHomePage />;
     } else if (decode.role === "user") {

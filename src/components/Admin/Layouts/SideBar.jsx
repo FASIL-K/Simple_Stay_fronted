@@ -36,20 +36,7 @@ export function SideBar() {
         </Typography>
       </div>
       <List>
-        <Accordion
-          open={open === 1}
-          icon={
-            <ChevronDownIcon
-              strokeWidth={2.5}
-              className={`mx-auto h-4 w-4 transition-transform ${open === 1 ? "rotate-180" : ""}`}
-            />
-          }
-        >
-          
-          <AccordionBody className="py-1">
-          
-          </AccordionBody>
-        </Accordion>
+        
        
         <ListItem>
           <ListItemPrefix>

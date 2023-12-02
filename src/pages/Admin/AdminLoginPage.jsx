@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AdminSignin } from "../../services/adminApi/";
-import * as jwtDecode from 'jwt-decode';
+import { jwtDecode } from "jwt-decode";
 import { Loader } from "../../components/Loader/Loading/";
 
 function AdminLoginPage() {
@@ -47,7 +47,7 @@ function AdminLoginPage() {
           const token = JSON.stringify(res.data);
           const decoded = jwtDecode(token);
           handleLoading();
-          if (decoded.role === "admin" && decoded.is_admin) {
+          if (decoded.user_type === "admin" && decoded.is_admin) {
             localStorage.setItem("token", token);
             navigate("/admin/adminhomepage/");
           } else {
