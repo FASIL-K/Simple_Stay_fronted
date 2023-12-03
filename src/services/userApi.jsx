@@ -41,27 +41,40 @@ const UserSignup = (values) => {
   });
 };
 
+// const UserGoogleSignup = (value) => {
+//   const values = {
+//     email: value.email,
+//     name: value.given_name,
+//     password: value.id,
+//   };
+//   return UserAxiosInstant.post("user/googleuser/", values, {
+//     withCredentials: true,
+//   });
+// };
+
 const UserGoogleSignup = (value) => {
   const values = {
+    first_name : value.given_name,
+    last_name : value.family_name,
     email: value.email,
-    name: value.given_name,
     password: value.id,
-  };
-  return UserAxiosInstant.post("googleuser", values, {
+  }
+  return UserAxiosInstant.post("user/googleuser/", values, {
     withCredentials: true,
+  })
+  .catch((error) => {
+    throw error;
   });
 };
-
 const UserGoogleSignin = (value) => {
   const values = {
     email: value.email,
     password: value.id,
   };
-  return UserAxiosInstant.post("/user/token/", values, {
+  return UserAxiosInstant.post("user/token/", values, {
     withCredentials: true,
   });
 };
-
 
 
 

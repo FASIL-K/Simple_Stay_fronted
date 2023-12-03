@@ -43,16 +43,14 @@ export function SideBar() {
             <InboxIcon className="h-5 w-5" />
           </ListItemPrefix>
           Dashboard
-          <ListItemSuffix>
-          </ListItemSuffix>
+         
         </ListItem>
         <ListItem>
           <ListItemPrefix>
             <InboxIcon className="h-5 w-5" />
           </ListItemPrefix>
           User
-          <ListItemSuffix>
-          </ListItemSuffix>
+          
         </ListItem>
         <ListItem>
           <ListItemPrefix>

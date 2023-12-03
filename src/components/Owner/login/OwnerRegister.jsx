@@ -62,7 +62,6 @@ function OwnerRegister() {
           password: '',
           confirmPassword: '',
         });
-
         
       } catch (error) {
         handleLoading();
@@ -141,7 +140,7 @@ function OwnerRegister() {
                   name="confirmPassword"
                   className="w-full py-2 px-3 border rounded"
                   placeholder="Confirm Password"
-                  onChange={(e) => setOwner({ ...user, [e.target.name]: e.target.value })}
+                  onChange={(e) => setOwner({ ...owner, [e.target.name]: e.target.value })}
                 />
               </div>
               <div className="text-center">

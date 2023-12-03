@@ -9,8 +9,15 @@ import {
   ListItem,
   ListItemPrefix,
 } from "@material-tailwind/react";
+import { useNavigate } from "react-router-dom";
 
 export default function DropDown() {
+  const navigate = useNavigate()
+  const handlelogout = ()=>{
+    localStorage.removeItem('token')
+    navigate('/login')
+    
+  }
   return (
     <Popover placement="bottom-start">
       <PopoverHandler>
@@ -36,7 +43,7 @@ export default function DropDown() {
           
           <a href="#" className="text-initial font-medium text-blue-gray-500">
             <ListItem>
-              <ListItemPrefix>
+              <ListItemPrefix >
                 <svg
                   width="16"
                   height="14"
@@ -52,7 +59,10 @@ export default function DropDown() {
                   />
                 </svg>
               </ListItemPrefix>
+              <button onClick={handlelogout}>
               Signout
+              </button>
+              
             </ListItem>
           </a>
         </List>

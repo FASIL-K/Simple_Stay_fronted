@@ -125,15 +125,18 @@ function UserLogin() {
             },
           }
         );
+        console.log(response);
   
-        const res = await UserGoogleSignin(response.data);
+        const res = await UserGoogleSignup(response.data);
+        console.log(res,'fcassd');
         const token = JSON.stringify(res.data);
         const decoded = jwtDecode(token);
-        if (decoded.role === "user") {
+        console.log(decoded,'dasfds');
+        if (decoded.user_type === "user") {
       
           localStorage.setItem("token", token);
           navigate("/user/userhome");
-        } else if (decoded.role === "owner") {
+        } else if (decoded.user_type === "owner") {
           localStorage.setItem("token", token);
           navigate("/owner/ownerhome/");
         }
@@ -155,7 +158,6 @@ function UserLogin() {
 
 
   // GOOGLE AUTHENTICATION
-
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => {
       setGuser(codeResponse);
@@ -163,7 +165,7 @@ function UserLogin() {
     },
     onError: (error) => console.log("Login Failed:", error),
   });
-
+  
 
   // Google signIn button design
   const customGoogleLoginButton = (

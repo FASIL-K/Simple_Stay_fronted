@@ -11,8 +11,16 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import avatar from "../../../../assets/profileavatar.png";
 import { Button } from "@material-tailwind/react";
+import { useNavigate } from "react-router-dom";
 
 export default function TemporaryDrawer({ isOpen, onClose }) {
+
+  const navigate = useNavigate()
+  const handlelogout = () => {
+      localStorage.removeItem('token');
+      navigate('/login'); // Redirect to the login page after logout
+    }
+
   const list = (
     <Box
       sx={{ width: "350px" }}
@@ -46,7 +54,7 @@ export default function TemporaryDrawer({ isOpen, onClose }) {
      <div className="flex justify-center">
 
      
-       <Button className="mt-2">
+       <Button className="mt-2" onClick={handlelogout}>
         LogOut
        </Button>
        </div>
