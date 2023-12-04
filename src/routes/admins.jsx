@@ -4,6 +4,7 @@ import AdminLoginPage from '../pages/Admin/AdminLoginPage'
 import AdminHomePage from '../pages/Admin/AdminHomePage'
 import AdminProtect from '../ProtectedRoutes/AdminProtect'
 import PrivateRoute from '../ProtectedRoutes/PrivateRoute'
+import UserLists from '../pages/Admin/UserListing'
 
 
 function AdminsRoute() {
@@ -14,6 +15,7 @@ function AdminsRoute() {
         </Route>
         <Route element={<AdminProtect/>}>
             <Route path='/adminhomepage/' element={<AdminHomePage/>}/>
+            <Route path='/users/' element={<UserLists/>} />
    
 
         </Route>

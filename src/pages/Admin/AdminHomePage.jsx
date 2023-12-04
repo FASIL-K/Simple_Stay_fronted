@@ -3,10 +3,12 @@ import { SideBar } from '../../components/Admin/Layouts/SideBar'
 
 function AdminHomePage() {
   return (
-    <div>
-      <SideBar/>
       
+    <div className="flex">
+
+    <SideBar/>
     </div>
+
   )
 }
 

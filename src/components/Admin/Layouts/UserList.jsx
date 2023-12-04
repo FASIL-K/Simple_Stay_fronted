@@ -23,6 +23,9 @@ import {
   IconButton,
   Tooltip,
 } from "@material-tailwind/react";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { AdminUrl } from "../../../Constants/Constants";
 
 function UserList() {
   const TABS = [
@@ -40,7 +43,7 @@ function UserList() {
     },
   ];
 
-  const TABLE_HEAD = ["Member", "Name", "Email", "Status", ""];
+  const TABLE_HEAD = ["ID", "Name", "Email","UserType", "Status", ];
 
   const [user, setUser] = useState([]);
 
@@ -53,12 +56,35 @@ function UserList() {
     try {
       const res = await ListUser();
       const data = res.data;
-      const user = data.filter((user) => user.user_type === "user");
+      console.log(data,'feacd');
+
+      const user = data.results
       setUser(user);
     } catch {
       console.log("error trying fetch");
     }
   };
+  
+  const searchUser = async (keyword) => {
+    if (keyword !== "") {
+      try {
+        const request = await axios.get(`${AdminUrl}searchuser/?search=${keyword}`);
+        console.log(request, 'fcasascsa');
+  
+        const userData = request.data
+        console.log(userData);
+        setUser(userData);
+      } catch (error) {
+        console.error(error);
+        toast.error("An error occurred while searching for users.");
+      }
+    } else {
+    }
+  };
+  
+
+  
+
 
   return (
     <div>
@@ -72,16 +98,16 @@ function UserList() {
         {/* <NavBar /> */}
       </div>
 
-      <div className="mx-20 my-10">
-        <Card className="h-full w-full">
+      <div className=" -mt-7 ">
+        <Card className="h-full w-[62rem] ">
           <CardHeader floated={false} shadow={false} className="rounded-none">
             <div className="mb-8 flex items-center justify-between gap-8">
               <div>
                 <Typography variant="h5" color="blue-gray">
-                  Members list
+                  User list
                 </Typography>
                 <Typography color="gray" className="mt-1 font-normal">
-                  See information about all members
+                  See information about all User
                 </Typography>
               </div>
               <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
@@ -105,15 +131,17 @@ function UserList() {
                 </TabsHeader>
               </Tabs>
               <div className="w-full md:w-72">
-                <Input
-                  label="Search"
-                  icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-                />
+              <Input
+  label="Search"
+  icon={<MagnifyingGlassIcon className="h-5 w-5" />}
+  onChange={(e) => searchUser(e.target.value)}
+  />
+
               </div>
             </div>
           </CardHeader>
           <CardBody className="overflow-scroll px-0">
-            <table className="mt-4 w-full min-w-max table-auto text-left">
+            <table className="mt-4 w-full min-w-max table-auto text-left" >
               <thead>
                 <tr>
                   {TABLE_HEAD.map((head) => (
@@ -166,6 +194,17 @@ function UserList() {
                             className="font-normal"
                           >
                             {user.email}
+                          </Typography>
+                        </div>
+                      </td>
+                      <td className={classes}>
+                        <div className="w-max">
+                          <Typography
+                            variant="small"
+                            color="blue-gray"
+                            className="font-normal"
+                          >
+                            {user.user_type}
                           </Typography>
                         </div>
                       </td>

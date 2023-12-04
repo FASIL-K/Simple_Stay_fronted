@@ -20,13 +20,21 @@ import {
   PowerIcon,
 } from "@heroicons/react/24/solid";
 import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
- 
+import { useNavigate } from "react-router-dom";
+
 export function SideBar() {
-  const [open, setOpen] = React.useState(0);
- 
-  const handleOpen = (value) => {
-    setOpen(open === value ? 0 : value);
-  };
+  const navigate = useNavigate()
+
+
+  const handleUserList = () =>{
+    navigate("/admin/users/")
+
+  }
+  
+  const handleLogout = () =>{
+    localStorage.removeItem('token')
+    navigate('/admin/adminlogin')
+  }
  
   return (
     <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
@@ -45,7 +53,7 @@ export function SideBar() {
           Dashboard
          
         </ListItem>
-        <ListItem>
+        <ListItem onClick={handleUserList}>
           <ListItemPrefix>
             <InboxIcon className="h-5 w-5" />
           </ListItemPrefix>
@@ -64,7 +72,7 @@ export function SideBar() {
           </ListItemPrefix>
           Settings
         </ListItem>
-        <ListItem>
+        <ListItem onClick={handleLogout}>
           <ListItemPrefix>
             <PowerIcon className="h-5 w-5" />
           </ListItemPrefix>

@@ -12,13 +12,17 @@ const ListUser = (values) =>{
   return AdminAxiosInstant.get("/listuser/", values, {withCredentials : true})
   .catch((error) => error.response);
 }
+const SearchUser = (values) =>{
+  return AdminAxiosInstant.get("/listuser/?search=", values, {withCredentials : true})
+  .catch((error) => error.response);
+}
 
 const BlockUser = (id,values) =>{
 
-  return AdminAxiosInstant.patch("/editdeleteuser/" +id+ "/", values , {withCredentials : true})
+  return AdminAxiosInstant.put("/user_block_unblock/" +id+ "/", values , {withCredentials : true})
   .catch((error) => error.response);
 }
 
 export {
-  AdminSignin,ListUser,BlockUser
+  AdminSignin,ListUser,BlockUser,SearchUser
 }
