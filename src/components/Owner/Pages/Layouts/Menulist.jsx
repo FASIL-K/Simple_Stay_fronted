@@ -41,7 +41,7 @@ export default function DropDown() {
         <List className="p-0">
           
           
-          <a href="#" className="text-initial font-medium text-blue-gray-500">
+          <button onClick={handlelogout} className="text-initial font-medium text-blue-gray-500">
             <ListItem>
               <ListItemPrefix >
                 <svg
@@ -59,12 +59,10 @@ export default function DropDown() {
                   />
                 </svg>
               </ListItemPrefix>
-              <button onClick={handlelogout}>
               Signout
-              </button>
               
             </ListItem>
-          </a>
+          </button>
         </List>
       </PopoverContent>
     </Popover>

@@ -59,6 +59,7 @@ const UserGoogleSignup = (value) => {
     email: value.email,
     password: value.id,
   }
+  console.log(values,'ifdfdfdfdfdfdfdfdfdchsbijsabjasbkjgcasuik');
   return UserAxiosInstant.post("user/googleuser/", values, {
     withCredentials: true,
   })

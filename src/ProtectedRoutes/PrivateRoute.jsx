@@ -8,15 +8,14 @@ import UserHomePage from '../pages/User/UserHomePage';
 
 function PrivateRoute() {
   const token = localStorage.getItem("token");
-  console.log(token,'ascdvwedcs');
 
   if (token) {
     const decode = jwtDecode(token);
-    if (decode.role === "owner") {
+    if (decode.user_type === "owner") {
       return <OwnerHomePage />;
-    } else if (decode.role === "user") {
+    } else if (decode.user_type === "user") {
       return <UserHomePage />;
-    } else if (decode.role === "admin") {
+    } else if (decode.user_type === "admin") {
       return <AdminHomePage />;
     }
   } else {

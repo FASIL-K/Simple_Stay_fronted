@@ -45,9 +45,12 @@ function Navbar() {
           </Link>
         ))}
         <DropDown />
+        <Link to="/owner/add-properties">
         <Button className="bg-green-600 hover:bg-black">
           + ADD Properties
         </Button>
+        </Link>
+        
         
         
       </div>

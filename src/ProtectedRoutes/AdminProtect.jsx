@@ -7,15 +7,27 @@ import { Outlet } from "react-router-dom";
 import UserHomePage from "../pages/User/UserHomePage";
 import OwnerHomePage from "../pages/Owner/OwnerHomePage";
 
+function parseJwt(token) {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+}
 
 function AdminProtect() {
     const token = localStorage.getItem('token')
-    console.log(token,'zrrrr')
+
 
     if (token) {
-        const decode = jwtDecode(token)
-        console.log(decode)
-        if (decode.user_type == 'admin'){
+        // const decode = jwtDecode(token)
+        const decode = parseJwt(token)
+
+        console.log(decode , 'decoded');
+
+        if (decode.user_type == "admin"){
             return <Outlet/>
         }else if (decode.user_type == 'user'){
             return <UserHomePage/>
@@ -23,7 +35,6 @@ function AdminProtect() {
             return <OwnerHomePage/>
         }
         else{
-            console.log(decode.user_type)
         }
     }
 }

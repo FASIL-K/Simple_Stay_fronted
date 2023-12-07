@@ -64,12 +64,13 @@ function UserSignup() {
         handleLoading();
         toast.success(response.data.msg);
       } catch (error) {
+        console.log(error,'facacfs');
         handleLoading();
 
         if (error.response && error.response.data) {
           const errorData = error.response.data;
           if (errorData.email) {
-            toast.error(errorData.email[0]);
+            toast.error('Email Already Exists');
           }
         } else {
           toast.error("An error occurred during registration.");
