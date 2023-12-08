@@ -57,6 +57,7 @@ function OwnerRegister() {
         
         handleLoading();
         toast.success(response.data.msg);
+        navigate('/emailcheck')
         setOwner({
           email: '',
           password: '',

@@ -86,8 +86,13 @@ function UserLogin() {
           );
         }
       } catch (error) {
-        console.error("An error occurred during login:", error);
-        toast.error("An error occurred during login.");
+        const res = await UserSignin(user);
+
+        if (res) {
+          toast.error(res.data.detail);
+        } else {
+          toast.error("An error occurred during login.");
+        }
       } finally {
         handleLoading();
       }

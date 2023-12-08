@@ -7,6 +7,7 @@ import UserType from "./components/User/login/UserType";
 import PrivateRoute from "./ProtectedRoutes/PrivateRoute";
 import UserLoginPage from "./pages/User/UserLoginPage";
 import UserSignupPage from "./pages/User/UserSignupPage";
+import EmailCheck from "./components/User/login/EmailCheck";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/login/" exact element={<UserLoginPage />} />
             <Route path="/signup/" exact element={<UserSignupPage />} />
             <Route path="/usertype/" exact element={<UserType />} />
+            <Route path="/emailcheck/" exact element={ <EmailCheck/>  } />
           </Route>
 
           <Route path="/admin/*" element={<AdminsRoute />} />

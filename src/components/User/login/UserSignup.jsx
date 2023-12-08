@@ -22,7 +22,6 @@ function UserSignup() {
       toast.error('Email field cannot be empty');
       return false;
     } else if (!isValidEmail(user.email.trim())) {
-      setUser({ email: '', password: '', confirmPassword: '' });
       emailInputRef.current.focus();
       toast.error('Invalid email format');
       return false;
@@ -46,26 +45,29 @@ function UserSignup() {
 
   const FormHandlerSignup = async (e) => {
     e.preventDefault();
+    
+
     if (Validation()) {
       handleLoading();
+      console.log('Request Data:', user);  // Move this line here
+
       try {
         const response = await axios.post(
           import.meta.env.VITE_USER_URL + "/user/register/",
           user // The data object
-        );
+        )
 
         console.log(response.data);
+        navigate('/emailcheck')
 
-        setUser({
-          email: '',
-          password: '',
-          confirmPassword: '',
-        });
         handleLoading();
+
         toast.success(response.data.msg);
       } catch (error) {
         console.log(error,'facacfs');
         handleLoading();
+        
+  
 
         if (error.response && error.response.data) {
           const errorData = error.response.data;
@@ -86,6 +88,8 @@ function UserSignup() {
     backgroundPosition: 'center',
     minHeight: '100vh',
   };
+
+  
 
   return (
     <div className="bg-cover bg-center min-h-screen" style={backgroundStyle}>
