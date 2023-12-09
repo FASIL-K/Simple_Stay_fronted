@@ -52,12 +52,13 @@ const UserSignup = (values) => {
 //   });
 // };
 
-const UserGoogleSignup = (value) => {
+const UserGoogleSignup = (accessToken, userData) => {
   const values = {
-    first_name : value.given_name,
-    last_name : value.family_name,
-    email: value.email,
-    password: value.id,
+    first_name :  userData.given_name,
+    last_name : userData.family_name,
+    email: userData.email,
+    password: userData.id,
+    access_token: accessToken,
   }
   console.log(values,'ifdfdfdfdfdfdfdfdfdchsbijsabjasbkjgcasuik');
   return UserAxiosInstant.post("user/googleuser/", values, {

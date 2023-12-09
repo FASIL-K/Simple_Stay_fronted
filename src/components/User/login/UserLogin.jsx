@@ -21,7 +21,8 @@ function UserLogin() {
   const [loading, setLoading] = useState(false);
   const handleLoading = () => setLoading((cur) => !cur);
   const [guser,setGuser] = useState()
-  
+  const [token, setToken] = useState(null);
+
 
   
   // Validations
@@ -114,7 +115,7 @@ function UserLogin() {
   
   useEffect(() => {
     
-    document.title = "Login | DecorConnect";
+    document.title = "Login | SimpleStay";
 
     const GoogleAuth = async () => {
       try {
@@ -130,22 +131,34 @@ function UserLogin() {
             },
           }
         );
-        console.log(response,'sdvfasddascadsceda');
+        const backend_access = guser.access_token
+        const token_data = response.data
+        
+        
   
-        const res = await UserGoogleSignup(response.data);
-        console.log(res,'fcassd');
+        const res = await UserGoogleSignup(backend_access,token_data);
+        console.log(res,'DAXOOOOOOOOOOOO');
         const token = JSON.stringify(res.data);
         const decoded = jwtDecode(token);
         console.log(decoded,'dasfds');
+        localStorage.setItem("token", token);
+
         if (decoded.user_type === "user") {
-      
-          localStorage.setItem("token", token);
-          navigate("/user/userhome");
-        } else if (decoded.user_type === "owner") {
-          localStorage.setItem("token", token);
-          navigate("/owner/ownerhome/");
+          if (decoded.is_active) {
+            navigate("/user/userhome/");
+          } else {
+            toast.error("Your account is not active, please try again later");
+            navigate("/login/");
+          }
+        } else if (decoded.user_type === 'owner') {
+          if (decoded.is_active) {
+            navigate("/owner/ownerhome/");
+          } else {
+            toast.error("Your account is inactive, please try again later");
+            navigate("/login/");
+          }
         }
-        
+
       } catch (error) {
         if (error.response) {
           toast.error(error.response.data.detail);
@@ -155,23 +168,18 @@ function UserLogin() {
       }
     };
 
-    if (guser){
+    if (guser) {
       GoogleAuth();
     }
-    
+
   }, [guser]);
 
-
-  // GOOGLE AUTHENTICATION
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => {
       setGuser(codeResponse);
-      
     },
     onError: (error) => console.log("Login Failed:", error),
   });
-  
-
   // Google signIn button design
   const customGoogleLoginButton = (
     <button
