@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-// import { NavBar } from "../../Components/NavBar/NavBar";
-// import Logo from "../../assets/logos/dc-black-transparent.png";
-
-
-import { BlockUser, ListUser } from "../../../services/adminApi";
+import {
+  BlockUser,
+  ListUser,
+} from "../../../services/adminApi";
 import NotificationModal from "../../Modal/NotificationModal";
-// import "../../Components/NavBar/NavBar.css";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { UserPlusIcon } from "@heroicons/react/24/solid";
+import {
+  MagnifyingGlassIcon,
+  UserPlusIcon,
+} from "@heroicons/react/24/solid";
 import {
   Card,
   CardHeader,
@@ -23,6 +23,7 @@ import {
   IconButton,
   Tooltip,
 } from "@material-tailwind/react";
+
 import { toast } from "react-toastify";
 import axios from "axios";
 import { AdminUrl } from "../../../Constants/Constants";
@@ -43,81 +44,63 @@ function UserList() {
     },
   ];
 
-  const TABLE_HEAD = ["ID", "Name", "Email","UserType", "Status", ];
+  const TABLE_HEAD = ["ID", "Name", "Email", "UserType", "Status"];
 
   const [user, setUser] = useState([]);
 
   useEffect(() => {
     FetchUserInfo();
-
   }, []);
 
-  const FetchUserInfo = async (e) => {
+  const FetchUserInfo = async () => {
     try {
       const res = await ListUser();
       const data = res.data;
-      console.log(data,'feacd');
-
-      const user = data.results
-      setUser(user);
-    } catch {
-      console.log("error trying fetch");
+      const users = data.results;
+      setUser(users);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      toast.error("An error occurred while fetching user data.");
     }
   };
-  
+
   const searchUser = async (keyword) => {
     if (keyword !== "") {
       try {
-        const request = await axios.get(`${AdminUrl}searchuser/?search=${keyword}`);
-        console.log(request, 'fcasascsa');
-  
-        const userData = request.data
-        console.log(userData);
+        const request = await axios.get(
+          `${AdminUrl}searchuser/?search=${keyword}`
+        );
+        const userData = request.data;
         setUser(userData);
       } catch (error) {
-        console.error(error);
+        console.error("Error searching for users:", error);
         toast.error("An error occurred while searching for users.");
       }
     } else {
+      // Handle case when keyword is empty
     }
   };
-  
-
-  
-
 
   return (
     <div>
-      <div className="flex justify-center my-4">
-        {/* <img src={Logo} className="w-20" alt="" /> */}
-      </div>
-      <div
-        className="w-full sticky top-0 z-50
-     transition-all duration-300 ease-in-out"
-      >
-        {/* <NavBar /> */}
-      </div>
-
       <div className=" -mt-7 ">
         <Card className="h-full w-[62rem] ">
-          <CardHeader floated={false} shadow={false} className="rounded-none">
+          <CardHeader
+            floated={false}
+            shadow={false}
+            className="rounded-none"
+          >
             <div className="mb-8 flex items-center justify-between gap-8">
               <div>
                 <Typography variant="h5" color="blue-gray">
                   User list
                 </Typography>
-                <Typography color="gray" className="mt-1 font-normal">
+                <Typography
+                  color="gray"
+                  className="mt-1 font-normal"
+                >
                   See information about all User
                 </Typography>
-              </div>
-              <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-                <Button variant="outlined" size="sm">
-                  view all
-                </Button>
-                <Button className="flex items-center gap-3" size="sm">
-                  <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Add
-                  member
-                </Button>
               </div>
             </div>
             <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
@@ -131,17 +114,16 @@ function UserList() {
                 </TabsHeader>
               </Tabs>
               <div className="w-full md:w-72">
-              <Input
-  label="Search"
-  icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-  onChange={(e) => searchUser(e.target.value)}
-  />
-
+                <Input
+                  label="Search"
+                  icon={<MagnifyingGlassIcon className="h-5 w-5" />}
+                  onChange={(e) => searchUser(e.target.value)}
+                />
               </div>
             </div>
           </CardHeader>
           <CardBody className="overflow-scroll px-0">
-            <table className="mt-4 w-full min-w-max table-auto text-left" >
+            <table className="mt-4 w-full min-w-max table-auto text-left">
               <thead>
                 <tr>
                   {TABLE_HEAD.map((head) => (
@@ -219,38 +201,38 @@ function UserList() {
                         </div>
                       </td>
                       <td className={classes}>
-                        <Tooltip content="Block User">
-                          <IconButton variant="text">
-                            {user.is_active ? (
-                              <NotificationModal
-                                buttonText="Block"
-                                modalTitle="Confirmation"
-                                modalHeading="Do you want to block this user ?"
-                                buttonColor="red"
-                                modalContent="Note : User will not be able to access this account"
-                                onOkClick={async () => {
-                                  const data = { is_active: false };
-                                  await BlockUser(user.id, data);
-                                  await FetchUserInfo()
-
-                                }}
-                              />
-                            ) : (
-                              <NotificationModal
-                                buttonText="Unblock"
-                                modalTitle="Confirmation"
-                                modalHeading="Do you want to Unblock this user ?"
-                                buttonColor="red"
-                                modalContent="Note : User will be able to access this account"
-                                onOkClick={async () => {
-                                  const data = { is_active: true };
-                                  await BlockUser(user.id, data);
-                                  await FetchUserInfo()
-
-                                }}
-                              />
-                            )}
-                          </IconButton>
+                        <Tooltip content={user.is_active ? "Block User" : "Unblock User"}>
+                          <div style={{ minWidth: '80px' }}> {/* Set a fixed size for the container */}
+                            <IconButton variant="text">
+                              {user.is_active ? (
+                                <NotificationModal
+                                  buttonText="Block"
+                                  modalTitle="Confirmation"
+                                  modalHeading="Do you want to block this user ?"
+                                  buttonColor="red"
+                                  modalContent="Note : User will not be able to access this account"
+                                  onOkClick={async () => {
+                                    const data = { is_active: false };
+                                    await BlockUser(user.id, data);
+                                    await FetchUserInfo();
+                                  }}
+                                />
+                              ) : (
+                                <NotificationModal
+                                  buttonText="Unblock"
+                                  modalTitle="Confirmation"
+                                  modalHeading="Do you want to Unblock this user ?"
+                                  buttonColor="red"
+                                  modalContent="Note : User will be able to access this account"
+                                  onOkClick={async () => {
+                                    const data = { is_active: true };
+                                    await BlockUser(user.id, data);
+                                    await FetchUserInfo();
+                                  }}
+                                />
+                              )}
+                            </IconButton>
+                          </div>
                         </Tooltip>
                       </td>
                     </tr>

@@ -50,3 +50,7 @@ function NotificationModal({ buttonText, modalTitle, modalContent, onOkClick,mod
 }
 
 export default NotificationModal;
+
+
+
+
