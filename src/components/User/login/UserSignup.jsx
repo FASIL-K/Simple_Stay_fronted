@@ -120,7 +120,7 @@ function UserSignup() {
                     type="password"
                     variant="standard"
                     name="confirmPassword"
-                    label="Password"
+                    label="ConfirmPassword"
                     color="black"
                     className="bg-[#1572a9b6]"
                     onChange={handleChange}

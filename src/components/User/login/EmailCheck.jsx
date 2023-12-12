@@ -5,8 +5,10 @@ import Emailimage from '../../../assets/email.png';
 
 function EmailCheck() {
 
+    const [email,SetEmail] = useState('')
+    
+
     // const email = location.state || '';
-    const email = 'lotta'
 
     const Gmail = () => {
         window.open("https://mail.google.com/mail/u/0/#inbox", "_blank")
