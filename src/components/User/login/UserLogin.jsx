@@ -11,10 +11,13 @@ import {jwtDecode} from 'jwt-decode';
 import { UserUrl } from "../../../constants/constants/"
 import logoImage from "../../../assets/main-logo.svg"; 
 import {Loader} from '../../Loader/Loading'
+import { setUserDetails } from "../../../redux/User";
+import { useDispatch } from "react-redux";
 
 
 function UserLogin() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [user, setUser] = useState({ email: "", password: "" });
   const emailInputRef = useRef(null);
   const passInputRef = useRef(null);
@@ -140,9 +143,19 @@ function UserLogin() {
         console.log(res,'DAXOOOOOOOOOOOO');
         const token = JSON.stringify(res.data);
         const decoded = jwtDecode(token);
-        console.log(decoded,'dasfds');
+        console.log(decoded,'dasfdsxsacax');
         localStorage.setItem("token", token);
+       
+        const setUser = {
+            "user_id" :decoded.user_id,
+            "email" : decoded.email,
+            "i_google" : decoded.is_google,
+            "is_active" : decoded.is_active
+          }
+          dispatch(setUserDetails(setUser));
 
+
+        
         if (decoded.user_type === "user") {
           if (decoded.is_active) {
             navigate("/user/userhome/");

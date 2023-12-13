@@ -12,14 +12,22 @@ import MailIcon from "@mui/icons-material/Mail";
 import avatar from "../../../../assets/profileavatar.png";
 import { Button } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { resetState } from "../../../../redux/User";
+
 
 export default function TemporaryDrawer({ isOpen, onClose }) {
+  const userInfo = useSelector((state) => state.user.userInfo)
+  const dispatch = useDispatch()
 
+  console.log(userInfo,'dccccccccccccccs')
   const navigate = useNavigate()
   const handlelogout = () => {
       localStorage.removeItem('token');
+      dispatch(resetState);
       navigate('/login'); // Redirect to the login page after logout
     }
+    
 
   const list = (
     <Box
@@ -45,7 +53,7 @@ export default function TemporaryDrawer({ isOpen, onClose }) {
 
           </div>
           <h3 className=" -mt-7 ml-20 text-sm opacity-95">
-                fasil@gmail.com
+                {userInfo.email}
             </h3>
         </div>
         </div>
