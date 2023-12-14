@@ -41,6 +41,12 @@ const UserSignup = (values) => {
   });
 };
 
+const UserResendEmail = (values) => {
+  return UserAxiosInstant.post("user/resend-verification-email/", values, {
+    withCredentials: true,
+  }).catch((error) => error.response);
+};
+
 // const UserGoogleSignup = (value) => {
 //   const values = {
 //     email: value.email,
@@ -97,4 +103,5 @@ export {
   UserGoogleSignup,
   UserGoogleSignin,
   TokenRefresh,
+  UserResendEmail,
 }

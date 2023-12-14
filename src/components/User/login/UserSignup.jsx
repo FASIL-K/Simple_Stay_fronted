@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
@@ -13,49 +13,45 @@ import { Button, Card, Input, Typography } from "@material-tailwind/react";
 function UserSignup() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+ 
   const initialValues = {
     email: "",
     password: "",
     confirmPassword: "",
   };
-  const { values, errors, touched, handleBlur, handleSubmit, handleChange } =
-    useFormik({
-      initialValues:initialValues,
-      validationSchema: SignupValidationSchema,
-      onSubmit: async (values) => {
-        try {
-          console.log(values,"jjjjjjjjjjjjjjjjjjj");
-          setLoading(true)
-          const response = await axios.post(
-            import.meta.env.VITE_USER_URL + "/user/register/",
-            values
-          );
+  const [email, setEmail] = useState(""); 
+  const { values, errors, touched, handleBlur, handleSubmit, handleChange } = useFormik({
+    initialValues: initialValues,
+    validationSchema: SignupValidationSchema,
+    onSubmit: async (values) => {
+      try {
+        setLoading(true);
+        const response = await axios.post(import.meta.env.VITE_USER_URL + '/user/register/', values);
+        setEmail(values.email);
+        setLoading(false);
+        toast.success(response.data.msg);
+        navigate('/emailcheck', { state: { email: values.email } }); // Pass email as a parameter
+      } catch (error) {
+        setLoading(false);
 
-          console.log(response,"ressssddddd");
-          navigate("/emailcheck");
-          setLoading(True)
-          toast.success(response.data.msg);
-        }  catch (error) {
-          setLoading(false);
-        
-          if (error.response && error.response.data) {
-            const errorData = error.response.data;
-            console.log(errorData, "fecdefcsdjcfwdhj");
-            toast.error(errorData.msg || "An error occurred during registration");
-          } else {
-            toast.error("An error occurred during registration.");
-          }
+        if (error.response && error.response.data) {
+          const errorData = error.response.data;
+          console.log(errorData, 'fecdefcsdjcfwdhj');
+          toast.error(errorData.msg || 'An error occurred during registration');
+        } else {
+          toast.error('An error occurred during registration.');
         }
-      },
-    });
+      }
+    },
+  });
 
-  // const inputFieldStyle =
-  // "mb-6 peer w-full h-full bg-transparent text-blue-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-blue-gray-200 focus:border-gray-900 " +
-  // `${(formik.touched.email && formik.errors.email) ||
-  // (formik.touched.password && formik.errors.password) ||
-  // (formik.touched.confirmPassword && formik.errors.confirmPassword)
-  //   ? "border-red-500"
-  //   : ""}`;
+  // Log the updated value of email when it changes
+  useEffect(() => {
+    console.log(email, 'dasxxxxxc');
+  }, [email]);
+
+
+
 
   const backgroundStyle = {
     backgroundImage: `url()`,
