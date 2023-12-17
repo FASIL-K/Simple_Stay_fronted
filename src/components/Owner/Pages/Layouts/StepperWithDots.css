@@ -1,0 +1,9 @@
+/* StepperWithDots.css */
+.stepper-dot {
+    width: 4px;
+    height: 4px;
+    /* Adjust the translateY value as needed */
+    transform: translateY(20px);
+    color: blueviolet;
+  }
+  
