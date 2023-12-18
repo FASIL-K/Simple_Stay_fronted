@@ -27,7 +27,19 @@ const OwnerGoogleSignup = (value) => {
   });
 };
 
+
+
+
+const OwnerPostCreation =(values)=>{
+  console.log(values,'afsassafas');
+
+  return OwnerAxiosInstant.post("createpost/",values,{
+    withCredentials: true,
+  });
+};
+
 export {
   OwnerGoogleSignup,
+  OwnerPostCreation,
   
 }

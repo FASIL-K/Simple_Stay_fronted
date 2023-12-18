@@ -32,3 +32,5 @@ export const SignupValidationSchema = Yup.object().shape({
     password: Yup.string().required('Password should not be empty'),
     confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords do not match').required('Confirm Password field cannot be empty'),
   });
+
+  
