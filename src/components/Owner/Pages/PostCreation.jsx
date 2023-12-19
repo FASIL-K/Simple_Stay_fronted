@@ -107,7 +107,7 @@ function PostCreations() {
       <div className="mt-2 space-x-9">
         <Button
           variant="gradient"
-          color="white"
+          color="white" 
           className="text-light-blue-900"
           onClick={() => formik.setFieldValue("lookingTo", "Rent")}
         >
