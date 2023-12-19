@@ -8,9 +8,9 @@ import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import DropDown from "./Menulist";
 
 const navItems = [
-  { path: "/owner/home", label: "Dashboard" },
-  { path: "/owner/listing", label: "Listing" },
-  { path: "/owner/profile", label: "Profile" },
+  { path: "/owner/ownerhome/", label: "Dashboard" },
+  { path: "/owner/list-properties/", label: "Listing" },
+  { path: "/owner/profile/", label: "Profile" },
   
 ];
 

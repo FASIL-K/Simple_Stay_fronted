@@ -6,6 +6,7 @@ import OwnerProtect from '../ProtectedRoutes/OwnerProtect'
 import OwnerSignupPage from '../pages/Owner/OwnerSignupPage'
 import OwnerHomePage from '../pages/Owner/OwnerHomePage'
 import PostCreation from '../pages/Owner/PostCreation'
+import ListProperty from '../pages/Owner/ListProperty'
 
 function OwnersRoutes() {
     return (
@@ -17,6 +18,8 @@ function OwnersRoutes() {
 
             <Route path='/ownerhome/' element = {<OwnerHomePage/>}/>
             <Route path='/add-properties/' element = {<PostCreation/>}/>
+            <Route path='/list-properties/' element = {<ListProperty/>}/>
+            
 
             
         </Route>
