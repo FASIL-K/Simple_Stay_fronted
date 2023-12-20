@@ -37,7 +37,12 @@ const validationSchemas = [
 ];
 
 function PostCreations() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [selectedLookingTo, setSelectedLookingTo] = useState("");
+  const [selectedPropertyType, setSelectedPropertyType] = useState("");
+  const [selectedFurnishedType, setSelectedFurnishedType] = useState("");
+  const [selectedBhkType, setSelectedBhkType] = useState("");
+  const [selectedSecurityDeposit, setSelectedSecurityDeposit] = useState("");
 
   const token = localStorage.getItem("token");
   const decode = jwtDecode(token);
@@ -61,17 +66,14 @@ function PostCreations() {
     },
     validationSchema: validationSchemas[activeStep],
     onSubmit: async (values) => {
-
       try {
         const apiUrl = `${OwnerUrl}property-post/${userId}/`;
         console.log(values, "dsadasdas");
 
-        const formattedDate = values.available_from.toISOString().split('T')[0];
+        const formattedDate = values.available_from.toISOString().split("T")[0];
         values.available_from = formattedDate;
 
-        const response = await axios.post(apiUrl, values, {
-         
-        });
+        const response = await axios.post(apiUrl, values, {});
 
         console.log(response, "dafadfcad");
         if (response.status === 201) {
@@ -79,10 +81,9 @@ function PostCreations() {
 
           // Handle successful submission
           toast.success("Post Created successfully!");
-          navigate("/owner/list-properties/")
-          
+          navigate("/owner/list-properties/");
+
           setActiveStep(0); // Reset to the first step after submission
-          
         } else {
           // Handle submission failure
           toast.error("Form submission failed. Please try again.");
@@ -130,17 +131,40 @@ function PostCreations() {
       <div className="mt-2 space-x-9">
         <Button
           variant="gradient"
-          color="white"
-          className="text-light-blue-900"
-          onClick={() => formik.setFieldValue("looking_to", "Rent")}
+          color={selectedLookingTo === "Rent" ? "blue-gray" : "white"}
+          className={`text-light-blue-900 ${
+            selectedLookingTo === "Rent" ? "selectedStyle" : ""
+          }`}
+          onClick={() => {
+            formik.setFieldValue("looking_to", "Rent");
+            setSelectedLookingTo("Rent");
+          }}
+          style={{
+            backgroundColor: selectedLookingTo === "Rent" ? "#F8F8F8" : "",
+            color: selectedLookingTo === "Rent" ? "white" : "black",
+          }}
         >
           Rent
         </Button>
         <Button
           variant="gradient"
-          color="white"
-          className="text-light-blue-900"
-          onClick={() => formik.setFieldValue("looking_to", "PG/CO-living")}
+          color={selectedLookingTo === "PG/CO-living" ? "blue-gray" : "white"}
+          className={`text-light-blue-900 ${
+            selectedLookingTo === "PG/CO-living" ? "selectedStyle" : ""
+          }`}
+          onClick={() => {
+            formik.setFieldValue("looking_to", "PG/CO-living");
+            setSelectedLookingTo("PG/CO-living");
+          }}
+          style={{
+            backgroundColor:
+              selectedLookingTo === "PG/CO-living" ? "#F8F8F8" : "",
+            color: selectedLookingTo === "PG/CO-living" ? "white" : "black",
+            boxShadow:
+              selectedLookingTo === "PG/CO-living"
+                ? "0 4px 8px rgba(0, 0, 0, 0.1)"
+                : "",
+          }}
         >
           PG/CO-living
         </Button>
@@ -178,19 +202,48 @@ function PostCreations() {
       <div className="mt-2 space-x-9">
         <Button
           variant="gradient"
-          color="white"
-          className="text-light-blue-900"
-          onClick={() => formik.setFieldValue("property_type", "Apartment")}
+          color={selectedPropertyType === "Apartment" ? "blue-gray" : "white"}
+          className={`text-light-blue-900 ${
+            selectedPropertyType === "Apartment" ? "selectedStyle" : ""
+          }`}
+          onClick={() => {
+            formik.setFieldValue("property_type", "Apartment");
+            setSelectedPropertyType("Apartment");
+          }}
+          style={{
+            backgroundColor:
+              selectedPropertyType === "Apartment" ? "#F8F8F8" : "",
+            color: selectedPropertyType === "Apartment" ? "white" : "black",
+            boxShadow:
+              selectedPropertyType === "Apartment"
+                ? "0 4px 8px rgba(0, 0, 0, 0.1)"
+                : "",
+          }}
         >
           Apartment
         </Button>
         <Button
           variant="gradient"
-          color="white"
-          className="text-light-blue-900"
-          onClick={() =>
-            formik.setFieldValue("property_type", "Independent Floor")
+          color={
+            selectedPropertyType === "Independent Floor" ? "blue-gray" : "white"
           }
+          className={`text-light-blue-900 ${
+            selectedPropertyType === "Independent Floor" ? "selectedStyle" : ""
+          }`}
+          onClick={() => {
+            formik.setFieldValue("property_type", "Independent Floor");
+            setSelectedPropertyType("Independent Floor");
+          }}
+          style={{
+            backgroundColor:
+              selectedPropertyType === "Independent Floor" ? "#F8F8F8" : "",
+            color:
+              selectedPropertyType === "Independent Floor" ? "white" : "black",
+            boxShadow:
+              selectedPropertyType === "Independent Floor"
+                ? "0 4px 8px rgba(0, 0, 0, 0.1)"
+                : "",
+          }}
         >
           Independent Floor
         </Button>
@@ -202,27 +255,76 @@ function PostCreations() {
       <div className="mt-2 space-x-9">
         <Button
           variant="gradient"
-          color="white"
-          className="text-light-blue-900"
-          onClick={() =>
-            formik.setFieldValue("furnished_type", "Fully Furnished")
+          color={
+            selectedFurnishedType === "Fully Furnished" ? "blue-gray" : "white"
           }
+          className={`text-light-blue-900 ${
+            selectedFurnishedType === "Fully Furnished" ? "selectedStyle" : ""
+          }`}
+          onClick={() => {
+            formik.setFieldValue("furnished_type", "Fully Furnished");
+            setSelectedFurnishedType("Fully Furnished");
+          }}
+          style={{
+            backgroundColor:
+              selectedFurnishedType === "Fully Furnished" ? "#F8F8F8" : "",
+            color:
+              selectedFurnishedType === "Fully Furnished" ? "white" : "black",
+            boxShadow:
+              selectedFurnishedType === "Fully Furnished"
+                ? "0 4px 8px rgba(0, 0, 0, 0.1)"
+                : "",
+          }}
         >
           Fully Furnished
         </Button>
         <Button
           variant="gradient"
-          color="white"
-          className="text-light-blue-900"
-          onClick={() => formik.setFieldValue("furnished_type", "Semi Furnished")}
+          color={
+            selectedFurnishedType === "Semi Furnished" ? "blue-gray" : "white"
+          }
+          className={`text-light-blue-900 ${
+            selectedFurnishedType === "Semi Furnished" ? "selectedStyle" : ""
+          }`}
+          onClick={() => {
+            formik.setFieldValue("furnished_type", "Semi Furnished");
+            setSelectedFurnishedType("Semi Furnished");
+          }}
+          style={{
+            backgroundColor:
+              selectedFurnishedType === "Semi Furnished" ? "#F8F8F8" : "",
+            color:
+              selectedFurnishedType === "Semi Furnished" ? "white" : "black",
+            boxShadow:
+              selectedFurnishedType === "Semi Furnished"
+                ? "0 4px 8px rgba(0, 0, 0, 0.1)"
+                : "",
+          }}
         >
           Semi Furnished
         </Button>
+
         <Button
           variant="gradient"
-          color="white"
-          className="text-light-blue-900"
-          onClick={() => formik.setFieldValue("furnished_type", "Unfurnished")}
+          color={
+            selectedFurnishedType === "Unfurnished" ? "blue-gray" : "white"
+          }
+          className={`text-light-blue-900 ${
+            selectedFurnishedType === "Unfurnished" ? "selectedStyle" : ""
+          }`}
+          onClick={() => {
+            formik.setFieldValue("furnished_type", "SUnfurnished");
+            setSelectedFurnishedType("Unfurnished");
+          }}
+          style={{
+            backgroundColor:
+              selectedFurnishedType === "Unfurnished" ? "#F8F8F8" : "",
+            color: selectedFurnishedType === "Unfurnished" ? "white" : "black",
+            boxShadow:
+              selectedFurnishedType === "Unfurnished"
+                ? "0 4px 8px rgba(0, 0, 0, 0.1)"
+                : "",
+          }}
         >
           Unfurnished
         </Button>
@@ -234,25 +336,58 @@ function PostCreations() {
       <div className="mt-2 space-x-9">
         <Button
           variant="gradient"
-          color="white"
-          className="text-light-blue-900"
-          onClick={() => formik.setFieldValue("bhk_type", "1 BHK")}
+          color={selectedBhkType === "1 BHK" ? "blue-gray" : "white"}
+          className={`text-light-blue-900 ${
+            selectedBhkType === "1 BHK" ? "selectedStyle" : ""
+          }`}
+          onClick={() => {
+            formik.setFieldValue("bhk_type", "1 BHK");
+            setSelectedBhkType("1 BHK");
+          }}
+          style={{
+            backgroundColor: selectedBhkType === "1 BHK" ? "#F8F8F8" : "",
+            color: selectedBhkType === "1 BHK" ? "white" : "black",
+            boxShadow:
+              selectedBhkType === "1 BHK" ? "0 4px 8px rgba(0, 0, 0, 0.1)" : "",
+          }}
         >
           1 BHK
         </Button>
         <Button
           variant="gradient"
-          color="white"
-          className="text-light-blue-900"
-          onClick={() => formik.setFieldValue("bhk_type", "2 BHK")}
+          color={selectedBhkType === "2 BHK" ? "blue-gray" : "white"}
+          className={`text-light-blue-900 ${
+            selectedBhkType === "2 BHK" ? "selectedStyle" : ""
+          }`}
+          onClick={() => {
+            formik.setFieldValue("bhk_type", "2 BHK");
+            setSelectedBhkType("2 BHK");
+          }}
+          style={{
+            backgroundColor: selectedBhkType === "2 BHK" ? "#F8F8F8" : "",
+            color: selectedBhkType === "2 BHK" ? "white" : "black",
+            boxShadow:
+              selectedBhkType === "2 BHK" ? "0 4px 8px rgba(0, 0, 0, 0.1)" : "",
+          }}
         >
           2 BHK
         </Button>
         <Button
           variant="gradient"
-          color="white"
-          className="text-light-blue-900"
-          onClick={() => formik.setFieldValue("bhk_type", "3 BHK")}
+          color={selectedBhkType === "3 BHK" ? "blue-gray" : "white"}
+          className={`text-light-blue-900 ${
+            selectedBhkType === "3 BHK" ? "selectedStyle" : ""
+          }`}
+          onClick={() => {
+            formik.setFieldValue("bhk_type", "3 BHK");
+            setSelectedBhkType("3 BHK");
+          }}
+          style={{
+            backgroundColor: selectedBhkType === "3 BHK" ? "#F8F8F8" : "",
+            color: selectedBhkType === "3 BHK" ? "white" : "black",
+            boxShadow:
+              selectedBhkType === "3 BHK" ? "0 4px 8px rgba(0, 0, 0, 0.1)" : "",
+          }}
         >
           3 BHK
         </Button>
@@ -328,57 +463,96 @@ function PostCreations() {
           </Typography>
         )}
 
-        
-         <DatePicker
-        selected={formik.values.available_from}
-        onChange={(date) => formik.setFieldValue("available_from", date)}
-        onBlur={formik.handleBlur}
-        placeholderText="Available From"
-        className="border rounded-md px-3 py-2 mt-1 mb-1 text-sm w-full"
-      />
+        <DatePicker
+          selected={formik.values.available_from}
+          onChange={(date) => formik.setFieldValue("available_from", date)}
+          onBlur={formik.handleBlur}
+          placeholderText="Available From"
+          className="border rounded-md px-3 py-2 mt-1 mb-1 text-sm w-full"
+        />
         {formik.touched.available_from && formik.errors.available_from && (
           <Typography variant="small" className="text-red-500">
             {formik.errors.available_from}
           </Typography>
-        )} 
+        )}
       </div>
 
       <Typography variant="small" className="opacity-90 font-semibold">
         Security Deposit
       </Typography>
       <div className="mt-2 space-x-9">
-        <Button
-          variant="gradient"
-          color="white"
-          className="text-light-blue-900"
-          onClick={() => formik.setFieldValue("security_deposit", "None")}
-        >
-          None
-        </Button>
-        <Button
-          variant="gradient"
-          color="white"
-          className="text-light-blue-900"
-          onClick={() => formik.setFieldValue("security_deposit", "1 Month")}
-        >
-          1 Month
-        </Button>
-        <Button
-          variant="gradient"
-          color="white"
-          className="text-light-blue-900"
-          onClick={() => formik.setFieldValue("security_deposit", "2 Month")}
-        >
-          2 Month
-        </Button>
-        <Button
-          variant="gradient"
-          color="white"
-          className="text-light-blue-900"
-          onClick={() => formik.setFieldValue("security_deposit", "3 Month")}
-        >
-          3 Month
-        </Button>
+      <Button
+  variant="gradient"
+  color={selectedSecurityDeposit === "None" ? "blue-gray" : "white"}
+  className={`text-light-blue-900 ${
+    selectedSecurityDeposit === "None" ? "selectedStyle" : ""
+  }`}
+  onClick={() => {
+    formik.setFieldValue("security_deposit", "None");
+    setSelectedSecurityDeposit("None");
+  }}
+  style={{
+    backgroundColor: selectedSecurityDeposit === "None" ? "#F8F8F8" : "",
+    color: selectedSecurityDeposit === "None" ? "white" : "black",
+    boxShadow: selectedSecurityDeposit === "None" ? "0 4px 8px rgba(0, 0, 0, 0.1)" : "",
+  }}
+>
+  None
+</Button>
+<Button
+  variant="gradient"
+  color={selectedSecurityDeposit === "1 Month" ? "blue-gray" : "white"}
+  className={`text-light-blue-900 ${
+    selectedSecurityDeposit === "1 Month" ? "selectedStyle" : ""
+  }`}
+  onClick={() => {
+    formik.setFieldValue("security_deposit", "1 Month");
+    setSelectedSecurityDeposit("1 Month");
+  }}
+  style={{
+    backgroundColor: selectedSecurityDeposit === "1 Month" ? "#F8F8F8" : "",
+    color: selectedSecurityDeposit === "1 Month" ? "white" : "black",
+    boxShadow: selectedSecurityDeposit === "1 Month" ? "0 4px 8px rgba(0, 0, 0, 0.1)" : "",
+  }}
+>
+  1 Month
+</Button>
+<Button
+  variant="gradient"
+  color={selectedSecurityDeposit === "2 Month" ? "blue-gray" : "white"}
+  className={`text-light-blue-900 ${
+    selectedSecurityDeposit === "2 Month" ? "selectedStyle" : ""
+  }`}
+  onClick={() => {
+    formik.setFieldValue("security_deposit", "2 Month");
+    setSelectedSecurityDeposit("2 Month");
+  }}
+  style={{
+    backgroundColor: selectedSecurityDeposit === "2 Month" ? "#F8F8F8" : "",
+    color: selectedSecurityDeposit === "2 Month" ? "white" : "black",
+    boxShadow: selectedSecurityDeposit === "2 Month" ? "0 4px 8px rgba(0, 0, 0, 0.1)" : "",
+  }}
+>
+  2 Month
+</Button>
+<Button
+  variant="gradient"
+  color={selectedSecurityDeposit === "3 Month" ? "blue-gray" : "white"}
+  className={`text-light-blue-900 ${
+    selectedSecurityDeposit === "3 Month" ? "selectedStyle" : ""
+  }`}
+  onClick={() => {
+    formik.setFieldValue("security_deposit", "3 Month");
+    setSelectedSecurityDeposit("3 Month");
+  }}
+  style={{
+    backgroundColor: selectedSecurityDeposit === "3 Month" ? "#F8F8F8" : "",
+    color: selectedSecurityDeposit === "3 Month" ? "white" : "black",
+    boxShadow: selectedSecurityDeposit === "3 Month" ? "0 4px 8px rgba(0, 0, 0, 0.1)" : "",
+  }}
+>
+  3 Month
+</Button>
       </div>
 
       <Button type="submit">Submit</Button>
