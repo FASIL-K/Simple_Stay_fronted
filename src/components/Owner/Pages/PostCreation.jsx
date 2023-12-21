@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from 'react';
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Navbar from "./Layouts/Navbar";
@@ -9,10 +9,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { OwnerPostCreation } from "../../../services/ownerApi";
-import axios, { Axios } from "axios";
+  import axios, { Axios } from "axios";
 import { jwtDecode } from "jwt-decode";
 import { OwnerUrl } from "../../../Constants/Constants";
 import { useNavigate } from "react-router-dom";
+import { useDropzone } from 'react-dropzone';
+
 
 const validationSchemas = [
   Yup.object().shape({
@@ -34,10 +36,15 @@ const validationSchemas = [
     security_deposit: Yup.string().required("Security Deposit is required"),
     // Add more validations for the third step as needed
   }),
+  Yup.object().shape({
+    photos: Yup.array(), // Allow empty array, i.e., no validation required
+  }),
 ];
 
 function PostCreations() {
   const navigate = useNavigate();
+  
+  const [uploadedFiles, setUploadedFiles] = useState([]);
   const [selectedLookingTo, setSelectedLookingTo] = useState("");
   const [selectedPropertyType, setSelectedPropertyType] = useState("");
   const [selectedFurnishedType, setSelectedFurnishedType] = useState("");
@@ -49,6 +56,23 @@ function PostCreations() {
   const userId = decode.user_id;
   const [activeStep, setActiveStep] = useState(0);
   const [formSubmitted, setFormSubmitted] = useState(false);
+
+  const onDrop = useCallback((acceptedFiles) => {
+    setUploadedFiles(acceptedFiles);
+  }, []);
+
+  const {
+    getRootProps,
+    getInputProps,
+    isDragActive,
+    isDragAccept,
+    isDragReject,
+  } = useDropzone({
+    onDrop,
+    accept: 'image/*',
+  });
+
+
   const formik = useFormik({
     initialValues: {
       looking_to: "",
@@ -63,6 +87,8 @@ function PostCreations() {
       available_from: "",
       security_deposit: "",
       owner: userId,
+            photos: [], // Array to store uploaded files
+
     },
     validationSchema: validationSchemas[activeStep],
     onSubmit: async (values) => {
@@ -554,10 +580,46 @@ function PostCreations() {
   3 Month
 </Button>
       </div>
-
-      <Button type="submit">Submit</Button>
+      <Button type="button" onClick={handleNext}>
+        Next
+      </Button>
     </form>
   );
+  
+  const renderImageUplode =() =>(
+    <form onSubmit={formik.handleSubmit} className="space-y-6">
+      {/* Add this inside the form in renderPropertyPrice function */}
+<div className="mt-6">
+  <label className="block text-sm font-semibold text-gray-700">
+    Upload Images
+  </label>
+  <div {...getRootProps()} className="mt-1 flex justify-center items-center">
+    <input {...getInputProps()} />
+    {isDragActive ? (
+      <p className="text-gray-600">Drop the files here...</p>
+    ) : (
+      <p className="text-gray-600">
+        Drag 'n' drop some files here, or click to select files
+      </p>
+    )}
+  </div>
+  {uploadedFiles.length > 0 && (
+    <div className="mt-2">
+      <strong>Selected Files:</strong>
+      <ul>
+        {uploadedFiles.map((file) => (
+          <li key={file.name}>{file.name}</li>
+        ))}
+      </ul>
+    </div>
+  )}
+</div>
+
+<Button type="submit">Submit</Button>
+
+
+    </form>
+  )
 
   const renderStepContent = (step) => {
     switch (step) {
@@ -569,6 +631,9 @@ function PostCreations() {
 
       case 2:
         return renderPropertyPrice();
+      
+      case 3:
+        return renderImageUplode();
 
       default:
         return null;

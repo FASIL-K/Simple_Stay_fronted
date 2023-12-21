@@ -13,7 +13,7 @@ export default function StepperWithDots({ handleNext, activeStep ,handlePrev }) 
   // };
 
   useEffect(() => {
-    setIsLastStep(activeStep === 2); // Update based on the number of steps
+    setIsLastStep(activeStep === 3); // Update based on the number of steps
     setIsFirstStep(activeStep === 0);
   }, [activeStep]);
 
@@ -29,6 +29,7 @@ export default function StepperWithDots({ handleNext, activeStep ,handlePrev }) 
         <Step className="h-4 w-4 " onClick={() => handlePrev(0)} />
         <Step className="h-4 w-4" onClick={() => handlePrev(1)} />
         <Step className="h-4 w-4"  onClick={() => handlePrev(2)} />
+        <Step className="h-4 w-4"  onClick={() => handlePrev(3)} />
 
         
         
