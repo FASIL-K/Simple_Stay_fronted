@@ -8,7 +8,7 @@ import { jwtDecode } from "jwt-decode";
 import axios, { Axios } from "axios";
 
 function ListPropertys() {
-  const [postData, setPostData] = useState([]);
+  const [postData, setPostData] = useState(null);
   const token = localStorage.getItem("token");
   const decode = jwtDecode(token);
   const userId = decode.user_id;
@@ -17,6 +17,7 @@ function ListPropertys() {
     axios
       .get(apiUrl)
       .then((response) => {
+        console.log(response,"afdasdas");
         setPostData(response.data);
         console.log(postData, "datat");
       })
@@ -29,18 +30,19 @@ function ListPropertys() {
     <div>
       <Navbar />
       <div className="flex justify-center items-center flex-col">
-        {postData.map((property) => (
-          <Card className="w-full max-w-[48rem] flex-row mt-4 shadow-2xl relative mb-5">
-            <CardHeader
+        {postData?.map((property) => (
+                    <Card key={property.id} className="w-full max-w-[48rem] flex-row mt-4 shadow-2xl relative mb-5">
+                    <CardHeader
               shadow={false}
               floated={false}
               className="m-4 w-2/5 shrink-0  rounded relative"
             >
-              <img
-                src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1471&q=80"
-                alt="card-image"
-                className="h-full w-full object-cover rounded-t-lg"
-              />
+               <img
+                                src={property.images.length > 0 ? `${import.meta.env.VITE_USER_URL}${property.images[0].image}` : ""}
+                                // Assuming there is only one image for simplicity
+                                alt="No andi"
+                                className="h-full w-full object-cover rounded-t-lg"
+                            />
             </CardHeader>
             <CardBody className="p-4">
               <div className="absolute flex top-14 right-3 mt-4 mr-2">

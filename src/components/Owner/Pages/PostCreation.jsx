@@ -93,6 +93,7 @@ function PostCreations() {
             formData.append(key, value);
           }
         });
+        console.log(formData,"asdfasfdasd form data");
         const response = await axios.post(apiUrl, formData);
 
         console.log(response, "dafadfcad");
