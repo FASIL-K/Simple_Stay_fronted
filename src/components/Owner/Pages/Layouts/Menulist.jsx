@@ -10,13 +10,18 @@ import {
   ListItemPrefix,
 } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { resetState } from "../../../../redux/User";
 
 export default function DropDown() {
   const navigate = useNavigate()
-  const handlelogout = ()=>{
-    localStorage.removeItem('token')
-    navigate('/login')
-    
+  const dispatch = useDispatch()
+
+  
+  const handlelogout = () => {
+    localStorage.removeItem('token');
+    dispatch(resetState());
+    navigate('/login'); // Redirect to the login page after logout
   }
   return (
     <Popover placement="bottom-start">

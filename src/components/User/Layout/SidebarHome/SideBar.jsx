@@ -24,7 +24,7 @@ export default function TemporaryDrawer({ isOpen, onClose }) {
   const navigate = useNavigate()
   const handlelogout = () => {
       localStorage.removeItem('token');
-      dispatch(resetState);
+      dispatch(resetState()); // Call the resetState action
       navigate('/login'); // Redirect to the login page after logout
     }
     

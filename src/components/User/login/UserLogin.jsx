@@ -65,6 +65,16 @@ function UserLogin() {
         if (res.status === 200) {
           const token = JSON.stringify(res.data);
           const decoded = jwtDecode(token);
+          console.log(decoded,'daxoooooooooooo')
+          const setUser = {
+            "user_id": decoded.user_id,
+            "email": decoded.email,
+            "i_google": decoded.is_google,
+            "is_active": decoded.is_active
+          };
+
+          dispatch(setUserDetails(setUser));
+
   
           localStorage.setItem('token', token);
   
@@ -143,7 +153,7 @@ function UserLogin() {
         console.log(res,'DAXOOOOOOOOOOOO');
         const token = JSON.stringify(res.data);
         const decoded = jwtDecode(token);
-        console.log(decoded,'dasfdsxsacax');
+        console.log(decoded,'dasfdsxsacaxdsadas');
         localStorage.setItem("token", token);
        
         const setUser = {
@@ -152,7 +162,9 @@ function UserLogin() {
             "i_google" : decoded.is_google,
             "is_active" : decoded.is_active
           }
+          console.log(setUser,'fascascascascdasdaxoooooooooooooooocs');
           dispatch(setUserDetails(setUser));
+
 
 
         
