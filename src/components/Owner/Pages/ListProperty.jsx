@@ -1,3 +1,5 @@
+// ListPropertys.jsx
+
 import React, { useEffect, useState } from "react";
 import Navbar from "./Layouts/Navbar";
 import { Typography } from "@material-tailwind/react";
@@ -7,6 +9,7 @@ import { OwnerUrl } from "../../../Constants/Constants";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import Example from "./Layouts/DeleteAlertModal";
+import NoImage from "../../../assets/House-image.svg";
 
 function ListPropertys() {
   const [postData, setPostData] = useState(null);
@@ -15,6 +18,7 @@ function ListPropertys() {
   const token = localStorage.getItem("token");
   const decode = jwtDecode(token);
   const userId = decode.user_id;
+  const [modalKey, setModalKey] = useState(0); // Add a key to force remounting the modal
 
   useEffect(() => {
     const apiUrl = `${OwnerUrl}property-post/${userId}/`;
@@ -28,18 +32,40 @@ function ListPropertys() {
       });
   }, [userId]);
 
-  const handleDeleteClick = (property) => {
+  const handleActivateClick = (property) => {
     setPropertyToDelete(property);
-    setShowDeleteModal(true);
+    // Reset the modal state and increment the key to force remounting the modal
+    setShowDeleteModal(false);
+    setModalKey((prevKey) => prevKey + 1);
+    // Delay opening the modal to ensure proper reset
+    setTimeout(() => setShowDeleteModal(true), 0);
   };
 
-  const handleDeleteConfirmation = () => {
-    console.log("Deleting property:", propertyToDelete);
-    // Handle the deletion logic here
+  const handleDeleteConfirmation = async () => {
+    try {
+      console.log("Activating/Deactivating property:", propertyToDelete);
 
-    // Reset state
-    setPropertyToDelete(null);
-    setShowDeleteModal(true);
+      // Update the 'is_available' field based on the current state
+      const apiUrl = `${OwnerUrl}property-post/${userId}/${propertyToDelete.id}/`;
+      const isAvailable = !propertyToDelete.is_available;
+
+      await axios.put(apiUrl, { is_available: isAvailable });
+
+      // Update the local state to mark the post as active/inactive
+      setPostData((prevData) =>
+        prevData.map((p) =>
+          p.id === propertyToDelete.id ? { ...p, is_available: isAvailable } : p
+        )
+      );
+
+      // Reset state
+      setPropertyToDelete(null);
+      setShowDeleteModal(false);
+      // Increment the key to force remounting the modal
+      setModalKey((prevKey) => prevKey + 1);
+    } catch (error) {
+      console.error("Error activating/deactivating property:", error);
+    }
   };
 
   return (
@@ -62,43 +88,72 @@ function ListPropertys() {
                     ? `${import.meta.env.VITE_USER_URL}${
                         property.images[0].image
                       }`
-                    : ""
+                    : NoImage
                 }
-                alt="No andi"
+                alt=""
                 className="h-full w-full object-cover rounded-t-lg"
               />
             </CardHeader>
             <CardBody className="p-4">
               <div className="absolute flex top-14 right-3 mt-4 mr-2">
-                <CheckCircleOutlineOutlinedIcon className="text-green-900" />
-                <Typography
-                  variant="h6"
-                  color="green"
-                  className="ml-2 mt-1 cursor-pointer text-xs"
-                >
-                  ACTIVE
-                </Typography>
+                {property.is_available ? (
+                  <>
+                    <CheckCircleOutlineOutlinedIcon className="text-green-900" />
+                    <Typography
+                      variant="h6"
+                      color="green"
+                      className="ml-2 mt-1 cursor-pointer text-xs"
+                    >
+                      ACTIVE
+                    </Typography>
+                  </>
+                ) : (
+                  <>
+                    <CheckCircleOutlineOutlinedIcon className="text-red-900" />
+                    <Typography
+                      variant="h6"
+                      color="red"
+                      className="ml-2 mt-1 cursor-pointer text-xs"
+                    >
+                      DEACTIVE
+                    </Typography>
+                  </>
+                )}
               </div>
               <div className="absolute top-0 right-0 h-10 w-44 flex justify-around mt-4">
-                <Typography
-                  variant="h6"
-                  className="text-light-blue-900 text-base cursor-pointer"
-                >
-                  Share
-                </Typography>
-                <Typography
-                  variant="h6"
-                  className="text-light-blue-900 text-base cursor-pointer"
-                >
-                  Edit
-                </Typography>
-                <Typography
-                  variant="h6"
-                  className="text-red-800 text-base cursor-pointer"
-                  onClick={() => handleDeleteClick(property)}
-                >
-                  Delete
-                </Typography>
+                {property.is_available && (
+                  <>
+                    <Typography
+                      variant="h6"
+                      className="text-light-blue-900 text-base cursor-pointer"
+                    >
+                      Share
+                    </Typography>
+                    <Typography
+                      variant="h6"
+                      className="text-light-blue-900 text-base cursor-pointer"
+                    >
+                      Edit
+                    </Typography>
+                  </>
+                )}
+                {property.is_available ? (
+                  <Typography
+                    variant="h6"
+                    className="text-red-800 text-base cursor-pointer"
+                    onClick={() => handleActivateClick(property)}
+                  >
+                    Delete
+                  </Typography>
+                ) : (
+                  <Typography
+                    variant="h6"
+                    className="text-green-900 text-base cursor-pointer ml-12"
+                    onClick={() => handleActivateClick(property)}
+                  >
+                    Activate
+                  </Typography>
+                )}
               </div>
 
               <div className="relative flex mt-20">
@@ -126,6 +181,7 @@ function ListPropertys() {
             isOpen={showDeleteModal}
             onClose={() => setShowDeleteModal(false)}
             onConfirm={handleDeleteConfirmation}
+            property={propertyToDelete} // Pass the property information to the modal
             unmount // Ensure that the modal is unmounted when closed
           />
         )}
