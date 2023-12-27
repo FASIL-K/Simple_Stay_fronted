@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Navbar from "./Layouts/Navbar";
@@ -15,6 +15,7 @@ import { OwnerUrl } from "../../../Constants/Constants";
 import { useNavigate } from "react-router-dom";
 import { formatISO } from "date-fns";
 import { format } from "date-fns";
+import { useParams } from "react-router-dom";
 
 const validationSchemas = [
   Yup.object().shape({
@@ -38,8 +39,11 @@ const validationSchemas = [
   }),
 ];
 
-function PostCreations() {
+function PropertyForm({ isEditing, initialValues }) {
   const navigate = useNavigate();
+  const { propertyId } = useParams();
+  console.log(propertyId, "sadasdcassad");
+  console.log(isEditing, "isededasd");
 
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [selectedLookingTo, setSelectedLookingTo] = useState("");
@@ -48,11 +52,53 @@ function PostCreations() {
   const [selectedBhkType, setSelectedBhkType] = useState("");
   const [selectedSecurityDeposit, setSelectedSecurityDeposit] = useState("");
 
+  const [existingPostData, setExistingPostData] = useState(null);
+
   const token = localStorage.getItem("token");
   const decode = jwtDecode(token);
   const userId = decode.user_id;
   const [activeStep, setActiveStep] = useState(0);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [images, setImages] = useState([]);
+
+
+  const handleDeleteImage = (imageId) => {
+    setImages(images.filter(id => id !== imageId));
+  };
+  useEffect(() => {
+    const fetchPostData = async () => {
+      if (propertyId) {
+        try {
+          const response = await axios.get(
+            `${OwnerUrl}property-post/${userId}/${propertyId}/`
+          );
+          const postData = response.data; // Assuming your API response has the post data structure
+          console.log(postData, "postdateasssssssssss");
+          // Parse the date received from the backend and set it in the correct format
+          console.log(postData.available_from, "before date");
+          const existingAvailableFromDate = format(
+            new Date(postData.available_from),
+            "MM-dd-yyyy"
+          );
+          console.log(existingAvailableFromDate, "new date");
+          const parsedDate = existingAvailableFromDate;
+
+          // Set the parsed date in the correct format
+          postData.available_from = parsedDate;
+
+          setExistingPostData(postData);
+          console.log(
+            existingPostData,
+            "fadfasdcasacaswxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+          );
+        } catch (error) {
+          console.error("Error fetching existing post data:", error);
+        }
+      }
+    };
+
+    fetchPostData();
+  }, [propertyId, userId]);
 
   const formik = useFormik({
     initialValues: {
@@ -67,15 +113,19 @@ function PostCreations() {
       monthly_rent: "",
       available_from: "",
       security_deposit: "",
+      is_available: true,
       owner: userId,
       images: [],
+      ...(initialValues || {}),
     },
     validationSchema: validationSchemas[activeStep],
     onSubmit: async (values) => {
       try {
-        const apiUrl = `${OwnerUrl}property-post/${userId}/`;
-        console.log(values, "dsadasdas");
+        const apiUrl = isEditing
+          ? `${OwnerUrl}property-post/${userId}/${propertyId}/`
+          : `${OwnerUrl}property-post/${userId}/`;
 
+        console.log(values, "dsadasdaszxxxxxxxxxxxxxxxxxxx");
         const formattedDate = format(
           new Date(values.available_from),
           "yyyy-MM-dd"
@@ -87,28 +137,37 @@ function PostCreations() {
           if (key === "images") {
             // Handle multiple images separately
             value.forEach((image) => {
-              formData.append("images", image);
+              formData.append("image", image);
             });
           } else {
             formData.append(key, value);
           }
         });
-        console.log(formData,"asdfasfdasd form data");
-        const response = await axios.post(apiUrl, formData);
+        console.log(formData, "asdfasfdasd form data");
+        const response = isEditing
+          ? await axios.put(apiUrl, formData)
+          : await axios.post(apiUrl, formData);
 
-        console.log(response, "dafadfcad");
-        if (response.status === 201) {
+        console.log(response, "anzil");
+
+        if (response.status === (isEditing ? 200 : 201)) {
           const data = response.data;
-          console.log(data,"dataaaaaaaaaa");
+          console.log(data, "dataaaaaaaaaa");
 
           // Handle successful submission
-          toast.success("Post Created successfully!");
+          toast.success(
+            `Property ${isEditing ? "updated" : "created"} successfully!`
+          );
           navigate("/owner/list-properties/");
 
           setActiveStep(0); // Reset to the first step after submission
         } else {
           // Handle submission failure
-          toast.error("Form submission failed. Please try again.");
+          toast.error(
+            `Property ${
+              isEditing ? "update" : "creation"
+            } failed. Please try again.`
+          );
         }
       } catch (error) {
         // Handle any errors that occurred during the submission
@@ -161,26 +220,29 @@ function PostCreations() {
       <div className="mt-2 space-x-9">
         <Button
           variant="gradient"
-          color={selectedLookingTo === "Rent" ? "blue-gray" : "white"}
+          color={formik.values.looking_to === "Rent" ? "blue-gray" : "white"}
           className={`text-light-blue-900 ${
-            selectedLookingTo === "Rent" ? "selectedStyle" : ""
+            formik.values.looking_to === "Rent" ? "selectedStyle" : ""
           }`}
           onClick={() => {
             formik.setFieldValue("looking_to", "Rent");
             setSelectedLookingTo("Rent");
           }}
           style={{
-            backgroundColor: selectedLookingTo === "Rent" ? "#F8F8F8" : "",
-            color: selectedLookingTo === "Rent" ? "white" : "black",
+            backgroundColor:
+              formik.values.looking_to === "Rent" ? "#F8F8F8" : "",
+            color: formik.values.looking_to === "Rent" ? "white" : "black",
           }}
         >
           Rent
         </Button>
         <Button
           variant="gradient"
-          color={selectedLookingTo === "PG/CO-living" ? "blue-gray" : "white"}
+          color={
+            formik.values.looking_to === "PG/CO-living" ? "blue-gray" : "white"
+          }
           className={`text-light-blue-900 ${
-            selectedLookingTo === "PG/CO-living" ? "selectedStyle" : ""
+            formik.values.looking_to === "PG/CO-living" ? "selectedStyle" : ""
           }`}
           onClick={() => {
             formik.setFieldValue("looking_to", "PG/CO-living");
@@ -188,10 +250,11 @@ function PostCreations() {
           }}
           style={{
             backgroundColor:
-              selectedLookingTo === "PG/CO-living" ? "#F8F8F8" : "",
-            color: selectedLookingTo === "PG/CO-living" ? "white" : "black",
+              formik.values.looking_to === "PG/CO-living" ? "#F8F8F8" : "",
+            color:
+              formik.values.looking_to === "PG/CO-living" ? "white" : "black",
             boxShadow:
-              selectedLookingTo === "PG/CO-living"
+              formik.values.looking_to === "PG/CO-living"
                 ? "0 4px 8px rgba(0, 0, 0, 0.1)"
                 : "",
           }}
@@ -232,9 +295,11 @@ function PostCreations() {
       <div className="mt-2 space-x-9">
         <Button
           variant="gradient"
-          color={selectedPropertyType === "Apartment" ? "blue-gray" : "white"}
+          color={
+            formik.values.property_type === "Apartment" ? "blue-gray" : "white"
+          }
           className={`text-light-blue-900 ${
-            selectedPropertyType === "Apartment" ? "selectedStyle" : ""
+            formik.values.property_type === "Apartment" ? "selectedStyle" : ""
           }`}
           onClick={() => {
             formik.setFieldValue("property_type", "Apartment");
@@ -242,12 +307,9 @@ function PostCreations() {
           }}
           style={{
             backgroundColor:
-              selectedPropertyType === "Apartment" ? "#F8F8F8" : "",
-            color: selectedPropertyType === "Apartment" ? "white" : "black",
-            boxShadow:
-              selectedPropertyType === "Apartment"
-                ? "0 4px 8px rgba(0, 0, 0, 0.1)"
-                : "",
+              formik.values.property_type === "Rent" ? "#F8F8F8" : "",
+            color:
+              formik.values.property_type === "Apartment" ? "white" : "black",
           }}
         >
           Apartment
@@ -255,10 +317,14 @@ function PostCreations() {
         <Button
           variant="gradient"
           color={
-            selectedPropertyType === "Independent Floor" ? "blue-gray" : "white"
+            formik.values.property_type === "Independent Floor"
+              ? "blue-gray"
+              : "white"
           }
           className={`text-light-blue-900 ${
-            selectedPropertyType === "Independent Floor" ? "selectedStyle" : ""
+            formik.values.property_type === "Independent Floor"
+              ? "selectedStyle"
+              : ""
           }`}
           onClick={() => {
             formik.setFieldValue("property_type", "Independent Floor");
@@ -266,13 +332,13 @@ function PostCreations() {
           }}
           style={{
             backgroundColor:
-              selectedPropertyType === "Independent Floor" ? "#F8F8F8" : "",
-            color:
-              selectedPropertyType === "Independent Floor" ? "white" : "black",
-            boxShadow:
-              selectedPropertyType === "Independent Floor"
-                ? "0 4px 8px rgba(0, 0, 0, 0.1)"
+              formik.values.property_type === "Independent Floor"
+                ? "#F8F8F8"
                 : "",
+            color:
+              formik.values.property_type === "Independent Floor"
+                ? "white"
+                : "black",
           }}
         >
           Independent Floor
@@ -286,10 +352,14 @@ function PostCreations() {
         <Button
           variant="gradient"
           color={
-            selectedFurnishedType === "Fully Furnished" ? "blue-gray" : "white"
+            formik.values.furnished_type === "Fully Furnished"
+              ? "blue-gray"
+              : "white"
           }
           className={`text-light-blue-900 ${
-            selectedFurnishedType === "Fully Furnished" ? "selectedStyle" : ""
+            formik.values.furnished_type === "Fully Furnished"
+              ? "selectedStyle"
+              : ""
           }`}
           onClick={() => {
             formik.setFieldValue("furnished_type", "Fully Furnished");
@@ -297,11 +367,15 @@ function PostCreations() {
           }}
           style={{
             backgroundColor:
-              selectedFurnishedType === "Fully Furnished" ? "#F8F8F8" : "",
+              formik.values.furnished_type === "Fully Furnished"
+                ? "#F8F8F8"
+                : "",
             color:
-              selectedFurnishedType === "Fully Furnished" ? "white" : "black",
+              formik.values.furnished_type === "Fully Furnished"
+                ? "white"
+                : "black",
             boxShadow:
-              selectedFurnishedType === "Fully Furnished"
+              formik.values.furnished_type === "Fully Furnished"
                 ? "0 4px 8px rgba(0, 0, 0, 0.1)"
                 : "",
           }}
@@ -311,10 +385,14 @@ function PostCreations() {
         <Button
           variant="gradient"
           color={
-            selectedFurnishedType === "Semi Furnished" ? "blue-gray" : "white"
+            formik.values.furnished_type === "Semi Furnished"
+              ? "blue-gray"
+              : "white"
           }
           className={`text-light-blue-900 ${
-            selectedFurnishedType === "Semi Furnished" ? "selectedStyle" : ""
+            formik.values.furnished_type === "Semi Furnished"
+              ? "selectedStyle"
+              : ""
           }`}
           onClick={() => {
             formik.setFieldValue("furnished_type", "Semi Furnished");
@@ -322,11 +400,15 @@ function PostCreations() {
           }}
           style={{
             backgroundColor:
-              selectedFurnishedType === "Semi Furnished" ? "#F8F8F8" : "",
+              formik.values.furnished_type === "Semi Furnished"
+                ? "#F8F8F8"
+                : "",
             color:
-              selectedFurnishedType === "Semi Furnished" ? "white" : "black",
+              formik.values.furnished_type === "Semi Furnished"
+                ? "white"
+                : "black",
             boxShadow:
-              selectedFurnishedType === "Semi Furnished"
+              formik.values.furnished_type === "Semi Furnished"
                 ? "0 4px 8px rgba(0, 0, 0, 0.1)"
                 : "",
           }}
@@ -337,21 +419,28 @@ function PostCreations() {
         <Button
           variant="gradient"
           color={
-            selectedFurnishedType === "Unfurnished" ? "blue-gray" : "white"
+            formik.values.furnished_type === "Unfurnished"
+              ? "blue-gray"
+              : "white"
           }
           className={`text-light-blue-900 ${
-            selectedFurnishedType === "Unfurnished" ? "selectedStyle" : ""
+            formik.values.furnished_type === "Unfurnished"
+              ? "selectedStyle"
+              : ""
           }`}
           onClick={() => {
-            formik.setFieldValue("furnished_type", "SUnfurnished");
+            formik.setFieldValue("furnished_type", "Unfurnished");
             setSelectedFurnishedType("Unfurnished");
           }}
           style={{
             backgroundColor:
-              selectedFurnishedType === "Unfurnished" ? "#F8F8F8" : "",
-            color: selectedFurnishedType === "Unfurnished" ? "white" : "black",
+              formik.values.furnished_type === "Unfurnished" ? "#F8F8F8" : "",
+            color:
+              formik.values.furnished_type === "Unfurnished"
+                ? "white"
+                : "black",
             boxShadow:
-              selectedFurnishedType === "Unfurnished"
+              formik.values.furnished_type === "Unfurnished"
                 ? "0 4px 8px rgba(0, 0, 0, 0.1)"
                 : "",
           }}
@@ -366,57 +455,66 @@ function PostCreations() {
       <div className="mt-2 space-x-9">
         <Button
           variant="gradient"
-          color={selectedBhkType === "1 BHK" ? "blue-gray" : "white"}
+          color={formik.values.bhk_type === "1 BHK" ? "blue-gray" : "white"}
           className={`text-light-blue-900 ${
-            selectedBhkType === "1 BHK" ? "selectedStyle" : ""
+            formik.values.bhk_type === "1 BHK" ? "selectedStyle" : ""
           }`}
           onClick={() => {
             formik.setFieldValue("bhk_type", "1 BHK");
             setSelectedBhkType("1 BHK");
           }}
           style={{
-            backgroundColor: selectedBhkType === "1 BHK" ? "#F8F8F8" : "",
-            color: selectedBhkType === "1 BHK" ? "white" : "black",
+            backgroundColor:
+              formik.values.bhk_type === "1 BHK" ? "#F8F8F8" : "",
+            color: formik.values.bhk_type === "1 BHK" ? "white" : "black",
             boxShadow:
-              selectedBhkType === "1 BHK" ? "0 4px 8px rgba(0, 0, 0, 0.1)" : "",
+              formik.values.bhk_type === "1 BHK"
+                ? "0 4px 8px rgba(0, 0, 0, 0.1)"
+                : "",
           }}
         >
           1 BHK
         </Button>
         <Button
           variant="gradient"
-          color={selectedBhkType === "2 BHK" ? "blue-gray" : "white"}
+          color={formik.values.bhk_type === "2 BHK" ? "blue-gray" : "white"}
           className={`text-light-blue-900 ${
-            selectedBhkType === "2 BHK" ? "selectedStyle" : ""
+            formik.values.bhk_type === "2 BHK" ? "selectedStyle" : ""
           }`}
           onClick={() => {
             formik.setFieldValue("bhk_type", "2 BHK");
             setSelectedBhkType("2 BHK");
           }}
           style={{
-            backgroundColor: selectedBhkType === "2 BHK" ? "#F8F8F8" : "",
-            color: selectedBhkType === "2 BHK" ? "white" : "black",
+            backgroundColor:
+              formik.values.bhk_type === "2 BHK" ? "#F8F8F8" : "",
+            color: formik.values.bhk_type === "2 BHK" ? "white" : "black",
             boxShadow:
-              selectedBhkType === "2 BHK" ? "0 4px 8px rgba(0, 0, 0, 0.1)" : "",
+              formik.values.bhk_type === "2 BHK"
+                ? "0 4px 8px rgba(0, 0, 0, 0.1)"
+                : "",
           }}
         >
           2 BHK
         </Button>
         <Button
           variant="gradient"
-          color={selectedBhkType === "3 BHK" ? "blue-gray" : "white"}
+          color={formik.values.bhk_type === "3 BHK" ? "blue-gray" : "white"}
           className={`text-light-blue-900 ${
-            selectedBhkType === "3 BHK" ? "selectedStyle" : ""
+            formik.values.bhk_type === "3 BHK" ? "selectedStyle" : ""
           }`}
           onClick={() => {
             formik.setFieldValue("bhk_type", "3 BHK");
             setSelectedBhkType("3 BHK");
           }}
           style={{
-            backgroundColor: selectedBhkType === "3 BHK" ? "#F8F8F8" : "",
-            color: selectedBhkType === "3 BHK" ? "white" : "black",
+            backgroundColor:
+              formik.values.bhk_type === "3 BHK" ? "#F8F8F8" : "",
+            color: formik.values.bhk_type === "3 BHK" ? "white" : "black",
             boxShadow:
-              selectedBhkType === "3 BHK" ? "0 4px 8px rgba(0, 0, 0, 0.1)" : "",
+              formik.values.bhk_type === "3 BHK"
+                ? "0 4px 8px rgba(0, 0, 0, 0.1)"
+                : "",
           }}
         >
           3 BHK
@@ -492,18 +590,33 @@ function PostCreations() {
             {formik.errors.monthly_rent}
           </Typography>
         )}
-
-        <DatePicker
-          selected={formik.values.available_from}
-          onChange={(date) => formik.setFieldValue("available_from", date)}
-          onBlur={formik.handleBlur}
-          placeholderText="Available From"
-          className="border rounded-md px-3 py-2 mt-1 mb-1 text-sm w-full"
-        />
-        {formik.touched.available_from && formik.errors.available_from && (
-          <Typography variant="small" className="text-red-500">
-            {formik.errors.available_from}
-          </Typography>
+        {isEditing && formik.values.available_from ? (
+          <div className="mt-2">
+            <Typography variant="small" className="opacity-90 font-semibold">
+              Available From
+            </Typography>
+            <div className="mt-1">
+              {format(new Date(formik.values.available_from), "MM/dd/yyyy")}
+            </div>
+          </div>
+        ) : (
+          <div className="mt-2">
+            <Typography variant="small" className="opacity-90 font-semibold">
+              Available From
+            </Typography>
+            <DatePicker
+              selected={formik.values.available_from}
+              onChange={(date) => formik.setFieldValue("available_from", date)}
+              onBlur={formik.handleBlur}
+              placeholderText="Available From"
+              className="border rounded-md px-3 py-2 mt-1 mb-1 text-sm w-full"
+            />
+            {formik.touched.available_from && formik.errors.available_from && (
+              <Typography variant="small" className="text-red-500">
+                {formik.errors.available_from}
+              </Typography>
+            )}
+          </div>
         )}
       </div>
 
@@ -513,9 +626,11 @@ function PostCreations() {
       <div className="mt-2 space-x-9">
         <Button
           variant="gradient"
-          color={selectedSecurityDeposit === "None" ? "blue-gray" : "white"}
+          color={
+            formik.values.security_deposit === "None" ? "blue-gray" : "white"
+          }
           className={`text-light-blue-900 ${
-            selectedSecurityDeposit === "None" ? "selectedStyle" : ""
+            formik.values.security_deposit === "None" ? "selectedStyle" : ""
           }`}
           onClick={() => {
             formik.setFieldValue("security_deposit", "None");
@@ -523,10 +638,11 @@ function PostCreations() {
           }}
           style={{
             backgroundColor:
-              selectedSecurityDeposit === "None" ? "#F8F8F8" : "",
-            color: selectedSecurityDeposit === "None" ? "white" : "black",
+              formik.values.security_deposit === "None" ? "#F8F8F8" : "",
+            color:
+              formik.values.security_deposit === "None" ? "white" : "black",
             boxShadow:
-              selectedSecurityDeposit === "None"
+              formik.values.security_deposit === "None"
                 ? "0 4px 8px rgba(0, 0, 0, 0.1)"
                 : "",
           }}
@@ -535,9 +651,11 @@ function PostCreations() {
         </Button>
         <Button
           variant="gradient"
-          color={selectedSecurityDeposit === "1 Month" ? "blue-gray" : "white"}
+          color={
+            formik.values.security_deposit === "1 Month" ? "blue-gray" : "white"
+          }
           className={`text-light-blue-900 ${
-            selectedSecurityDeposit === "1 Month" ? "selectedStyle" : ""
+            formik.values.security_deposit === "1 Month" ? "selectedStyle" : ""
           }`}
           onClick={() => {
             formik.setFieldValue("security_deposit", "1 Month");
@@ -545,10 +663,11 @@ function PostCreations() {
           }}
           style={{
             backgroundColor:
-              selectedSecurityDeposit === "1 Month" ? "#F8F8F8" : "",
-            color: selectedSecurityDeposit === "1 Month" ? "white" : "black",
+              formik.values.security_deposit === "1 Month" ? "#F8F8F8" : "",
+            color:
+              formik.values.security_deposit === "1 Month" ? "white" : "black",
             boxShadow:
-              selectedSecurityDeposit === "1 Month"
+              formik.values.security_deposit === "1 Month"
                 ? "0 4px 8px rgba(0, 0, 0, 0.1)"
                 : "",
           }}
@@ -557,9 +676,11 @@ function PostCreations() {
         </Button>
         <Button
           variant="gradient"
-          color={selectedSecurityDeposit === "2 Month" ? "blue-gray" : "white"}
+          color={
+            formik.values.security_deposit === "2 Month" ? "blue-gray" : "white"
+          }
           className={`text-light-blue-900 ${
-            selectedSecurityDeposit === "2 Month" ? "selectedStyle" : ""
+            formik.values.security_deposit === "2 Month" ? "selectedStyle" : ""
           }`}
           onClick={() => {
             formik.setFieldValue("security_deposit", "2 Month");
@@ -567,10 +688,11 @@ function PostCreations() {
           }}
           style={{
             backgroundColor:
-              selectedSecurityDeposit === "2 Month" ? "#F8F8F8" : "",
-            color: selectedSecurityDeposit === "2 Month" ? "white" : "black",
+              formik.values.security_deposit === "2 Month" ? "#F8F8F8" : "",
+            color:
+              formik.values.security_deposit === "2 Month" ? "white" : "black",
             boxShadow:
-              selectedSecurityDeposit === "2 Month"
+              formik.values.security_deposit === "2 Month"
                 ? "0 4px 8px rgba(0, 0, 0, 0.1)"
                 : "",
           }}
@@ -579,9 +701,11 @@ function PostCreations() {
         </Button>
         <Button
           variant="gradient"
-          color={selectedSecurityDeposit === "3 Month" ? "blue-gray" : "white"}
+          color={
+            formik.values.security_deposit === "3 Month" ? "blue-gray" : "white"
+          }
           className={`text-light-blue-900 ${
-            selectedSecurityDeposit === "3 Month" ? "selectedStyle" : ""
+            formik.values.security_deposit === "3 Month" ? "selectedStyle" : ""
           }`}
           onClick={() => {
             formik.setFieldValue("security_deposit", "3 Month");
@@ -589,10 +713,11 @@ function PostCreations() {
           }}
           style={{
             backgroundColor:
-              selectedSecurityDeposit === "3 Month" ? "#F8F8F8" : "",
-            color: selectedSecurityDeposit === "3 Month" ? "white" : "black",
+              formik.values.security_deposit === "3 Month" ? "#F8F8F8" : "",
+            color:
+              formik.values.security_deposit === "3 Month" ? "white" : "black",
             boxShadow:
-              selectedSecurityDeposit === "3 Month"
+              formik.values.security_deposit === "3 Month"
                 ? "0 4px 8px rgba(0, 0, 0, 0.1)"
                 : "",
           }}
@@ -603,40 +728,53 @@ function PostCreations() {
       <Button type="button" onClick={handleNext}>
         Next
       </Button>
-      <Button type="submit">Submit</Button>
     </form>
   );
 
-  const renderImageUplode = () => (
-    <>
-      <form onSubmit={formik.handleSubmit} className="space-y-6">
-        <Typography variant="h4">Upload Images</Typography>
+    const renderImageUplode = () => (
+      <>
+        <form onSubmit={formik.handleSubmit} className="space-y-6 ">
+          <Typography variant="h4">Upload Images</Typography>
 
-        <div className="flex flex-col gap-6 w-full md:w-[500px]">
-          <input
-            type="file"
-            name="images"
-            accept="image/*"
-            onChange={handleImageChange}
-            multiple
-          />
+          <div className="flex flex-col gap-6 w-full md:w-[500px]">
+            <input
+              type="file"
+              name="images"
+              accept="image/*"
+              onChange={handleImageChange}
+              multiple
+            />
 
-          {/* Display the selected images */}
-          {formik.values.images.length > 0 &&
-            formik.values.images.map((image, index) => (
-              <div key={index}>
-                <Typography variant="small">{image.name}</Typography>
-              </div>
-            ))}
-        </div>
+          
+          </div>
 
-        <Button type="button" onClick={() => handlePrev(2)}>
-          Previous
-        </Button>
-        <Button type="submit">Submit</Button>
-      </form>
-    </>
-  );
+          <Button type="submit">Submit</Button>
+        </form>
+        {isEditing && existingPostData && (
+          <div>
+            <Typography variant="h4">Existing Images</Typography>
+            <div className="flex flex-wrap gap-4 mt-4">
+              {existingPostData.images.map((image, index) => (
+                <div key={index} className="relative">
+                  <img
+                    src={`${import.meta.env.VITE_USER_URL}${image.image}`}
+                    alt={`Image ${index}`}
+                    className="h-[100px] w-[100px] object-cover rounded-t-lg"
+                  />
+                  <button
+                    type="button"
+                    className="absolute top-0 right-0 p-1 bg-red-500 text-white rounded-full"
+                    onClick={() => handleDeleteImage(image.id)}
+                  >
+                    X
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </>
+    );
 
   const renderStepContent = (step) => {
     switch (step) {
@@ -687,4 +825,5 @@ function PostCreations() {
   );
 }
 
-export default PostCreations;
+export default PropertyForm;
+  

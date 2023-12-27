@@ -8,6 +8,7 @@ import homeCover from "../../../../assets/coverhome.png";
 import SearchBar from "../SearchBarHome/SearchBar";
 import TemporaryDrawer from "../SidebarHome/SideBar";
 import "./UserNavbar.css";
+import { Link } from "react-router-dom";
 
 export function StickyNavbar() {
   const [scrolling, setScrolling] = useState(false);
@@ -56,6 +57,13 @@ export function StickyNavbar() {
                 <FaRegHeart className="h-6 w-9 mb-3 text-white" />
               </Button>
             </div>
+            <Link to="/user/property_list/" style={{ textDecoration: 'none' }}>
+            <div className="flex items-center gap-x-1 mb-3" >
+              List Propertys
+            </div>
+            </Link>
+            
+
             <div className="mr-4">{renderNavList()}</div>
           </div>
         </div>

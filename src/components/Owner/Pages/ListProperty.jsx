@@ -10,6 +10,7 @@ import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import Example from "./Layouts/DeleteAlertModal";
 import NoImage from "../../../assets/House-image.svg";
+import { Link } from "react-router-dom";
 
 function ListPropertys() {
   const [postData, setPostData] = useState(null);
@@ -71,7 +72,7 @@ function ListPropertys() {
   return (
     <div>
       <Navbar />
-      <div className="flex justify-center items-center flex-col">
+      <div className="flex justify-center items-center flex-col ">
         {postData?.map((property) => (
           <Card
             key={property.id}
@@ -120,7 +121,7 @@ function ListPropertys() {
                   </>
                 )}
               </div>
-              <div className="absolute top-0 right-0 h-10 w-44 flex justify-around mt-4">
+              <div className="absolute top-0 right-0 h-10 w-44 flex justify-around mt-4 mr-3 ">
                 {property.is_available && (
                   <>
                     <Typography
@@ -129,12 +130,12 @@ function ListPropertys() {
                     >
                       Share
                     </Typography>
-                    <Typography
-                      variant="h6"
+                    <Link
+                      to={`/owner/edit-properties/${property.id}`}
                       className="text-light-blue-900 text-base cursor-pointer"
                     >
-                      Edit
-                    </Typography>
+                      <Typography variant="h6">Edit</Typography>
+                    </Link>
                   </>
                 )}
                 {property.is_available ? (

@@ -5,6 +5,7 @@ import UserSignupPage from '../pages/User/UserSignupPage'
 import PrivateRoute from '../ProtectedRoutes/PrivateRoute';
 import UserProtect from '../ProtectedRoutes/UserProtect';
 import UserHomePage from '../pages/User/UserHomePage';
+import PropertyList from '../pages/User/PropertyList';
 
 function UsersRoutes() {
     
@@ -16,7 +17,9 @@ function UsersRoutes() {
         </Route>
         <Route exact element = {<UserProtect/>}>
 
-            <Route path='/userhome/' element = {<UserHomePage/>}/>
+        <Route path='/userhome/' element = {<UserHomePage/>}/>
+        <Route path='/property_list/' element = {<PropertyList/>}/>
+            
            
         </Route>
          

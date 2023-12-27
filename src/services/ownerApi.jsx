@@ -14,6 +14,9 @@
 //   customerSignin
 // }
 
+import axios from 'axios';
+
+
 import { OwnerAxiosInstant } from "../utils/axiosUtils";
 
 const OwnerGoogleSignup = (value) => {
@@ -25,7 +28,9 @@ const OwnerGoogleSignup = (value) => {
   return OwnerAxiosInstant.post("/googleowner/", values, {
     withCredentials: true,
   });
+  
 };
+
 
 
 
@@ -38,8 +43,20 @@ const OwnerPostCreation =(values)=>{
   });
 };
 
+
+const DeletePropertyImages = (id) =>{
+  return OwnerAxiosInstant.delete("/editdeletepropertyimages/" +id+ "/" , {withCredentials:true})
+}
+
+const EditPropertyImages = (id , value) =>{
+  return OwnerAxiosInstant.patch("/editdeletepropertyimages/" +id+ "/" , value, {withCredentials:true})
+}
+
 export {
   OwnerGoogleSignup,
   OwnerPostCreation,
+  DeletePropertyImages,
+  EditPropertyImages,
   
 }
+

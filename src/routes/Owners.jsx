@@ -8,6 +8,7 @@ import OwnerHomePage from '../pages/Owner/OwnerHomePage'
 import PostCreation from '../pages/Owner/PostCreation'
 import ListProperty from '../pages/Owner/ListProperty'
 import OwnerProfile from '../pages/Owner/OwnerProfile'
+import EditPropertys from '../pages/Owner/EditPropertys'
 
 function OwnersRoutes() {
     return (
@@ -20,8 +21,8 @@ function OwnersRoutes() {
             <Route path='/ownerhome/' element = {<OwnerHomePage/>}/>
             <Route path='/add-properties/' element = {<PostCreation/>}/>
             <Route path='/list-properties/' element = {<ListProperty/>}/>
+            <Route path='/edit-properties/:propertyId' element={<EditPropertys />} />
             <Route path='/profile/' element = {<OwnerProfile/>}/>
-            
             
 
             
