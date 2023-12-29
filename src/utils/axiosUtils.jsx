@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { UserUrl, OwnerUrl,AdminUrl} from '../Constants/Constants'
+import { json } from 'react-router-dom'
 
 const CreateAxiosClient = (baseURL) =>{
     const client = axios.create({
@@ -12,9 +13,10 @@ const CreateAxiosClient = (baseURL) =>{
 
 
 const attachToken = (req,tokenName) => {
-    let authToken = localStorage.getItem(tokenName.access)
-    if(authToken){
-        req.headers.Authorization = `Bearer ${authToken}`;
+    let authToken = localStorage.getItem('token')
+    const accessToken = JSON.parse(authToken)
+    if(accessToken){
+        req.headers.Authorization = `Bearer ${accessToken.access}`;
     }
     return req
 }

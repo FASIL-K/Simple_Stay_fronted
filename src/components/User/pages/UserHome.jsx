@@ -1,58 +1,128 @@
-import React from 'react'
-import TemporaryDrawer from '../../User/Layout/SidebarHome/SideBar'
-// import { StickyNavbar } from '../../Layout/Navbar/UserNavbar'
-// import { CustomNavbar } from '../../Layout/HomepageNav.jsx/Navbar'
+import React from "react";
+import TemporaryDrawer from "../../User/Layout/SidebarHome/SideBar";
+import { Typography } from "@material-tailwind/react";
+import findImage from "../../../assets/findEasy.png"; // Import the image file
+import stayImage from "../../../assets/stay-easy.png";
 
 function UserHome() {
   return (
     <div>
-     <TemporaryDrawer/>
-      <h1>Body</h1>
-      <h3>What is Lorem Ipsum?
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+      <TemporaryDrawer />
+      <>
+        <div className="mt-28">
+          {/* First Row */}
+          <div className="flex w-auto h-screen">
+            <div className=" h-4/6 w-screen flex">
+              <div className="w-1/2 h-full flex items-center justify-center relative overflow-hidden">
+                <div
+                  className="w-5/6 h-5/6 bg-red-200 rounded-2xl relative overflow-hidden "
+                  
+                >
+                  <div className="p-8">
+                    <Typography
+                      color="gray"
+                      variant="h6"
+                      style={{ fontSize: "4rem" }}
+                      className="text-gray-900 font-thin text-start mt-6"
+                    >
+                      FIND
+                    </Typography>
+                    <Typography
+                      color="gray"
+                      style={{ fontSize: "2rem" }}
+                      className="text-gray-900 font-bold text-start -mt-8"
+                    >
+                      EASY
+                    </Typography>
+                  </div>
+                  {/* Image inside red div */}
+                </div>
+                {/* Image inside orange div */}
+                <div className="absolute top-36 right-0 w-1/2 h-full bg-no-repeat bg-cover">
+                  <img src={findImage} alt="" />
+                </div>
+              </div>
+              <div className="w-1/2 h-"></div>
+            </div>
+          </div>
 
-Why do we use it?
-It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+          {/* Second Row */}
+          <div className="flex w-auto h-screen">
+            <div className="bg-black w-auto h-screen">
 
-What is Lorem Ipsum?
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+            </div>
+            <div className=" h-4/6 w-screen flex">
+            <div className="w-1/2 h-full flex items-center justify-center relative overflow-hidden">
+              </div>
+              <div className="w-1/2 h-full flex items-center justify-center relative overflow-hidden">
+                <div
+                  className="w-5/6 h-5/6 bg-red-200 rounded-2xl relative overflow-hidden"
+                >
+                  <div className="p-8">
+                    <Typography
+                      color="gray"
+                      variant="h6"
+                      style={{ fontSize: "4rem" }}
+                      className="text-gray-900 font-thin text-start mt-6"
+                    >
+                      STAY
+                    </Typography>
+                    <Typography
+                      color="gray"
+                      style={{ fontSize: "2rem" }}
+                      className="text-gray-900 font-bold text-start -mt-8"
+                    >
+                      EASY
+                    </Typography>
+                  </div>
+                  {/* Image inside red div */}
+                </div>
+                {/* Image inside orange div */}
+                <div className="absolute top-36  right-0 w-1/2 h-full bg-no-repeat bg-cover">
+                  <img src={stayImage} alt="" />
+                </div>
+              </div>
+            </div>
+          </div>
 
-Why do we use it?
-It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-
-What is Lorem Ipsum?
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-
-Why do we use it?
-It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-
-What is Lorem Ipsum?
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-
-Why do we use it?
-It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-
-What is Lorem Ipsum?
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-
-Why do we use it?
-It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-
-What is Lorem Ipsum?
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-
-Why do we use it?
-It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-
-What is Lorem Ipsum?
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-
-Why do we use it?
-It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-
-</h3>
+          {/* Third Row */}
+          <div className="flex w-auto h-screen">
+            <div className=" h-4/6 w-screen flex">
+              <div className="w-1/2 h-full flex items-center justify-center relative overflow-hidden">
+                <div
+                  className="w-5/6 h-5/6 bg-red-200 rounded-2xl relative overflow-hidden"
+                >
+                  <div className="p-8">
+                    <Typography
+                      color="gray"
+                      variant="h6"
+                      style={{ fontSize: "4rem" }}
+                      className="text-gray-900 font-thin text-start mt-6"
+                    >
+                      FIND
+                    </Typography>
+                    <Typography
+                      color="gray"
+                      style={{ fontSize: "2rem" }}
+                      className="text-gray-900 font-bold text-start -mt-8"
+                    >
+                      EASY
+                    </Typography>
+                  </div>
+                  {/* Image inside red div */}
+                </div>
+                {/* Image inside orange div */}
+                <div className="absolute top-36  right-0 w-1/2 h-full bg-no-repeat bg-cover">
+                  <img src={findImage} alt="" />
+                </div>
+              </div>
+              <div className="w-1/2 h- b"></div>
+            </div>
+          </div>
+        </div>
+      </>
     </div>
-  )
+  );
 }
 
-export default UserHome
+export default UserHome;

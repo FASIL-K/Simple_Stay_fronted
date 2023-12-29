@@ -17,7 +17,7 @@ function OwnersRoutes() {
             <Route path='/signup/' element={<OwnerSignupPage/>} />
         </Route>
         <Route exact element = {<OwnerProtect/>}>
-
+            
             <Route path='/ownerhome/' element = {<OwnerHomePage/>}/>
             <Route path='/add-properties/' element = {<PostCreation/>}/>
             <Route path='/list-properties/' element = {<ListProperty/>}/>

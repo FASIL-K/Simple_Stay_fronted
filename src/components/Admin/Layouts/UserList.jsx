@@ -204,9 +204,8 @@ function UserList() {
                         </div>
                       </td>
                       <td className={classes}>
-                        <Tooltip content={user.is_active ? "Block User" : "Unblock User"}>
+                        <Tooltip  content={user.is_active ? "Block User" : "Unblock User"}>
                           <div style={{ minWidth: '80px' }}> {/* Set a fixed size for the container */}
-                            <IconButton variant="text">
                               {user.is_active ? (
                                 <NotificationModal
                                   buttonText="Block"
@@ -225,7 +224,7 @@ function UserList() {
                                   buttonText="Unblock"
                                   modalTitle="Confirmation"
                                   modalHeading="Do you want to Unblock this user ?"
-                                  buttonColor="red"
+                                  buttonColor="green"
                                   modalContent="Note : User will be able to access this account"
                                   onOkClick={async () => {
                                     const data = { is_active: true };
@@ -234,7 +233,6 @@ function UserList() {
                                   }}
                                 />
                               )}
-                            </IconButton>
                           </div>
                         </Tooltip>
                       </td>

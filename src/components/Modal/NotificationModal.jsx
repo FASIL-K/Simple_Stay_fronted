@@ -23,27 +23,30 @@ function NotificationModal({ buttonText, modalTitle, modalContent, onOkClick,mod
     <>
       
       <Button onClick={handleOpen} color={buttonColor}>{buttonText}</Button>
-      <Dialog open={open} handler={handleOpen}>
-        <DialogHeader>
-          <Typography variant="h5" color="blue-gray">
+      <Dialog open={open} handler={handleOpen} size='xxl' className='bg-black bg-opacity-[10rem]  backdrop-blur-sm' >
+        <div className='text-center mt-[10rem] bg-white shadow-2xl w-[40rem] h-[20rem] ml-80'>
+
+          <Typography variant="h5" color="blue-gray" className='mt-10'>
             {modalTitle}
           </Typography>
-        </DialogHeader>
-        <DialogBody divider className="grid place-items-center gap-4">
+        
+        <div className="grid place-items-center gap-4">
         
           <Typography color="red" variant="h4">
             {modalHeading}
           </Typography>
           {modalContent}
-        </DialogBody>
-        <DialogFooter className="space-x-2">
+        </div>
+        <div className="space-x-2 mt-14 ">
           <Button variant="text" color="blue-gray" onClick={handleOpen}>
             Close
           </Button>
           <Button variant="gradient" onClick={handleOkClick}>
             Ok, Got It
           </Button>
-        </DialogFooter>
+        </div>
+        </div>
+
       </Dialog>
     </>
   );

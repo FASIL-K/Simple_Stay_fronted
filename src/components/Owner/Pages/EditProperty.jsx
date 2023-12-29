@@ -6,6 +6,7 @@ import PropertyForm from '../../../components/Owner/Pages/PostCreation';
 import { useParams } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
 import { OwnerUrl } from '../../../Constants/Constants';
+import { PropertyEdit } from '../../../services/ownerApi';
 
 function EditProperty() {
   const { propertyId } = useParams();
@@ -18,8 +19,9 @@ function EditProperty() {
   const userId = decode.user_id;  useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${OwnerUrl}property-post/${userId}/${propertyId}/`);
-        console.log(response,"asdasas");
+
+        const response = await PropertyEdit(userId,propertyId)
+       
         setPropertyDetails(response.data);
 
       } catch (error) {

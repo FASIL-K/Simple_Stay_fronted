@@ -8,7 +8,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { OwnerPostCreation } from "../../../services/ownerApi";
+import { EditProperty, OwnerPostCreation, PropertyEdit } from "../../../services/ownerApi";
 import axios, { Axios } from "axios";
 import { jwtDecode } from "jwt-decode";
 import { OwnerUrl } from "../../../Constants/Constants";
@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { formatISO } from "date-fns";
 import { format } from "date-fns";
 import { useParams } from "react-router-dom";
+
 
 const validationSchemas = [
   Yup.object().shape({
@@ -69,9 +70,11 @@ function PropertyForm({ isEditing, initialValues }) {
     const fetchPostData = async () => {
       if (propertyId) {
         try {
-          const response = await axios.get(
-            `${OwnerUrl}property-post/${userId}/${propertyId}/`
-          );
+
+          const response = await PropertyEdit(userId, propertyId)
+          // const response = await axios.get(
+          //   `${OwnerUrl}property-post/${userId}/${propertyId}/`
+          // );
           const postData = response.data; // Assuming your API response has the post data structure
           console.log(postData, "postdateasssssssssss");
           // Parse the date received from the backend and set it in the correct format
@@ -121,12 +124,8 @@ function PropertyForm({ isEditing, initialValues }) {
     validationSchema: validationSchemas[activeStep],
     onSubmit: async (values) => {
       try {
-        const apiUrl = isEditing
-          ? `${OwnerUrl}property-post/${userId}/${propertyId}/`
-          : `${OwnerUrl}property-post/${userId}/`;
-
-        console.log(values, "dsadasdaszxxxxxxxxxxxxxxxxxxx");
-        const formattedDate = format(
+        
+      const formattedDate = format(
           new Date(values.available_from),
           "yyyy-MM-dd"
         );
@@ -144,9 +143,16 @@ function PropertyForm({ isEditing, initialValues }) {
           }
         });
         console.log(formData, "asdfasfdasd form data");
+        const apiUrl = isEditing
+        ? EditProperty(userId, propertyId, formData) // Pass values to EditProperty
+        : OwnerPostCreation(userId, formData); 
+
+      console.log(apiUrl, "Constructed API URL");
         const response = isEditing
-          ? await axios.put(apiUrl, formData)
-          : await axios.post(apiUrl, formData);
+        ? await apiUrl // apiUrl is already a function
+
+        : await apiUrl
+        console.log(response, "Response from API");
 
         console.log(response, "anzil");
 

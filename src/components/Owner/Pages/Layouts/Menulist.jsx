@@ -12,17 +12,28 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { resetState } from "../../../../redux/User";
+import { OwnerLogout } from "../../../../services/ownerApi";
+import { toast } from "react-toastify";
 
 export default function DropDown() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
   
-  const handlelogout = () => {
-    localStorage.removeItem('token');
-    dispatch(resetState());
-    navigate('/login'); // Redirect to the login page after logout
+  const handlelogout = async () => {
+    try {
+      const res = await OwnerLogout()
+        localStorage.removeItem('token');
+        dispatch(resetState());
+        navigate('/login'); // Redirect to the login page after logout
+    } catch (error) {
+      console.log(error);
+      toast.error("somthing error")
+      
+    }
+    
   }
+
   return (
     <Popover placement="bottom-start">
       <PopoverHandler>

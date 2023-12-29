@@ -11,6 +11,7 @@ import axios from "axios";
 import Example from "./Layouts/DeleteAlertModal";
 import NoImage from "../../../assets/House-image.svg";
 import { Link } from "react-router-dom";
+import { DeactivateProperty, PropertyListing } from "../../../services/ownerApi";
 
 function ListPropertys() {
   const [postData, setPostData] = useState(null);
@@ -22,16 +23,26 @@ function ListPropertys() {
   const [modalKey, setModalKey] = useState(0); // Add a key to force remounting the modal
 
   useEffect(() => {
-    const apiUrl = `${OwnerUrl}property-post/${userId}/`;
-    axios
-      .get(apiUrl)
-      .then((response) => {
-        setPostData(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+    DataListing()
+    // const apiUrl = `${OwnerUrl}property-post/${userId}/`;
+    // axios
+    //   .get(apiUrl)
+    //   .then((response) => {
+    //     setPostData(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error fetching data:", error);
+    //   });
   }, [userId]);
+
+  const DataListing = async() =>{
+    try {
+      const response = await PropertyListing(userId)
+      setPostData(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const handleActivateClick = (property) => {
     setPropertyToDelete(property);
@@ -44,16 +55,10 @@ function ListPropertys() {
 
   const handleDeleteConfirmation = async () => {
     try {
-      console.log("Activating/Deactivating property:", propertyToDelete);
-
-      // Update the 'is_available' field based on the current state
-      const apiUrl = `${OwnerUrl}property-post/${userId}/${propertyToDelete.id}/`;
       const isAvailable = !propertyToDelete.is_available;
-
-      await axios.put(apiUrl, { is_available: isAvailable });
-
-      // Update the local state to mark the post as active/inactive
-      setPostData((prevData) =>
+      const res = await DeactivateProperty(userId,propertyToDelete.id,{is_available: isAvailable })
+      if (res.status===200){
+        setPostData((prevData) =>
         prevData.map((p) =>
           p.id === propertyToDelete.id ? { ...p, is_available: isAvailable } : p
         )
@@ -64,6 +69,17 @@ function ListPropertys() {
       setShowDeleteModal(false);
       // Increment the key to force remounting the modal
       setModalKey((prevKey) => prevKey + 1);
+      }
+      // console.log("Activating/Deactivating property:", propertyToDelete);
+
+      // // Update the 'is_available' field based on the current state
+      // const apiUrl = `${OwnerUrl}property-post/${userId}/${propertyToDelete.id}/`;
+
+      // await axios.put(apiUrl, { is_available: isAvailable });
+
+
+      // Update the local state to mark the post as active/inactive
+      
     } catch (error) {
       console.error("Error activating/deactivating property:", error);
     }
