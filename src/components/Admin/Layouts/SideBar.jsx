@@ -68,6 +68,12 @@ export function SideBar() {
         </ListItem>
         <ListItem>
           <ListItemPrefix>
+            <UserCircleIcon className="h-5 w-5" />
+          </ListItemPrefix>
+          Post
+        </ListItem>
+        <ListItem>
+          <ListItemPrefix>
             <Cog6ToothIcon className="h-5 w-5" />
           </ListItemPrefix>
           Settings

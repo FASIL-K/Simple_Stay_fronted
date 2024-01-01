@@ -145,7 +145,7 @@ function PropertyForm({ isEditing, initialValues }) {
         console.log(formData, "asdfasfdasd form data");
         const apiUrl = isEditing
         ? EditProperty(userId, propertyId, formData) // Pass values to EditProperty
-        : OwnerPostCreation(userId, formData); 
+        : OwnerPostCreation(userId, formData ); 
 
       console.log(apiUrl, "Constructed API URL");
         const response = isEditing
