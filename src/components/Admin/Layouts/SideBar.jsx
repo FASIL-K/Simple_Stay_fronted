@@ -30,6 +30,9 @@ export function SideBar() {
     navigate("/admin/users/")
 
   }
+  const handlePostList = ()=>{
+    navigate("/admin/posts/")
+  }
   
   const handleLogout = () =>{
     localStorage.removeItem('token')
@@ -60,17 +63,17 @@ export function SideBar() {
           User
           
         </ListItem>
-        <ListItem>
+        <ListItem onClick={handlePostList}>
           <ListItemPrefix>
             <UserCircleIcon className="h-5 w-5" />
           </ListItemPrefix>
-          Profile
+          Post
         </ListItem>
         <ListItem>
           <ListItemPrefix>
             <UserCircleIcon className="h-5 w-5" />
           </ListItemPrefix>
-          Post
+          Profile
         </ListItem>
         <ListItem>
           <ListItemPrefix>

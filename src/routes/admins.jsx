@@ -5,7 +5,7 @@ import AdminHomePage from '../pages/Admin/AdminHomePage'
 import AdminProtect from '../ProtectedRoutes/AdminProtect'
 import PrivateRoute from '../ProtectedRoutes/PrivateRoute'
 import UserLists from '../pages/Admin/UserListing'
-
+import PostList from '../pages/Admin/PostList'
 
 function AdminsRoute() {
     return (
@@ -16,8 +16,9 @@ function AdminsRoute() {
         <Route element={<AdminProtect/>}>
             <Route path='/adminhomepage/' element={<AdminHomePage/>}/>
             <Route path='/users/' element={<UserLists/>} />
+            <Route path='/posts/' element={<PostList/>} />
    
-
+            
         </Route>
     </Routes>
     )
