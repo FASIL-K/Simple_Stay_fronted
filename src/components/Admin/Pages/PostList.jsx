@@ -50,6 +50,7 @@ function PostLists() {
   ];
 
   const [post, setPost] = useState();
+
   useEffect(() => {
     console.log("Previous Post:", post);
     FetchPostInfo();
@@ -233,8 +234,8 @@ function PostLists() {
                                   onOkClick={async () => {
                                     const data = { is_verify: false };
                                     await VerifyPost(singlePost.id, data);
-                                    await FetchUserInfo();
-                                  }}
+                                    await FetchPostInfo()
+                                }}
                                 />
                               ) : (
                                 <NotificationModal
@@ -246,8 +247,8 @@ function PostLists() {
                                   onOkClick={async () => {
                                     const data = { is_verify: true };
                                     await VerifyPost(singlePost.id, data);
-                                    await FetchUserInfo();
-                                  }}
+                                    await FetchPostInfo()
+                                }}
                                 />
                               )}
                             </div>
@@ -292,7 +293,7 @@ function PostLists() {
                                   onOkClick={async () => {
                                     const data = { is_blocked_by_admin: false };
                                     await BlockPost(singlePost.id, data);
-                                    await FetchUserInfo();
+                                  await  FetchPostInfo()
                                   }}
                                 />
                               ) : (
@@ -305,7 +306,8 @@ function PostLists() {
                                   onOkClick={async () => {
                                     const data = { is_blocked_by_admin: true };
                                     await BlockPost(singlePost.id, data);
-                                    await FetchUserInfo();
+                                   await FetchPostInfo()
+                                     
                                   }}
                                 />
                               )}
