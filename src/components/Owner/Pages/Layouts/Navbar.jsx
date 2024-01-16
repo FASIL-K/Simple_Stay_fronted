@@ -11,6 +11,7 @@ const navItems = [
   { path: "/owner/ownerhome/", label: "Dashboard" },
   { path: "/owner/list-properties/", label: "Listing" },
   { path: "/owner/profile/", label: "Profile" },
+  { path: "/owner/premium/", label: "Packages" },
   
 ];
 

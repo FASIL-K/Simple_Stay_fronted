@@ -9,6 +9,7 @@ import PostCreation from '../pages/Owner/PostCreation'
 import ListProperty from '../pages/Owner/ListProperty'
 import OwnerProfile from '../pages/Owner/OwnerProfile'
 import EditPropertys from '../pages/Owner/EditPropertys'
+import OwnerPremium from '../pages/Owner/OwnerPremium'
 
 function OwnersRoutes() {
     return (
@@ -23,6 +24,7 @@ function OwnersRoutes() {
             <Route path='/list-properties/' element = {<ListProperty/>}/>
             <Route path='/edit-properties/:propertyId' element={<EditPropertys />} />
             <Route path='/profile/' element = {<OwnerProfile/>}/>
+            <Route path='/premium/' element = {<OwnerPremium/>}/>
             
 
             

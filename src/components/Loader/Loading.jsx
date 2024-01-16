@@ -1,5 +1,5 @@
 
-import { Triangle , Rings, Puff,Oval} from 'react-loader-spinner'
+import { Triangle } from 'react-loader-spinner'
  
 export function Loader() {
   return (

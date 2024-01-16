@@ -19,36 +19,36 @@ function UserSignup() {
   };
   const { values, errors, touched, handleBlur, handleSubmit, handleChange } =
     useFormik({
-      initialValues:initialValues,
+      initialValues: initialValues,
       validationSchema: SignupValidationSchema,
       onSubmit: async (values) => {
         try {
-          console.log(values,"jjjjjjjjjjjjjjjjjjj");
-          setLoading(true)
+          console.log(values, "jjjjjjjjjjjjjjjjjjj");
+          setLoading(true);
           const response = await axios.post(
             import.meta.env.VITE_USER_URL + "/owner/register/",
             values
           );
 
-          console.log(response,"ressssddddd");
+          console.log(response, "ressssddddd");
           navigate("/emailcheck");
-          setLoading(True)
+          setLoading(True);
           toast.success(response.data.msg);
-        }  catch (error) {
+        } catch (error) {
           setLoading(false);
-        
+
           if (error.response && error.response.data) {
             const errorData = error.response.data;
             console.log(errorData, "fecdefcsdjcfwdhj");
-            toast.error(errorData.msg || "An error occurred during registration");
+            toast.error(
+              errorData.msg || "An error occurred during registration"
+            );
           } else {
             toast.error("An error occurred during registration.");
           }
         }
       },
     });
-
-
 
   const backgroundStyle = {
     backgroundImage: `url()`,
@@ -58,13 +58,16 @@ function UserSignup() {
   };
 
   return (
-    <div className="bg-cover bg-center  flex justify-center items-center container mx-auto w-screen" style={backgroundStyle}>
+    <div
+      className="bg-cover bg-center  flex justify-center items-center container mx-auto w-screen"
+      style={backgroundStyle}
+    >
       {loading && <Loader />}
 
       <div className=" ">
         <div className="">
           <Card className="shadow-2xl shadow-black  rounded-md w-96 sm:w-[28rem]">
-          <img src={logoImage} alt="Logo" className="mx-auto " />
+            <img src={logoImage} alt="Logo" className="mx-auto " />
             <div className="m-6 flex flex-col  justify-center items-center ">
               <Typography
                 variant="h4"
@@ -88,8 +91,8 @@ function UserSignup() {
                     value={values.email}
                   />
                   {touched.email && errors.email && (
-                      <div className="text-red-500 text-xs ">{errors.email}</div>
-                    )}
+                    <div className="text-red-500 text-xs ">{errors.email}</div>
+                  )}
                 </div>
 
                 <div className="mb-3 w-80 sm:w-96">
@@ -105,8 +108,10 @@ function UserSignup() {
                     value={values.password}
                   />
                   {touched.password && errors.password && (
-                      <div className="text-red-500 text-xs ">{errors.password}</div>
-                    )}
+                    <div className="text-red-500 text-xs ">
+                      {errors.password}
+                    </div>
+                  )}
                 </div>
                 <div className="mb-3 w-80 sm:w-96">
                   <Input
@@ -121,8 +126,10 @@ function UserSignup() {
                     value={values.confirmPassword}
                   />
                   {touched.confirmPassword && errors.confirmPassword && (
-                      <div className="text-red-500 text-xs ">{errors.confirmPassword}</div>
-                    )}
+                    <div className="text-red-500 text-xs ">
+                      {errors.confirmPassword}
+                    </div>
+                  )}
                 </div>
                 <div className="flex items-start justify-between">
                   <Button
@@ -143,7 +150,6 @@ function UserSignup() {
                     Login
                   </Link>
                 </Typography>
-              
               </form>
             </div>
           </Card>

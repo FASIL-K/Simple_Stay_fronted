@@ -14,9 +14,10 @@ import { FaRegHeart } from "react-icons/fa";
 import { IoShareSocialOutline } from "react-icons/io5";
 import { Avatar } from "@material-tailwind/react";
 import { FiMessageSquare } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
-export function HorizontalCard() {
-  const [postData, setPostData] = useState(null);
+export function HorizontalCard({ postData, setPostData }) {
+  // const [postData, setPostData] = useState(null);
 
   useEffect(() => {
     const apiUrl = `${OwnerUrl}post/`;
@@ -33,7 +34,13 @@ export function HorizontalCard() {
 
   // Return null if postData is not available yet
   if (!postData) {
-    return null;
+    return (
+      <div className="flex w-auto h-auto justify-center items-center">
+        <div className="">
+          <Typography>No Post found</Typography>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -64,7 +71,7 @@ export function HorizontalCard() {
               />
               <div>
                 <Typography variant="h6" color="black">
-                 {post.owner_detail.email}  
+                  {post.owner_detail.email}
                 </Typography>
                 <Typography
                   color="gray"
@@ -74,7 +81,6 @@ export function HorizontalCard() {
                   Owner
                 </Typography>
               </div>
-              
             </div>
             {/* <img
               src={
@@ -98,7 +104,9 @@ export function HorizontalCard() {
 
                 <FaRegHeart />
               </div>
-              ₹ {post.monthly_rent}
+              <Link to={`/user/property/${post.id}`} className="cursor-pointer">
+                ₹ {post.monthly_rent}
+              </Link>
             </Typography>
             <Typography
               variant="h4"
@@ -111,13 +119,11 @@ export function HorizontalCard() {
             <Typography color="gray" className="mb-8 font-normal text-left">
               {post.description}
             </Typography>
-            
           </CardBody>
           <div className="absolute gap-3 cursor-pointer bottom-9 right-20 w-[15rem] h-12 bg-light-green-400 rounded-md flex justify-center items-center text-white">
-            <FiMessageSquare/>
+            <FiMessageSquare />
             <Typography>Message Owner</Typography>
           </div>
-
         </Card>
       ))}
     </div>

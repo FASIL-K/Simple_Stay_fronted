@@ -1,49 +1,74 @@
+// UserProfileModal.js
 import React from "react";
-import {
-  Button,
-  Dialog,
-  DialogHeader,
-  DialogBody,
-  DialogFooter,
-} from "@material-tailwind/react";
+import Modal from "react-modal";
+import { FaTimes } from "react-icons/fa";
+import { Avatar, Input, Typography } from "@material-tailwind/react";
 
-export function DialogDefault() {
-  const [open, setOpen] = React.useState(false);
+const customStyles = {
+  overlay: {
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  content: {
+    width: "90%", // Use a relative unit like percentage for responsiveness
+    margin: "auto",
+    borderRadius: "8px",
+  },
+};
 
-  const handleOpen = () => setOpen(!open);
-
+export const UserProfileModal = ({ isOpen, onClose, userInfo }) => {
   return (
-    <>
-      <Button onClick={handleOpen} variant="gradient">
-        Edit
-      </Button>
-      <Dialog
-        open={open}
-        handler={handleOpen}
-        className="fixed inset-0 z-50 overflow-auto"
-        overlayClassName="fixed inset-0 bg-black bg-opacity-50"
-      >
-        <DialogHeader>Its a simple dialog.</DialogHeader>
-        <DialogBody>
-          The key to more success is to have a lot of pillows. Put it this way,
-          it took me twenty-five years to get these plants, twenty-five years of
-          blood sweat and tears, and I&apos;m never giving up, I&apos;m just
-          getting started. I&apos;m up to something. Fan luv.
-        </DialogBody>
-        <DialogFooter>
-          <Button
-            variant="text"
-            color="red"
-            onClick={handleOpen}
-            className="mr-1"
-          >
-            <span>Cancel</span>
-          </Button>
-          <Button variant="gradient" color="green" onClick={handleOpen}>
-            <span>Confirm</span>
-          </Button>
-        </DialogFooter>
-      </Dialog>
-    </>
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onClose}
+      style={customStyles}
+      contentLabel="User Profile Modal"
+    >
+      <div className="flex justify-end">
+        <button onClick={onClose} className="text-2xl">
+          <FaTimes />
+        </button>
+      </div>
+      <div className="">
+        <Typography
+          variant="h5"
+          color="blue-gray"
+          className="font-semibold mb-3"
+        >
+          Edit Your Information
+        </Typography>
+        <div className="flex flex-col md:flex-row">
+          <div className="mb-4 md:mb-0 md:mr-4">
+            <Avatar
+              src="https://docs.material-tailwind.com/img/face-2.jpg"
+              alt="avatar"
+              size="xxl"
+            />
+          </div>
+          <div>
+            <Input
+              variant="standard"
+              label="Username"
+              placeholder="Username"
+              className="w-full md:w-96 lg:w-[900px]"
+            />
+            <div className="my-4"></div>
+            <Input
+              variant="standard"
+              label="Email"
+              placeholder="Email"
+              defaultValue={userInfo.email}
+              className="w-full md:w-96 lg:w-[900px]"
+            />
+            <div className="my-4"></div>
+            <Input
+              variant="standard"
+              type="number"
+              label="Phone"
+              className="w-full md:w-96 lg:w-[900px]"
+            />
+          </div>
+        </div>
+      </div>
+    </Modal>
   );
-}
+};

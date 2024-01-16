@@ -21,22 +21,10 @@ import {
 import { toast } from "react-toastify";
 import axios from "axios";
 import { AdminUrl } from "../../../Constants/Constants";
+import PostDetailsModal from "../Layouts/PostModalDetails";
 
 function PostLists() {
-  const TABS = [
-    {
-      label: "All",
-      value: "all",
-    },
-    {
-      label: "Monitored",
-      value: "monitored",
-    },
-    {
-      label: "Unmonitored",
-      value: "unmonitored",
-    },
-  ];
+  
 
   const TABLE_HEAD = [
     "ID",
@@ -50,6 +38,8 @@ function PostLists() {
   ];
 
   const [post, setPost] = useState();
+  const [selectedPost, setSelectedPost] = useState(null);
+
 
   useEffect(() => {
     console.log("Previous Post:", post);
@@ -84,6 +74,13 @@ function PostLists() {
   //       // Handle case when keyword is empty
   //     }
   //   };
+  const handlePostClick = (post) => {
+    setSelectedPost(post);
+  };
+
+  const handleModalClose = () => {
+    setSelectedPost(null);
+  };
 
   return (
     <div>
@@ -102,13 +99,7 @@ function PostLists() {
             </div>
             <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
               <Tabs value="all" className="w-full md:w-max">
-                <TabsHeader>
-                  {TABS.map(({ label, value }) => (
-                    <Tab key={value} value={value}>
-                      &nbsp;&nbsp;{label}&nbsp;&nbsp;
-                    </Tab>
-                  ))}
-                </TabsHeader>
+                
               </Tabs>
               {/* <div className="w-full md:w-72">
                 <Input
@@ -148,8 +139,8 @@ function PostLists() {
                       : "p-4 border-b border-blue-gray-50";
 
                     return (
-                      <tr key={singlePost.id}>
-                        <td className={classes}>
+                      <tr key={singlePost.id} onClick={() => handlePostClick(singlePost)}>
+                      <td className={classes}>
                           <div className="flex items-center gap-3">
                             {singlePost.id}
                             <img
@@ -346,6 +337,13 @@ function PostLists() {
           </CardFooter>
         </Card>
       </div>
+      {selectedPost && (
+        <PostDetailsModal
+          isOpen={!!selectedPost}
+          onClose={handleModalClose}
+          post={selectedPost}
+        />
+      )}
     </div>
   );
 }
