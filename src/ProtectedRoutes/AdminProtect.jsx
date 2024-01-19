@@ -20,26 +20,24 @@ function parseJwt(token) {
 function AdminProtect() {
     const token = localStorage.getItem('token')
 
-
     if (token) {
-        // const decode = jwtDecode(token)
         const decode = parseJwt(token)
 
         console.log(decode , 'decoded');
 
-        if (decode.user_type == "admin"){
-            return <Outlet/>
-        }else if (decode.user_type == 'user'){
-            return <UserHomePage/>
-        }else if (decode.user_type == 'owner'){
-            return <OwnerHomePage/>
-        }
-        else{
+        if (decode.user_type === "admin") {
+            return <Outlet />
+        } else if (decode.user_type === 'user') {
+            return <Outlet />
+        } else if (decode.user_type === 'owner') {
+            return <Outlet />
+        } else {
+            console.log('Unknown user type:', decode.user_type);
+            // Handle unknown user type, redirect, or show an error message
         }
     }
 }
 
-export default AdminProtect
-
+export default AdminProtect;
 
 

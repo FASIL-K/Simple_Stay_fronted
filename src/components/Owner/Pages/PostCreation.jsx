@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { formatISO } from "date-fns";
 import { format } from "date-fns";
 import { useParams } from "react-router-dom";
+import Select from 'react-select';
 
 
 const validationSchemas = [
@@ -45,6 +46,7 @@ function PropertyForm({ isEditing, initialValues }) {
   const { propertyId } = useParams();
   console.log(propertyId, "sadasdcassad");
   console.log(isEditing, "isededasd");
+  const [cityNames, setCityNames] = useState([]);
 
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [selectedLookingTo, setSelectedLookingTo] = useState("");
@@ -66,6 +68,24 @@ function PropertyForm({ isEditing, initialValues }) {
   const handleDeleteImage = (imageId) => {
     setImages(images.filter(id => id !== imageId));
   };
+  useEffect(() => {
+    const fetchCityNames = async () => {
+      try {
+        const geonamesUsername = 'Fasil';
+        const response = await axios.get(
+          `http://api.geonames.org/searchJSON?country=IN&maxRows=1000&username=${geonamesUsername}`
+        );
+
+        // Extract city names from the response
+        const cities = response.data.geonames.map(city => city.name);
+        setCityNames(cities);
+      } catch (error) {
+        console.error('Error fetching cities:', error);
+      }
+    };
+
+    fetchCityNames();
+  }, []);
   useEffect(() => {
     const fetchPostData = async () => {
       if (propertyId) {
@@ -270,20 +290,18 @@ function PropertyForm({ isEditing, initialValues }) {
       </div>
 
       <div className="flex flex-col gap-6 w-full md:w-[500px]">
-        <Input
-          variant="standard"
-          placeholder="City"
-          name="city"
-          value={formik.values.city}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-        />
-        {formik.touched.city && formik.errors.city && (
-          <Typography variant="small" className="text-red-500">
-            {formik.errors.city}
-          </Typography>
-        )}
-      </div>
+      <Select
+        placeholder="Select City"
+        options={cityNames.map(city => ({ label: city, value: city }))}
+        value={formik.values.city ? { label: formik.values.city, value: formik.values.city } : null}
+        onChange={(selectedOption) => formik.setFieldValue('city', selectedOption?.value || '')}
+      />
+      {formik.touched.city && formik.errors.city && (
+        <Typography variant="small" className="text-red-500">
+          {formik.errors.city}
+        </Typography>
+      )}
+    </div>
 
       <Button type="button" onClick={handleNext}>
         Next

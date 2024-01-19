@@ -65,12 +65,17 @@ function UserLogin() {
         if (res.status === 200) {
           const token = JSON.stringify(res.data);
           const decoded = jwtDecode(token);
-          console.log(decoded,'daxoooooooooooo')
+          console.log(decoded,'daxoooooooooooo0000000000')
           const setUser = {
             "user_id": decoded.user_id,
             "email": decoded.email,
+            "name": decoded.name,
+            "phone": decoded.phone,
+            "user_type":decoded.user_type,
             "i_google": decoded.is_google,
-            "is_active": decoded.is_active
+            "is_active": decoded.is_active,
+            "profileImage":decoded.profile_image,
+
           };
 
           dispatch(setUserDetails(setUser));

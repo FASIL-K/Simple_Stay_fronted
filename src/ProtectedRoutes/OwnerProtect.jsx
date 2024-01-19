@@ -18,7 +18,7 @@ function OwnerProtect() {
     } else if (decode.user_type === 'owner') {
       return <Outlet />;
     } else if (decode.user_type === 'admin') {
-      return <AdminHomePage />;
+      return <Outlet />;
     } else {
       console.log(decode, 'the else case of Owner Protected');
     }

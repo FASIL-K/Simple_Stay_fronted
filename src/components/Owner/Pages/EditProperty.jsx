@@ -16,7 +16,8 @@ function EditProperty() {
   const token = localStorage.getItem("token");
   const decode = jwtDecode(token);
 
-  const userId = decode.user_id;  useEffect(() => {
+  const userId = decode.user_id; 
+   useEffect(() => {
     const fetchData = async () => {
       try {
 

@@ -116,6 +116,37 @@ const EditProperty = (userId,propertyId,values) =>{
   });
 }
 
+const EditProfile = (userId, values) => {
+  console.log(userId, values ,"daxoooooooooooooooooooo")
+  const formData = new FormData();
+
+  formData.append('name', values.name);
+  formData.append('email', values.email);
+  formData.append('phone', values.phone);
+  
+  // Append the profile image if available
+  if (values.profileImage) {
+    formData.append('profileImage', values.profileImage);
+  }
+
+  return OwnerAxiosInstant.put(`/profileEdit/${userId}/`, formData, {
+    withCredentials: true,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+  .then((response) => {
+    // Assuming the backend returns updated user data
+    return response.data;
+  })
+  .catch((error) => {
+    if (error.response && (error.response.status === 403 || error.response.status === 401)) {
+      // Handle authentication error, if needed
+    }
+    throw error;
+  });
+};
+
 const RemoveToken = () => {
     localStorage.removeItem('token');
 };
@@ -131,5 +162,6 @@ export {
   DeactivateProperty,
   PropertyEdit,
   OwnerLogout,
+  EditProfile,
 }
 

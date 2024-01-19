@@ -4,6 +4,7 @@ import { Outlet } from 'react-router-dom';
 import AdminHomePage from '../pages/Admin/AdminHomePage';
 import OwnerHomePage from '../pages/Owner/OwnerHomePage';
 import UserLoginPage from '../pages/User/UserLoginPage';
+import UserHomePage from '../pages/User/UserHomePage';
 
 function UserProtect() {
     
@@ -16,10 +17,10 @@ function UserProtect() {
         console.log(decode, 'fadscwds');
         if (decode.user_type === 'user') {
             return <Outlet />;
-        } else if (decode.user_type === 'owner') {
+        } else if (decode.user_type === ' owner') {
             return <OwnerHomePage />;
         } else if (decode.user_type === 'admin') {
-            return <AdminHomePage />;
+            return <Outlet />;
         } else {
             // return <UnknownHomePage/>                                      use this once this page is created
             console.log(decode, "the else case of Customer Protected");
@@ -32,6 +33,8 @@ function UserProtect() {
 }
 
 export default UserProtect;
+
+
 
 
 

@@ -8,6 +8,7 @@ import PrivateRoute from "./ProtectedRoutes/PrivateRoute";
 import UserLoginPage from "./pages/User/UserLoginPage";
 import UserSignupPage from "./pages/User/UserSignupPage";
 import EmailCheck from "./components/User/login/EmailCheck";
+import IndiaCityDropdown from "./pages/Test";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
 
           <Route element={<PrivateRoute />}>
             <Route path="/" exact element={<UserLoginPage />} />
+            <Route path="/city" exact element={<IndiaCityDropdown />} />
             <Route path="/login/" exact element={<UserLoginPage />} />
             <Route path="/signup/" exact element={<UserSignupPage />} />
             <Route path="/usertype/" exact element={<UserType />} />
