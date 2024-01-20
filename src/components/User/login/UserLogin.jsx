@@ -164,8 +164,11 @@ function UserLogin() {
         const setUser = {
             "user_id" :decoded.user_id,
             "email" : decoded.email,
+            "phone" : decoded.phone,
             "i_google" : decoded.is_google,
-            "is_active" : decoded.is_active
+            "is_active" : decoded.is_active,
+            "profileImage" : decoded.profileImage,
+
           }
           console.log(setUser,'fascascascascdasdaxoooooooooooooooocs');
           dispatch(setUserDetails(setUser));
