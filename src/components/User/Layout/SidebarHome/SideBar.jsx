@@ -10,10 +10,11 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import avatar from "../../../../assets/profileavatar.png";
-import { Button } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { resetState } from "../../../../redux/User";
+import { Link } from "react-router-dom";
 
 
 export default function TemporaryDrawer({ isOpen, onClose }) {
@@ -46,10 +47,12 @@ export default function TemporaryDrawer({ isOpen, onClose }) {
             <h3 className="font-semibold font-sans text-base  opacity-90 ml-3 mt-2 ">
               Hello 👋🏻
             </h3>
-            <div>
-            <Button className="bg-green-600 ml-14 w-24 h-11">Login</Button>
-            </div>
-            
+            <div className="flex-grow text-right pr-9 cursor-pointer" >
+            <Link to="/user/userprofile">
+                  <Typography>Edit</Typography>
+                </Link>
+               
+              </div>
 
           </div>
           <h3 className=" -mt-7 ml-20 text-sm opacity-95">

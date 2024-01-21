@@ -18,7 +18,6 @@ import { Link } from "react-router-dom";
 
 export function HorizontalCard({ postData, setPostData }) {
   // const [postData, setPostData] = useState(null);
-
   useEffect(() => {
     const apiUrl = `${OwnerUrl}post/`;
     axios
@@ -65,7 +64,7 @@ export function HorizontalCard({ postData, setPostData }) {
 
             <div className="flex justify-start ml-6 mb-6 gap-3">
               <Avatar
-                src="https://docs.material-tailwind.com/img/face-2.jpg"
+                src={post.owner_detail.profile_photo}
                 alt="avatar"
                 size="lg"
               />
