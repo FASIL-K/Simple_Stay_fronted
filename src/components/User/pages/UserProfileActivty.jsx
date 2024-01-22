@@ -1,10 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProfileNavigation from "../Layout/ProfileNavigation.jsx/ProfileNaviagtion";
 import { Typography } from "@material-tailwind/react";
 import { TbHomeHeart } from "react-icons/tb";
+import { jwtDecode } from "jwt-decode";
+import { Loader } from "../../Loader/Loading";
+import axios from 'axios';
 
 function UserProfileActivity() {
   const [selectedCard, setSelectedCard] = useState(null);
+  const [userDetails, setUserDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem('token');
+  const decode = jwtDecode(token);
+
+  const tokenData = JSON.parse(token);
+  const accessToken = tokenData ? tokenData.access : null;
+  const ownerId = decode.id;
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/owner/user-details/', {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+          },
+        });
+        setUserDetails(response.data);
+        console.log(userDetails,"ssssssssssssssssssssssssss");
+      } catch (error) {
+        console.error('Error fetching user details:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (accessToken) {
+      fetchUserDetails();
+    }
+  }, [accessToken]);
 
   const handleCardSelect = (card) => {
     setSelectedCard(card);
@@ -14,12 +47,16 @@ function UserProfileActivity() {
     if (selectedCard === "saved") {
       return (
         <div className="bg-green-100 p-4 rounded mt-4">
+                {loading && <Loader />}
+
           Additional content for Saved Properties
         </div>
       );
     } else if (selectedCard === "seen") {
       return (
         <div className="bg-yellow-100 p-4 rounded mt-4">
+                {loading && <Loader />}
+
           Additional content for Seen Properties
         </div>
       );
@@ -29,8 +66,9 @@ function UserProfileActivity() {
   };
 
   return (
-    <div className="flex">
-      <ProfileNavigation />
+      <div className="flex">
+            {loading && <Loader />}
+      <ProfileNavigation userDetails={userDetails} setUserDetails={setUserDetails}/>
       <div className="mt-8 ml-16 flex flex-col">
         <div className="mb-2">
           <Typography variant="h4">My Activity</Typography>

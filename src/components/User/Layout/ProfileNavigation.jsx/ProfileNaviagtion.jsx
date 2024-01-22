@@ -1,14 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Avatar, Typography, Card, CardBody } from "@material-tailwind/react";
 import { Link } from 'react-router-dom';
 
-function ProfileNavigation() {
+const ProfileNavigation=({userDetails,setUserDetails}) => {
+  if (!userDetails) {
+    return null; // or any loading state or fallback UI
+  }
+
+  console.log(userDetails,"resoooooooooooooooooooo");
   return (
       <div className="w-1/4  bg-white">
         <div className="flex flex-col items-center justify-start p-6">
           <Avatar src="https://docs.material-tailwind.com/img/face-2.jpg" alt="avatar" size="xxl" className="mb-4 mt-10" />
-          <Typography size="xl" fontWeight="bold">Fasil K</Typography>
-          <Typography className="mb-4">fasilmlm10@gmail.com</Typography>
+          <Typography size="xl" fontWeight="bold">{userDetails.name}</Typography>
+          <Typography className="mb-4">{userDetails.email}</Typography>
 
           <Card className="w-full flex flex-col items-center bg-blue-gray-50 h-full">
             <CardBody className="flex-grow">

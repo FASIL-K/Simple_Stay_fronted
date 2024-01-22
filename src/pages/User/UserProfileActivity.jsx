@@ -8,7 +8,6 @@ function UserProfileActivity() {
     <div>
         <Example/>
       <UserProfileActivty/>
-
     </div>
   )
 }

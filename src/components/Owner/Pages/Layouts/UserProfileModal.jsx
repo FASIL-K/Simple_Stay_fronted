@@ -30,18 +30,16 @@ const validationSchema = Yup.object().shape({
 
 const UserProfileModal = ({ isOpen, onClose, userDetails, setUserDetails }) => {
   const [loading, setLoading] = useState(false);
-  // const handleLoading = () => setLoading((cur) => !cur);
-
-  const [profileImage, setProfileImage] = useState(
-    userDetails?.profileImage || ""
-  );
+  const [profileImage, setProfileImage] = useState(userDetails?.profileImage || "");
   const [selectedImage, setSelectedImage] = useState(null);
+  const [emailField, setEmailField] = useState(userDetails?.email || "");
+  const [formChanged, setFormChanged] = useState(false);
+
   const token = localStorage.getItem("token");
   const decode = jwtDecode(token);
   const ownerId = decode.id;
   const tokenData = JSON.parse(token);
   const accessToken = tokenData ? tokenData.access : null;
-  const [emailField, setEmailField] = useState(userDetails?.email || "");
 
   const handleImageChange = (e, setFieldValue) => {
     const file = e.target.files[0];
@@ -50,6 +48,7 @@ const UserProfileModal = ({ isOpen, onClose, userDetails, setUserDetails }) => {
       setSelectedImage(file);
       setFieldValue("profileImage", file);
       setProfileImage(URL.createObjectURL(file));
+      setFormChanged(true); // Indicate that the form has changed
     }
   };
 
@@ -60,7 +59,10 @@ const UserProfileModal = ({ isOpen, onClose, userDetails, setUserDetails }) => {
       formData.append("name", values.name);
       formData.append("email", values.email);
       formData.append("phone", values.phone);
-      formData.append("profile_photo", values.profileImage);
+      if (selectedImage) {
+        // Only append the image if it's selected
+        formData.append("profile_photo", selectedImage);
+      }
 
       const response = await axios.patch(
         `http://127.0.0.1:8000/owner/profileEdit/${ownerId}/`,
@@ -75,24 +77,32 @@ const UserProfileModal = ({ isOpen, onClose, userDetails, setUserDetails }) => {
       setUserDetails(response.data);
       setLoading(false);
 
-      setSelectedImage("");
       onClose();
       toast.success("Profile updated successfully");
 
       if (selectedImage) {
         setProfileImage(URL.createObjectURL(selectedImage));
       }
+
+      setFormChanged(false); // Reset the form changed state after submission
     } catch (error) {
       console.error("Error updating user profile:", error);
       toast.error("Error updating user profile");
+    } finally {
+      setLoading(false);
     }
   };
+
   useEffect(() => {
     if (userDetails) {
       setEmailField(userDetails.email || "");
     }
   }, [userDetails]);
 
+  const handleModalClose = (formik) => {
+    formik.resetForm(); // Reset the form when the modal is closed
+    onClose();
+  };
   return (
     <>
       {loading && <Loader />}
@@ -121,12 +131,10 @@ const UserProfileModal = ({ isOpen, onClose, userDetails, setUserDetails }) => {
               email: emailField,
               phone: userDetails?.phone || "",
               profileImage: userDetails?.profileImage || "",
-              // Add more fields here
             }}
             validationSchema={validationSchema}
             onSubmit={(values, helpers) => EditProfiles(values, helpers)}
-            enableReinitialize={true} // This allows reinitialization when initialValues change
-
+            enableReinitialize={true}
           >
             {({ setFieldValue, values, handleChange, handleBlur }) => (
               <Form encType="multipart/form-data">
@@ -159,7 +167,10 @@ const UserProfileModal = ({ isOpen, onClose, userDetails, setUserDetails }) => {
                       id="name"
                       name="name"
                       value={values.name}
-                      onChange={handleChange}
+                      onChange={(e) => {
+                        handleChange(e);
+                        setFormChanged(true);
+                      }}
                       onBlur={handleBlur}
                       className="w-full md:w-96 lg:w-[900px] border rounded-md p-2"
                     />
@@ -185,22 +196,29 @@ const UserProfileModal = ({ isOpen, onClose, userDetails, setUserDetails }) => {
                       id="phone"
                       name="phone"
                       value={values.phone}
-                      onChange={handleChange}
+                      onChange={(e) => {
+                        handleChange(e);
+                        setFormChanged(true);
+                      }}
                       onBlur={handleBlur}
                       className="w-full md:w-96 lg:w-[900px] border rounded-md p-2"
                     />
-                    <ErrorMessage name="phone" component="div" />
-
-                    {/* Add more fields here */}
+                    <ErrorMessage
+                      name="phone"
+                      className="text-red-800"
+                      component="div"
+                    />
                   </div>
                 </div>
                 <div className="mt-8">
-                  <button
-                    type="submit"
-                    className="bg-blue-500 text-white px-4 py-2 rounded-md"
-                  >
-                    Save Changes
-                  </button>
+                  {formChanged && (
+                    <button
+                      type="submit"
+                      className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                    >
+                      Save Changes
+                    </button>
+                  )}
                 </div>
               </Form>
             )}

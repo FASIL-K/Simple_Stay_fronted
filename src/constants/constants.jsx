@@ -11,5 +11,7 @@ export const OwnerUrl = import.meta.env.VITE_OWNER_URL;
 
 export const AdminUrl = import.meta.env.VITE_ADMIN_URL;
 
+export const SavedPostUrl = import.meta.env.VITE_SAVEDPOST_URL
+
 export const wsApiUrl = import.meta.env.VITE_Ws_URL;
 

@@ -88,13 +88,26 @@ const UserGoogleSignin = (value) => {
 
 
 
+
+
 // User Token refresh
-const TokenRefresh = (value) => {
-  return UserAxiosInstant
-    .post("token/refresh/", value, {
-      withCredentials: true,
-    })
-    .catch((error) => error.response);
+const RefreshToken = async () => {
+    
+  let authToken = localStorage.getItem("token");
+  const refreshtoken = JSON.parse(authToken);
+  try {
+      const res = await UserAxiosInstant.post(
+          "user/token/refresh/",
+          { refresh: refreshtoken.refresh },
+          { withCredentials: true }
+        );
+        if (res.status === 200) {
+          const token = JSON.stringify(res.data);
+          localStorage.setItem("token", token);
+        }
+  } catch (error) {
+      console.error(error);
+  }
 };
 
 export {
@@ -102,6 +115,6 @@ export {
   UserSignup,
   UserGoogleSignup,
   UserGoogleSignin,
-  TokenRefresh,
+  RefreshToken,
   UserResendEmail,
 }

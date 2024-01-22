@@ -3,7 +3,6 @@ import {
   CardHeader,
   CardBody,
   Typography,
-  Button,
   CardFooter,
 } from "@material-tailwind/react";
 import { OwnerUrl } from "../../../Constants/Constants";
@@ -15,9 +14,57 @@ import { IoShareSocialOutline } from "react-icons/io5";
 import { Avatar } from "@material-tailwind/react";
 import { FiMessageSquare } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import { PostAxiosInstant } from "../../../utils/axiosUtils";
 
 export function HorizontalCard({ postData, setPostData }) {
-  // const [postData, setPostData] = useState(null);
+  const [selectedPostId, setSelectedPostId] = useState(null);
+  const [savedProperties, setSavedProperties] = useState([]);
+
+  const token = localStorage.getItem('token');
+  const decode = jwtDecode(token);
+  const userId = decode.id;
+  const tokenData = JSON.parse(token);
+  const accessToken = tokenData ? tokenData.access : null;
+  
+  const CreateSaved = async (userId, postId) => {
+    try {
+      const response = await PostAxiosInstant .post('createsaved/', { user: userId, post_id: postId }, {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${accessToken}`, // Replace with your actual authentication token
+        },
+      });
+      // Handle the response as needed
+      console.log('CreateSaved API Response:', response.data);
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        RefreshToken();
+      } else {
+        console.error('Error:', error.response);
+        // You may want to rethrow the error here to propagate it further
+        throw error;
+      }
+    }
+  };
+
+  const handleHeartClick = async (postId) => {
+    setSelectedPostId(postId);
+
+    try {
+      // Call the CreateSaved API with userId and postId
+      await CreateSaved(userId, postId);
+
+      // Update savedProperties state
+      setSavedProperties((prevSavedProperties) => [
+        ...prevSavedProperties,
+        postId,
+      ]);
+    } catch (error) {
+      console.error('Error handling heart click:', error);
+    }
+  };
+
   useEffect(() => {
     const apiUrl = `${OwnerUrl}post/`;
     axios
@@ -31,7 +78,6 @@ export function HorizontalCard({ postData, setPostData }) {
       });
   }, []);
 
-  // Return null if postData is not available yet
   if (!postData) {
     return (
       <div className="flex w-auto h-auto justify-center items-center">
@@ -51,12 +97,11 @@ export function HorizontalCard({ postData, setPostData }) {
         >
           <CardHeader shadow={false} floated={false} className="m-0 shrink-0">
             <Carousel className="rounded-xl h-[18rem] w-[18rem] mb-7 ml-3 mt-2">
-              {/* Map over post.images to create image elements */}
               {post.images.map((image) => (
                 <img
-                  key={image.id} // Assuming image objects have unique IDs
+                  key={image.id}
                   src={`${import.meta.env.VITE_USER_URL}${image.image}`}
-                  alt={image.altText} // Use alt text if available
+                  alt={image.altText}
                   className="h-[18rem] w-[18rem] object-cover"
                 />
               ))}
@@ -81,15 +126,6 @@ export function HorizontalCard({ postData, setPostData }) {
                 </Typography>
               </div>
             </div>
-            {/* <img
-              src={
-                post.images.length > 0
-                  ? `${import.meta.env.VITE_USER_URL}${post.images[0].image}`
-                  : ""
-              }
-              alt="no image"
-              className="h-[18rem] w-[18rem] object-cover rounded"
-            /> */}
           </CardHeader>
 
           <CardBody>
@@ -99,9 +135,8 @@ export function HorizontalCard({ postData, setPostData }) {
               className="mb-4 uppercase text-left"
             >
               <div className="flex justify-end gap-7 text-blue-900">
-                <IoShareSocialOutline />
-
-                <FaRegHeart />
+                <IoShareSocialOutline className="cursor-pointer" />
+                <FaRegHeart className="cursor-pointer" onClick={() => handleHeartClick(post.id)} />
               </div>
               <Link to={`/user/property/${post.id}`} className="cursor-pointer">
                 ₹ {post.monthly_rent}
