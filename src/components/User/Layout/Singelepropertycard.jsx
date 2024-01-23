@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { CardFooter, Carousel } from "@material-tailwind/react";
-import { FaRegHeart } from "react-icons/fa";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { IoShareSocialOutline } from "react-icons/io5";
 import { FiMessageSquare } from "react-icons/fi";
 import home from "../../../assets/home1.svg";
 import { useParams } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 import {
   Card,
@@ -22,7 +23,7 @@ import {
 } from "@material-tailwind/react";
 import { OwnerUrl } from "../../../Constants/Constants";
 import axios from "axios";
-import { Unsave } from "../../../services/postApi";
+import { CreateSaved, IsSave, Unsave } from "../../../services/postApi";
 import {
   FacebookShareButton,
   TwitterShareButton,
@@ -30,11 +31,41 @@ import {
   EmailShareButton,
 } from "react-share";
 import { FaFacebook, FaTwitter, FaWhatsapp, FaEnvelope } from "react-icons/fa";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 function Singelepropertycard() {
   const [isSaved, SetisSaved] = useState(false);
   const { propertyId } = useParams();
   const [postData, setPostData] = useState("");
+  const token = localStorage.getItem("token");
+  const decode = jwtDecode(token);
+  const userId = decode.id;
+  const tokenData = JSON.parse(token);
+  const accessToken = tokenData ? tokenData.access : null;
+ 
+  const handleHeartClick = async () => {
+    try {
+      if (isSaved) {
+        await Unsave(userId, propertyId);
+        SetisSaved(false);
+        toast.success('Property removed from wishlist!');
+      } else {
+        const values = { user: userId, post: propertyId };
+        await CreateSaved(values);
+        SetisSaved(true);
+
+        toast.success('Property added from wishlist!');
+
+
+      }
+    } catch (error) {
+      console.error('Error handling heart click:', error);
+      toast.error('Error processing your request. Please try again later.');
+    }
+  };
+
 
   const propertyDetails = [
     { label: "Security", value: postData.security_deposit },
@@ -44,6 +75,20 @@ function Singelepropertycard() {
     { label: "Bathrooms", value: null },
     { label: "FloorNumber", value: null },
   ];
+
+  useEffect(() => {
+    const checkSavedStatus = async () => {
+      try {
+        const isSavedResponse = await IsSave(userId, propertyId);
+        SetisSaved(isSavedResponse.data.saved);
+      } catch (error) {
+        console.error('Error checking saved status:', error);
+      }
+    };
+
+    checkSavedStatus();
+  }, [userId, propertyId]);
+
   useEffect(() => {
     const apiUrl = `${OwnerUrl}post/${propertyId}/  `;
     axios
@@ -67,21 +112,7 @@ function Singelepropertycard() {
     );
   }
 
-  const HandleSave = async () => {
-    try {
-      if (isSaved) {
-        await Unsave(userinfo.id, postId);
-        toast.success("Unsaved Post");
-      } else {
-        await CreateSaved({ user: userinfo.id, blog: blogId });
-        toast.success("saved Post");
-      }
-
-      SetisSaved(!isSaved);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+ 
 
   const shareUrl = `${window.location.origin}/property/${propertyId}`;
   const title = `${postData.bhk_type} ${postData.property_type} for ${postData.looking_to} in ${postData.locality}, ${postData.house_name}, ${postData.city}`;
@@ -98,11 +129,21 @@ function Singelepropertycard() {
                 {postData.looking_to}
               </Typography>
               <div className="flex gap-7">
-                <FaRegHeart
-                  color="orange"
-                  size={"1.5rem"}
-                  className="cursor-pointer"
-                />
+                {isSaved ? (
+                  <FaHeart
+                    color="orange"
+                    size={"1.5rem"}
+                    className="cursor-pointer"
+                    onClick={handleHeartClick}
+                  />
+                ) : (
+                  <FaRegHeart
+                    color="orange"
+                    size={"1.5rem"}
+                    className="cursor-pointer"
+                    onClick={handleHeartClick}
+                  />
+                )}
                 
                 <Menu
                   animate={{
@@ -111,7 +152,8 @@ function Singelepropertycard() {
                   }}
                 >
                   <MenuHandler>
-                    <Typography><IoShareSocialOutline
+                    <Typography>
+                      <IoShareSocialOutline
                   size={"1.5rem"}
                   className="cursor-pointer"
                 />
@@ -358,6 +400,13 @@ function Singelepropertycard() {
           </div>
         </CardBody>
       </Card>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnHover
+      />
     </div>
   );
 }

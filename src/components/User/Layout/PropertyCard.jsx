@@ -35,7 +35,6 @@ export function HorizontalCard({ postData, setPostData }) {
   const accessToken = tokenData ? tokenData.access : null;
 
   const CreateSaved = async (userId, postId) => {
-    console.log(userId, postId, "daaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     try {
       const response = await PostAxiosInstant.post(
         "createsaved/",
@@ -61,18 +60,14 @@ export function HorizontalCard({ postData, setPostData }) {
   };
 
   const handleHeartClick = async (postId) => {
-    console.log("Handle Heart Click called with postId:", postId);
 
     setSelectedPostId(postId);
 
     try {
-      console.log(userId, "daxoooooooooooooooooooooooooooooooo");
       const isSaved = await IsSave(userId, postId);
-      console.log(isSaved, "issaaaaaaaavvvvvvvvvvvvvvvvvvvvvvv");
       if (isSaved.data.saved) {
         // If already saved, call the Unsave API to remove the post from wishlist
-        const unsaveResponse = await Unsave(userId, postId);
-        console.log(unsaveResponse, "saaaaaaaaaaaaaaaaaaaaaaaaa");
+         await Unsave(userId, postId);
 
         // Update savedProperties state by removing the postId
         setSavedProperties((prevSavedProperties) =>
@@ -106,7 +101,6 @@ export function HorizontalCard({ postData, setPostData }) {
       postData.forEach(async (post) => {
         try {
           const isSaved = await IsSave(userId, post.id);
-          console.log(isSaved, "daxoooooooooooooooooooooooooooooooo");
 
           if (isSaved.data.saved) {
             // If already saved, update savedProperties state
@@ -128,7 +122,6 @@ export function HorizontalCard({ postData, setPostData }) {
       .get(apiUrl)
       .then((response) => {
         setPostData(response.data);
-        console.log(postData, "dadadasda");
       })
       .catch((error) => {
         console.error("Error fetching data:", error);

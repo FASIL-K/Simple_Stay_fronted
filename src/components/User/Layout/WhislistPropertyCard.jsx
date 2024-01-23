@@ -9,13 +9,16 @@ import {
   import { useEffect, useState } from "react";
   import axios from "axios";
   import { Carousel } from "@material-tailwind/react";
-  import { FaRegHeart } from "react-icons/fa";
+  import { FaHeart, FaRegHeart } from "react-icons/fa";
   import { IoShareSocialOutline } from "react-icons/io5";
   import { Avatar } from "@material-tailwind/react";
   import { FiMessageSquare } from "react-icons/fi";
   import { Link } from "react-router-dom";
   import { jwtDecode } from "jwt-decode";
-  import { PostAxiosInstant } from "../../../utils/axiosUtils";
+  import { toast } from "react-toastify";
+  import "react-toastify/dist/ReactToastify.css";
+  import { ToastContainer } from "react-toastify";
+import { Unsave } from "../../../services/postApi";
   
   export function HorizontalCard({ wishlist, setWhishlistData }) {
     console.log(wishlist,'posttttttttttttttttttttttttttttttttt');
@@ -28,60 +31,10 @@ import {
     const userId = decode.id;
     const tokenData = JSON.parse(token);
     const accessToken = tokenData ? tokenData.access : null;
-  
-    // const CreateSaved = async (userId, postId) => {
-    //   console.log(userId,postId,'daaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-    //   try {
-    //     const response = await PostAxiosInstant .post('createsaved/', { user: userId, post: postId }, {
-    //       withCredentials: true,
-    //       headers: {
-    //         Authorization: `Bearer ${accessToken}`, // Replace with your actual authentication token
-    //       },
-    //     });
-    //     // Handle the response as needed
-    //     console.log('CreateSaved API Response:', response.data);
-    //   } catch (error) {
-    //     if (error.response && error.response.status === 401) {
-    //       RefreshToken();
-    //     } else {
-    //       console.error('Error:', error.response);
-    //       // You may want to rethrow the error here to propagate it further
-    //       throw error;
-    //     }
-    //   }
-    // };
+
   
     
   
-    // const handleHeartClick = async (postId) => {
-    //   setSelectedPostId(postId);
-  
-    //   try {
-    //     // Call the CreateSaved API with userId and postId
-    //     await CreateSaved(userId, postId);
-  
-    //     // Update savedProperties state
-    //     setSavedProperties((prevSavedProperties) => [
-    //       ...prevSavedProperties,
-    //       postId,
-    //     ]);
-    //   } catch (error) {
-    //     console.error('Error handling heart click:', error);
-    //   }
-    // };
-  
-    // useEffect(() => {
-    //   const apiUrl = `${OwnerUrl}post/`;
-    //   axios
-    //     .get(apiUrl)
-    //     .then((response) => {
-    //       setPostData(response.data);
-    //       console.log(postData, "dadadasda");
-    //     })
-    //     .catch((error) => {
-    //       console.error("Error fetching data:", error);
-    //     });
-    // }, []);
   
     if (wishlist.length===0) {
       return (
@@ -93,6 +46,20 @@ import {
       );
     }
   
+    const handleHeartClick = async (propertyId) => {
+        try {
+            await Unsave(userId, propertyId);
+            toast.success('Property removed from wishlist!');
+            
+            // Update the wishlist state after removal
+            const updatedWishlist = wishlist.filter(post => post.post.id !== propertyId);
+            setWhishlistData(updatedWishlist);
+        } catch (error) {
+            console.error('Error handling heart click:', error);
+            toast.error('Error processing your request. Please try again later.');
+        }
+    };
+    
     return (
       <div>
         {wishlist.map((post) => (
@@ -141,8 +108,12 @@ import {
               >
                 <div className="flex justify-end gap-7 text-blue-900">
                   <IoShareSocialOutline className="cursor-pointer" />
-                  <FaRegHeart className="cursor-pointer" />
-                </div>
+                  <FaHeart
+                    size={"1.5rem"}
+                    className="cursor-pointer"
+                    onClick={() => handleHeartClick(post.post.id)}
+                    />     
+                   </div>
                 <Link to={`/user/property/${post.post.id}`} className="cursor-pointer">
                   ₹ {post.post.monthly_rent}
                 </Link>
@@ -165,6 +136,13 @@ import {
             </div>
           </Card>
         ))}
+        <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnHover
+      />
       </div>
     );
   }
