@@ -143,9 +143,7 @@ function Singelepropertycard() {
                   
                   </MenuList>
                 </Menu>
-                <div className="flex gap-3">
-                 
-                </div>
+                
               </div>
             </div>
 
