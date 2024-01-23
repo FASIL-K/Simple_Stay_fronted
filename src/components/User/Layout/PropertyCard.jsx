@@ -16,20 +16,24 @@ import { FiMessageSquare } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { PostAxiosInstant } from "../../../utils/axiosUtils";
+import { FaHeart } from "react-icons/fa";
 
 export function HorizontalCard({ postData, setPostData }) {
+  console.log(postData,'posttttttttttttttttttttttttttttttttt');
+
   const [selectedPostId, setSelectedPostId] = useState(null);
   const [savedProperties, setSavedProperties] = useState([]);
-
+  
   const token = localStorage.getItem('token');
   const decode = jwtDecode(token);
   const userId = decode.id;
   const tokenData = JSON.parse(token);
   const accessToken = tokenData ? tokenData.access : null;
-  
+
   const CreateSaved = async (userId, postId) => {
+    console.log(userId,postId,'daaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
     try {
-      const response = await PostAxiosInstant .post('createsaved/', { user: userId, post_id: postId }, {
+      const response = await PostAxiosInstant .post('createsaved/', { user: userId, post: postId }, {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${accessToken}`, // Replace with your actual authentication token
@@ -47,6 +51,8 @@ export function HorizontalCard({ postData, setPostData }) {
       }
     }
   };
+
+
 
   const handleHeartClick = async (postId) => {
     setSelectedPostId(postId);
@@ -136,7 +142,12 @@ export function HorizontalCard({ postData, setPostData }) {
             >
               <div className="flex justify-end gap-7 text-blue-900">
                 <IoShareSocialOutline className="cursor-pointer" />
-                <FaRegHeart className="cursor-pointer" onClick={() => handleHeartClick(post.id)} />
+                {/* Toggle between outlined and filled heart icons based on wishlist status */}
+                {savedProperties.includes(post.id) ? (
+                  <FaHeart className="cursor-pointer" onClick={() => handleHeartClick(post.id)} />
+                ) : (
+                  <FaRegHeart className="cursor-pointer" onClick={() => handleHeartClick(post.id)} />
+                )}
               </div>
               <Link to={`/user/property/${post.id}`} className="cursor-pointer">
                 ₹ {post.monthly_rent}

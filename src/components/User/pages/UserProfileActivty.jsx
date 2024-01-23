@@ -5,6 +5,8 @@ import { TbHomeHeart } from "react-icons/tb";
 import { jwtDecode } from "jwt-decode";
 import { Loader } from "../../Loader/Loading";
 import axios from 'axios';
+import { HorizontalCard } from "../Layout/WhislistPropertyCard";
+import { ListSaved } from "../../../services/postApi";
 
 function UserProfileActivity() {
   const [selectedCard, setSelectedCard] = useState(null);
@@ -16,6 +18,17 @@ function UserProfileActivity() {
   const tokenData = JSON.parse(token);
   const accessToken = tokenData ? tokenData.access : null;
   const ownerId = decode.id;
+  const [wishlist, setWhishlistData] = useState(null);
+
+  const fetchWishlistData = async () => {
+    try {
+      const response = await ListSaved(ownerId, '');
+        setWhishlistData(response.data); 
+      console.log(wishlist,'dataaaaaaaaaaaaaaaaaaaa');// Assuming your API response has a 'data' property
+    } catch (error) {
+      console.error('Error fetching wishlist data:', error);
+    }
+  };
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -26,11 +39,11 @@ function UserProfileActivity() {
           },
         });
         setUserDetails(response.data);
-        console.log(userDetails,"ssssssssssssssssssssssssss");
       } catch (error) {
         console.error('Error fetching user details:', error);
       } finally {
         setLoading(false);
+        fetchWishlistData ();
       }
     };
 
@@ -38,6 +51,8 @@ function UserProfileActivity() {
       fetchUserDetails();
     }
   }, [accessToken]);
+  
+  
 
   const handleCardSelect = (card) => {
     setSelectedCard(card);
@@ -46,10 +61,11 @@ function UserProfileActivity() {
   const renderAdditionalContent = () => {
     if (selectedCard === "saved") {
       return (
-        <div className="bg-green-100 p-4 rounded mt-4">
+        <div className=" mt-14">
                 {loading && <Loader />}
 
-          Additional content for Saved Properties
+          <HorizontalCard wishlist={wishlist} setWhishlistData={setWhishlistData}  />
+
         </div>
       );
     } else if (selectedCard === "seen") {
@@ -68,7 +84,7 @@ function UserProfileActivity() {
   return (
       <div className="flex">
             {loading && <Loader />}
-      <ProfileNavigation userDetails={userDetails} setUserDetails={setUserDetails}/>
+      <ProfileNavigation userDetails={userDetails} setUserDetails={setUserDetails}  />
       <div className="mt-8 ml-16 flex flex-col">
         <div className="mb-2">
           <Typography variant="h4">My Activity</Typography>
@@ -95,7 +111,7 @@ function UserProfileActivity() {
               </Typography>
             </div>
           </div>
-          <div
+          <div  
             className={`w-36 h-24 mt-3 bg-blue-gray-50 shadow-2xl cursor-pointer border-1 border-blue-gray-800 border-opacity-5 transition duration-75 hover:border-blue-500 rounded ${
               selectedCard === "seen" ? "border-blue-500  bg-blue-100" : ""
             }`}

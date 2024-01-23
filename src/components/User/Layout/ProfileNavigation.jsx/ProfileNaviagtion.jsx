@@ -9,7 +9,7 @@ const ProfileNavigation=({userDetails,setUserDetails}) => {
 
   console.log(userDetails,"resoooooooooooooooooooo");
   return (
-      <div className="w-1/4  bg-white">
+      <div className="w-1/4  bg-white ml-4">
         <div className="flex flex-col items-center justify-start p-6">
           <Avatar src="https://docs.material-tailwind.com/img/face-2.jpg" alt="avatar" size="xxl" className="mb-4 mt-10" />
           <Typography size="xl" fontWeight="bold">{userDetails.name}</Typography>

@@ -4,7 +4,7 @@ import { FaRegHeart } from "react-icons/fa";
 import { IoShareSocialOutline } from "react-icons/io5";
 import { FiMessageSquare } from "react-icons/fi";
 import home from "../../../assets/home1.svg";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 
 import {
   Card,
@@ -13,20 +13,31 @@ import {
   Typography,
   Avatar,
 } from "@material-tailwind/react";
+import {
+  Menu,
+  MenuHandler,
+  MenuList,
+  MenuItem,
+  Button,
+} from "@material-tailwind/react";
 import { OwnerUrl } from "../../../Constants/Constants";
 import axios from "axios";
 import { Unsave } from "../../../services/postApi";
+import {
+  FacebookShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
+  EmailShareButton,
+} from "react-share";
+import { FaFacebook, FaTwitter, FaWhatsapp, FaEnvelope } from "react-icons/fa";
 
 function Singelepropertycard() {
   const [isSaved, SetisSaved] = useState(false);
-
-
-  
   const { propertyId } = useParams();
-  const [postData, setPostData] = useState("")
+  const [postData, setPostData] = useState("");
 
   const propertyDetails = [
-    { label: "Security", value: postData.security_deposit  },
+    { label: "Security", value: postData.security_deposit },
     { label: "Furnishing", value: postData.furnished_type },
     { label: "Buildup area", value: postData.build_up_area },
     { label: "Balcony", value: null },
@@ -39,7 +50,7 @@ function Singelepropertycard() {
       .get(apiUrl)
       .then((response) => {
         setPostData(response.data);
-        console.log(response.data,"dasdsadasdsadas");
+        console.log(response.data, "dasdsadasdsadas");
         console.log(postData, "dadadasda");
       })
       .catch((error) => {
@@ -72,17 +83,19 @@ function Singelepropertycard() {
     }
   };
 
+  const shareUrl = `${window.location.origin}/property/${propertyId}`;
+  const title = `${postData.bhk_type} ${postData.property_type} for ${postData.looking_to} in ${postData.locality}, ${postData.house_name}, ${postData.city}`;
+
   return (
-    
     <div className="h-min w-full">
-     
       {/* First Card */}
       <Card className="m-12 mt-24 md:m-14 bg-blue-gray-50 rounded-3xl shadow-2xl">
         <div className="flex h-40 rounded-2xl m-6 ">
           <div className="bg-blue-gray-50 w-1/2 flex flex-col">
             <div className="flex justify-between ">
               <Typography variant="h3" color="black" className="mb-2">
-              {postData.bhk_type} {postData.property_type} for {postData.looking_to}
+                {postData.bhk_type} {postData.property_type} for{" "}
+                {postData.looking_to}
               </Typography>
               <div className="flex gap-7">
                 <FaRegHeart
@@ -90,10 +103,49 @@ function Singelepropertycard() {
                   size={"1.5rem"}
                   className="cursor-pointer"
                 />
-                <IoShareSocialOutline
+                
+                <Menu
+                  animate={{
+                    mount: { y: 0 },
+                    unmount: { y: 25 },
+                  }}
+                >
+                  <MenuHandler>
+                    <Typography><IoShareSocialOutline
                   size={"1.5rem"}
                   className="cursor-pointer"
                 />
+                </Typography>
+                    
+                  </MenuHandler>
+                  <MenuList>
+                    <MenuItem><FacebookShareButton url={shareUrl} quote={title}>
+                    <FaFacebook size={24} className="cursor-pointer" />
+                  </FacebookShareButton>
+                  </MenuItem>
+                    <MenuItem><TwitterShareButton url={shareUrl} title={title}>
+                    <FaTwitter size={24} className="cursor-pointer" />
+                  </TwitterShareButton>
+                  </MenuItem>
+                    <MenuItem>
+                    <WhatsappShareButton url={shareUrl} title={title}>
+                    <FaWhatsapp size={24} className="cursor-pointer" />
+                  </WhatsappShareButton>
+                  </MenuItem>
+                    
+                  <MenuItem>
+                  <EmailShareButton url={shareUrl} subject={title}>
+                    <FaEnvelope size={24} className="cursor-pointer" />
+                  </EmailShareButton>
+
+                  </MenuItem>
+
+                  
+                  </MenuList>
+                </Menu>
+                <div className="flex gap-3">
+                 
+                </div>
               </div>
             </div>
 
@@ -110,7 +162,7 @@ function Singelepropertycard() {
                 color="black"
                 className="font-light text-lg opacity-70 "
               >
-                { postData.build_up_area} sqft
+                {postData.build_up_area} sqft
               </Typography>
             </div>
             <Typography
@@ -167,7 +219,6 @@ function Singelepropertycard() {
               />
             ))}
           </Carousel>
-          
         </div>
       </Card>
 
@@ -276,7 +327,7 @@ function Singelepropertycard() {
                 color="blue-gray"
                 className="ml-4 md:ml-10"
               >
-                Furnishing 
+                Furnishing
               </Typography>
               <hr className="border-t border-blue-gray-300 absolute w-full  md:mt-14" />
             </div>
