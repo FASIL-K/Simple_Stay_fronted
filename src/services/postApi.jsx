@@ -2,13 +2,22 @@ import { PostAxiosInstant } from "../utils/axiosUtils";
 import { RefreshToken } from "./userApi";
 import { jwtDecode } from "jwt-decode";
 
+
 const token = localStorage.getItem('token');
-  const decode = jwtDecode(token);
+let decode, accessToken, ownerId;
 
-  const tokenData = JSON.parse(token);
-  const accessToken = tokenData ? tokenData.access : null;
-  const ownerId = decode.id;
-
+if (token) {
+  try {
+    decode = jwtDecode(token);
+    console.log(decode);
+    const tokenData = JSON.parse(token);
+    accessToken = tokenData ? tokenData.access : null;
+    ownerId = decode.id;
+  } catch (error) {
+    console.error('Error decoding token:', error);
+    // Handle the error as needed
+  }
+}
 
 
 const CreateSaved = (values) => {

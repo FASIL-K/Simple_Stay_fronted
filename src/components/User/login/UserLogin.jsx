@@ -60,12 +60,10 @@ function UserLogin() {
   
       try {
         const res = await UserSignin(user);
-        console.log(res,'fedscdfcsax');
   
-        if (res.status === 200) {
-          const token = JSON.stringify(res.data);
+        if (res) {
+          const token = JSON.stringify(res);
           const decoded = jwtDecode(token);
-          console.log(decoded,'daxoooooooooooo0000000000')
           const setUser = {
             "user_id": decoded.user_id,
             "email": decoded.email,
@@ -156,9 +154,8 @@ function UserLogin() {
   
         const res = await UserGoogleSignup(backend_access,token_data);
         console.log(res,'DAXOOOOOOOOOOOO');
-        const token = JSON.stringify(res.data);
+        const token = JSON.stringify(res.data.token);
         const decoded = jwtDecode(token);
-        console.log(decoded,'dasfdsxsacaxdsadas');
         localStorage.setItem("token", token);
        
         const setUser = {

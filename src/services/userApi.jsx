@@ -1,38 +1,27 @@
-// import axios from "axios";
-// import { loginAxiosInstant } from "../utils/axiosUtils";
-// import { Auth_url } from "";
-// // ---------------------------------------Post Methoda-------------------------------//
-// const userSignin = (values) => {
-//   return loginAxiosInstant
-//     .post("token/", values, { withCredentials: true })
-//     .catch((error) => {
-//       throw error;
-//     });
-// };
-
-// // User Google signup and signIn
-// const UserGoogleSignup = (value) => {
-//   const values = {
-//     first_name : value.given_name,
-//     last_name : value.family_name,
-//     email: value.email,
-//     password: value.id,
-//   }
-//   return axios.post(`${Auth_url}googleauth/`, values, {
-//     withCredentials: true,
-//   })
-//   .catch((error) => {
-//     throw error;
-//   });
-// };
-
-
 import { UserAxiosInstant } from "../utils/axiosUtils";
-
-const UserSignin = (values) => {
-  return UserAxiosInstant.post("user/token/", values, {
-    withCredentials: true,
-  }).catch((error) => error.response);
+import { OwnerAxiosInstant } from "../utils/axiosUtils";
+const UserSignin = async (values) => {
+  try {
+    const response = await UserAxiosInstant.post("user/token/", values, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    if (
+      error.response &&
+      (error.response.status === 401 || error.response.status === 403)
+    ) {
+      // Token expired, try to refresh it
+      await RefreshToken();
+      // Retry the original request
+      const retryResponse = await UserAxiosInstant.post("user/token/", values, {
+        withCredentials: true,
+      });
+      return retryResponse.data;
+    } else {
+      throw error;
+    }
+  }
 };
 
 const UserSignup = (values) => {
@@ -47,66 +36,134 @@ const UserResendEmail = (values) => {
   }).catch((error) => error.response);
 };
 
-// const UserGoogleSignup = (value) => {
-//   const values = {
-//     email: value.email,
-//     name: value.given_name,
-//     password: value.id,
-//   };
-//   return UserAxiosInstant.post("user/googleuser/", values, {
-//     withCredentials: true,
-//   });
-// };
-
 const UserGoogleSignup = (accessToken, userData) => {
   const values = {
-    first_name :  userData.given_name,
-    last_name : userData.family_name,
+    first_name: userData.given_name,
+    last_name: userData.family_name,
     email: userData.email,
     password: userData.id,
     access_token: accessToken,
-  }
-  console.log(values,'ifdfdfdfdfdfdfdfdfdchsbijsabjasbkjgcasuik');
+  };
   return UserAxiosInstant.post("user/googleuser/", values, {
     withCredentials: true,
-  })
-  .catch((error) => {
+  }).catch((error) => {
     throw error;
   });
 };
-const UserGoogleSignin = (value) => {
+
+const UserGoogleSignin = async (value) => {
   const values = {
     email: value.email,
     password: value.id,
   };
-  return UserAxiosInstant.post("user/token/", values, {
-    withCredentials: true,
-  });
+  try {
+    const response = await UserAxiosInstant.post("user/token/", values, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    if (
+      error.response &&
+      (error.response.status === 401 || error.response.status === 403)
+    ) {
+      await RefreshToken();
+      const retryResponse = await UserAxiosInstant.post("user/token/", values, {
+        withCredentials: true,
+      });
+      return retryResponse.data;
+    } else {
+      throw error;
+    }
+  }
 };
 
+export const getUserDetails = async (accessToken) => {
+  try {
+    const response = await OwnerAxiosInstant.get("user-details/", {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    if (
+      error.response &&
+      (error.response.status === 401 || error.response.status === 403)
+    ) {
+      await RefreshToken();
+      const retryResponse = await OwnerAxiosInstant.get("user-details/", {
+        withCredentials: true,
+      });
+      return retryResponse.data;
+    } else {
+      throw error;
+    }
+  }
+};
 
+//Edit//------------------------------------------------------------------------
 
+export const updateUserProfile = async (ownerId, form, accessToken) => {
+  try {
+    const response = await OwnerAxiosInstant.patch(
+      `profileEdit/${ownerId}/`,
+      form,
+      {
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (
+      error.response &&
+      (error.response.status === 401 || error.response.status === 403)
+    ) {
+      await RefreshToken();
+      const retryResponse = await OwnerAxiosInstant.patch(
+        `profileEdit/${ownerId}/`,
+        form,
+        {
+          withCredentials: true,
+        }
+      );
+      return retryResponse.data;
+    } else {
+      console.error("Error updating user profile:", error);
+      throw error;
+    }
+  }
+};
 
+const logout = async () => {
+  try {
+    const authToken = localStorage.getItem("token");
+    const refresh_token = JSON.parse(authToken).refresh;
 
+    await UserAxiosInstant.post("user/logout/", { refresh_token });
 
+    // Clear local storage or perform other necessary actions on successful logout
+    localStorage.removeItem("token");
+    // Redirect to the login page or homepage, etc.
+  } catch (error) {
+    // Handle error, e.g., if the refresh token is invalid
+    console.error(error);
+  }
+};
 
 // User Token refresh
 const RefreshToken = async () => {
-    
   let authToken = localStorage.getItem("token");
   const refreshtoken = JSON.parse(authToken);
   try {
-      const res = await UserAxiosInstant.post(
-          "user/token/refresh/",
-          { refresh: refreshtoken.refresh },
-          { withCredentials: true }
-        );
-        if (res.status === 200) {
-          const token = JSON.stringify(res.data);
-          localStorage.setItem("token", token);
-        }
+    const res = await UserAxiosInstant.post(
+      "user/token/refresh/",
+      { refresh: refreshtoken.refresh },
+      { withCredentials: true }
+    );
+    if (res.status === 200) {
+      const token = JSON.stringify(res.data);
+      localStorage.setItem("token", token);
+    }
   } catch (error) {
-      console.error(error);
+    console.error(error);
   }
 };
 
@@ -117,4 +174,5 @@ export {
   UserGoogleSignin,
   RefreshToken,
   UserResendEmail,
-}
+  logout,
+};

@@ -7,6 +7,7 @@ import { Loader } from "../../Loader/Loading";
 import axios from 'axios';
 import { HorizontalCard } from "../Layout/WhislistPropertyCard";
 import { ListSaved } from "../../../services/postApi";
+import { OwnerAxiosInstant } from "../../../utils/axiosUtils";
 
 function UserProfileActivity() {
   const [selectedCard, setSelectedCard] = useState(null);
@@ -33,7 +34,7 @@ function UserProfileActivity() {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/owner/user-details/', {
+        const response = await OwnerAxiosInstant.get('user-details/', {
           headers: {
             'Authorization': `Bearer ${accessToken}`,
           },

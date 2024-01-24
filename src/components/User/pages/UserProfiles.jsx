@@ -9,6 +9,9 @@ import { Loader } from "../../Loader/Loading";
 import { toast } from "react-toastify";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { OwnerAxiosInstant } from '../../../utils/axiosUtils';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom/dist';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Name is required'),
@@ -27,6 +30,10 @@ function UserProfiles() {
   const accessToken = tokenData ? tokenData.access : null;
   const ownerId = decode.id;
 
+  const userInfo = useSelector((state) => state.user.userInfo)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
   const handleSubmit = async (values) => {
     setLoading(true);
     try {
@@ -35,15 +42,10 @@ function UserProfiles() {
       form.append('email', values.email);
       form.append('phone', values.phone);
 
-      const response = await axios.patch(
-        `http://127.0.0.1:8000/owner/profileEdit/${ownerId}/`,
+      const response = await OwnerAxiosInstant.patch(
+        `profileEdit/${ownerId}/`,
         form,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
+        
       );
 
       setUserDetails(response.data);
@@ -62,7 +64,7 @@ function UserProfiles() {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/owner/user-details/', {
+        const response = await OwnerAxiosInstant.get('user-details/', {
           headers: {
             'Authorization': `Bearer ${accessToken}`,
           },
@@ -81,6 +83,16 @@ function UserProfiles() {
     }
   }, [accessToken]);
 
+  const handlelogout = async () => {
+    try {
+      await logout();  // Call the logout API function
+      dispatch(resetState()); // Call the resetState action
+      navigate('/login'); // Redirect to the login page after logout
+    } catch (error) {
+      // Handle error, e.g., if the refresh token is invalid
+      console.error(error);
+    }
+  };
   return (
     <div className="min-w-full">
       {loading && <Loader />}

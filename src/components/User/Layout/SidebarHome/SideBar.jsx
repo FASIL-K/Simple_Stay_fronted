@@ -15,19 +15,25 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { resetState } from "../../../../redux/User";
 import { Link } from "react-router-dom";
+import { logout } from "../../../../services/userApi";
 
 
 export default function TemporaryDrawer({ isOpen, onClose }) {
   const userInfo = useSelector((state) => state.user.userInfo)
   const dispatch = useDispatch()
-
-  console.log(userInfo,'dccccccccccccccs')
   const navigate = useNavigate()
-  const handlelogout = () => {
-      localStorage.removeItem('token');
+
+ const handlelogout = async () => {
+    try {
+      await logout();  // Call the logout API function
       dispatch(resetState()); // Call the resetState action
       navigate('/login'); // Redirect to the login page after logout
+    } catch (error) {
+      // Handle error, e.g., if the refresh token is invalid
+      console.error(error);
     }
+  };
+
     
 
   const list = (
