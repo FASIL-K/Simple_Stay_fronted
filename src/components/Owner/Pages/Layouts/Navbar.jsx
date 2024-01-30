@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import cover from "../../../../assets/ownercover.png";
 import logo from "../../../../assets/logo.svg";
 import { Button, Typography } from "@material-tailwind/react";
@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import DropDown from "./Menulist";
+import { jwtDecode } from "jwt-decode";
+import { PropertyListing } from "../../../../services/ownerApi";
 
 const navItems = [
   { path: "/owner/ownerhome/", label: "Dashboard" },
@@ -17,9 +19,41 @@ const navItems = [
 
 function Navbar() {
   const [arrowRotation, setArrowRotation] = useState(0);
+  const [postData, setPostData] = useState(null);
+  const token = localStorage.getItem("token");
+  const decode = jwtDecode(token);
+  const userId = decode.user_id;
+  const isPremium = decode.is_premium; // Assuming you have a field indicating premium status
+
+ const DataListing = async() =>{
+    try {
+      const response = await PropertyListing(userId)
+      console.log(response,"dsadsadas");
+      setPostData(response.data);
+      console.log(postData,"posttttttttttttttttttttdsaaaaaaaaadsa");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    DataListing()
+  
+  }, []);
+  useEffect(() => {
+    console.log(postData, "posttttttttttttttttttttdsaaaaaaaaadsa");
+  }, [postData]);
 
   const rotateArrow = () => {
     setArrowRotation(arrowRotation + 180);
+  };
+  const canAddPost = () => {
+    if (isPremium) {
+      // Premium user can add posts without any limit
+      return true;
+    } else {
+      // Check if the user has created less than 3 posts
+      return postData && postData.length < 1;
+    }
   };
 
   return (
@@ -46,14 +80,20 @@ function Navbar() {
           </Link>
         ))}
         <DropDown />
-        <Link to="/owner/add-properties">
-        <Button className="bg-green-600 hover:bg-black w-44">
-          + ADD Properties
-        </Button>
-        </Link>
-        
-        
-        
+     
+        {canAddPost() ? (
+          <Link to="/owner/add-properties">
+            <Button className="bg-green-600 hover:bg-black w-44">
+              + ADD Properties
+            </Button>
+          </Link>
+        ) : (
+          <Link to="/owner/premium/   ">
+            <Button className="bg-yellow-500 hover:bg-yellow-400 w-44">
+              Upgrade to Premium
+            </Button>
+          </Link>
+        )}
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import classNames from 'classnames';
 const Plan = ({ name, price, features, className, ...props }) => (
   <div className={classNames('bg-white dark:bg-gray-900 rounded-xl p-6 shadow-xl', className)} {...props}>
     <div className="space-y-2">
-      <h4 className="text-2xl font-bold">{name}</h4>
+      <h4 className="text-2xl font-bold">{name} </h4>
       <span className="text-6xl font-bold">{price}</span>
     </div>
     <ul className="space-y-2 mt-6">

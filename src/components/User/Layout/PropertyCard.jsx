@@ -21,6 +21,7 @@ import { IsSave, Unsave } from "../../../services/postApi";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 
 export function HorizontalCard({ postData, setPostData }) {
   console.log(postData, "posttttttttttttttttttttttttttttttttt");
@@ -166,7 +167,14 @@ export function HorizontalCard({ postData, setPostData }) {
               <div>
                 <Typography variant="h6" color="black">
                   {post.owner_detail.email}
+                  {post.owner_detail.is_premium ?
+                   <CheckCircleOutlineOutlinedIcon 
+                    className="text-blue-700 ml-3" />:""
+}
+
                 </Typography>
+                
+                
                 <Typography
                   color="gray"
                   className="-mt-1 flex justify-start"
@@ -185,10 +193,10 @@ export function HorizontalCard({ postData, setPostData }) {
               className="mb-4 uppercase text-left"
             >
               <div className="flex justify-end gap-7 text-blue-900">
-                <IoShareSocialOutline
+                {/* <IoShareSocialOutline
                   className="cursor-pointer"
                   onClick={() => handleHeartClick(post.id)}
-                />
+                /> */}
                 {savedProperties.includes(post.id) ? (
                   <FaHeart onClick={() => handleHeartClick(post.id)} />
                 ) : (

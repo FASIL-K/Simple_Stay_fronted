@@ -153,12 +153,12 @@ function ListPropertys() {
                 
                 {property.is_available && (
                   <>
-                    <Typography
+                    {/* <Typography
                       variant="h6"
                       className="text-light-blue-900 text-base cursor-pointer"
                     >
                       Share
-                    </Typography>
+                    </Typography> */}
                     <Link
                       to={`/owner/edit-properties/${property.id}`}
                       className="text-light-blue-900 text-base cursor-pointer"

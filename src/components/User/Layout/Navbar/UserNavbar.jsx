@@ -50,12 +50,15 @@ export function StickyNavbar() {
           <div className="flex items-center">
             <img src={logo} alt="Logo" className="h-11 md:h-12 lg:h-12 xl:h-12 ml-4 md:ml-8 lg:ml-12 xl:ml-16 mb-4" />
           </div>
-
+          
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-x-1">
-              <Button variant="text" size="sm" className="hidden sm:inline-block">
+            <Link to="/user/userprofile/myactivity/">
+            <Button variant="text" size="sm" className="hidden sm:inline-block">
                 <FaRegHeart className="h-6 w-9 mb-3 text-white" />
               </Button>
+            </Link>
+             
             </div>
             <Link to="/user/property_list/" style={{ textDecoration: 'none' }}>
             <div className="flex items-center gap-x-1 mb-3" >

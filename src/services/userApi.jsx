@@ -11,9 +11,7 @@ const UserSignin = async (values) => {
       error.response &&
       (error.response.status === 401 || error.response.status === 403)
     ) {
-      // Token expired, try to refresh it
       await RefreshToken();
-      // Retry the original request
       const retryResponse = await UserAxiosInstant.post("user/token/", values, {
         withCredentials: true,
       });
@@ -139,11 +137,8 @@ const logout = async () => {
 
     await UserAxiosInstant.post("user/logout/", { refresh_token });
 
-    // Clear local storage or perform other necessary actions on successful logout
     localStorage.removeItem("token");
-    // Redirect to the login page or homepage, etc.
   } catch (error) {
-    // Handle error, e.g., if the refresh token is invalid
     console.error(error);
   }
 };

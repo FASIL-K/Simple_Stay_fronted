@@ -99,6 +99,7 @@ const UserProfileModal = ({ isOpen, onClose, userDetails, setUserDetails }) => {
     }
   }, [userDetails]);
 
+  console.log(userDetails,'dusereeeeeeeeeeeeeeeee');
   const handleModalClose = (formik) => {
     formik.resetForm(); // Reset the form when the modal is closed
     onClose();
@@ -127,7 +128,7 @@ const UserProfileModal = ({ isOpen, onClose, userDetails, setUserDetails }) => {
           </Typography>
           <Formik
             initialValues={{
-              name: userDetails?.name || "",
+                name: userDetails?.name || "",
               email: emailField,
               phone: userDetails?.phone || "",
               profileImage: userDetails?.profileImage || "",

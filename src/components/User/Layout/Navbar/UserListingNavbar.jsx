@@ -9,6 +9,7 @@ import avatar from "../../../../assets/profileavatar.png";
 import { Button, Input } from "@material-tailwind/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { UserUrl } from "../../../../Constants/Constants";
+import { Link } from "react-router-dom/dist";
 
 const navigation = [
   { name: "Dashboard", href: "#", current: true },
@@ -60,29 +61,33 @@ export default function Example() {
                 </Disclosure.Button>
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+                <Link to="/">
                 <div className="flex flex-shrink-0 items-center">
                   <img className="h-8 w-auto" src={logo} alt="Your Company" />
                 </div>
+                </Link>
                 <div className="hidden sm:ml-6 sm:block ml-2">
                   <Input
                     variant="standard"
                     icon={<MagnifyingGlassIcon className="h-5 w-5" />}
                   />
                 </div>
-
-                
               </div>
 
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <div className="flex items-center gap-x-1">
-                  <Button
-                    variant="text"
-                    size="sm"
-                    className="hidden sm:inline-block mt-3"
-                  >
-                    <FaRegHeart className="h-6 w-9 mb-3 text-white" />
-                  </Button>
-                  <div className="flex ml-auto mr-2 mt-3">{renderNavList()}</div>
+                  <Link to="/user/userprofile/myactivity/">
+                    <Button
+                      variant="text"
+                      size="sm"
+                      className="hidden sm:inline-block"
+                    >
+                      <FaRegHeart className="h-6 w-9 mb-3 text-white" />
+                    </Button>
+                  </Link>
+                  <div className="flex ml-auto mr-2 mt-3">
+                    {renderNavList()}
+                  </div>
                 </div>
                 <TemporaryDrawer isOpen={drawerOpen} onClose={toggleDrawer} />
               </div>

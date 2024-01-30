@@ -60,7 +60,7 @@ const CreateSaved = (values) => {
             Authorization: `Bearer ${accessToken}`, // Replace with your actual authentication token
         },
         }).catch((error) => {
-        if (error.response.status === 401) {
+        if (error.response.status === 401 || error.response.status === 403 ) {
             RefreshToken();
         } else {
             console.error('Error:', error.response);

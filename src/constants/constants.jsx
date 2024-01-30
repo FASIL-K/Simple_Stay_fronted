@@ -15,3 +15,5 @@ export const SavedPostUrl = import.meta.env.VITE_SAVEDPOST_URL
 
 export const wsApiUrl = import.meta.env.VITE_Ws_URL;
 
+
+export const Premiumurl = import.meta.env.VITE_PREMIUM_URL;

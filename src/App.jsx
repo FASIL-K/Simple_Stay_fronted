@@ -9,6 +9,7 @@ import UserLoginPage from "./pages/User/UserLoginPage";
 import UserSignupPage from "./pages/User/UserSignupPage";
 import EmailCheck from "./components/User/login/EmailCheck";
 import IndiaCityDropdown from "./pages/Test";
+import LocationPage from "./pages/Test";
 
 function App() {
   return (
@@ -24,6 +25,8 @@ function App() {
             <Route path="/signup/" exact element={<UserSignupPage />} />
             <Route path="/usertype/" exact element={<UserType />} />
             <Route path="/emailcheck/" exact element={ <EmailCheck/>  } />
+            <Route path="/location/" exact element={ <LocationPage/>  } />
+            
           </Route>
 
           <Route path="/admin/*" element={<AdminsRoute />} />

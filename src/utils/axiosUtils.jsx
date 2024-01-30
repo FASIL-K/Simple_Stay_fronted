@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { UserUrl, OwnerUrl, AdminUrl, SavedPostUrl } from '../Constants/Constants';
+import { UserUrl, OwnerUrl, AdminUrl, SavedPostUrl, Premiumurl } from '../Constants/Constants';
 
 const CreateAxiosClient = (baseURL) => {
   const client = axios.create({
@@ -99,5 +99,16 @@ PostAxiosInstant.interceptors.response.use(
   async (error) => handleUnauthorizedError(error, PostAxiosInstant)
 );
 
+const PremiumAxiosInstant = CreateAxiosClient(Premiumurl);
+PremiumAxiosInstant.interceptors.request.use(async (req) => {
+  const modifiedReq = attachToken(req, 'token');
+  return modifiedReq;
+});
 
-export { UserAxiosInstant, OwnerAxiosInstant, AdminAxiosInstant, PostAxiosInstant };
+PremiumAxiosInstant.interceptors.response.use(
+  (response) => response,
+  async (error) => handleUnauthorizedError(error, PremiumAxiosInstant)
+);
+
+
+export { UserAxiosInstant, OwnerAxiosInstant, AdminAxiosInstant, PostAxiosInstant,PremiumAxiosInstant };

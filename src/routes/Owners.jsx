@@ -10,6 +10,8 @@ import ListProperty from '../pages/Owner/ListProperty'
 import OwnerProfile from '../pages/Owner/OwnerProfile'
 import EditPropertys from '../pages/Owner/EditPropertys'
 import OwnerPremium from '../pages/Owner/OwnerPremium'
+import SuccessfulPayment from '../components/Owner/Pages/Payment/SuccessfullPayment'
+import CanceledPayment from '../components/Owner/Pages/Payment/Cancellpayment'
 
 function OwnersRoutes() {
     return (
@@ -25,7 +27,8 @@ function OwnersRoutes() {
             <Route path='/edit-properties/:propertyId' element={<EditPropertys />} />
             <Route path='/profile/' element = {<OwnerProfile/>}/>
             <Route path='/premium/' element = {<OwnerPremium/>}/>
-            
+            <Route path='/payment/success' element={<SuccessfulPayment />} />
+            <Route path='/payment/canceled' element={<CanceledPayment />} />
 
             
         </Route>

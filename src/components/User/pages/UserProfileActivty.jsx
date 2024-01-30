@@ -45,9 +45,14 @@ function UserProfileActivity() {
       } finally {
         setLoading(false);
         fetchWishlistData ();
+        setDefaultSelection(); // Call setDefaultSelection here
+
       }
     };
-
+    const setDefaultSelection = () => {
+      // Set the default selected card to "saved" when the page loads
+      handleCardSelect("saved");
+    };
     if (accessToken) {
       fetchUserDetails();
     }
@@ -62,12 +67,14 @@ function UserProfileActivity() {
   const renderAdditionalContent = () => {
     if (selectedCard === "saved") {
       return (
-        <div className=" mt-14">
-                {loading && <Loader />}
-
-          <HorizontalCard wishlist={wishlist} setWhishlistData={setWhishlistData}  />
-
-        </div>
+        <div className="mt-14">
+    {loading && <Loader />}
+    {wishlist && wishlist.length > 0 ? (
+      <HorizontalCard wishlist={wishlist} setWhishlistData={setWhishlistData} />
+    ) : (
+      <p>No items in the wishlist</p>
+    )}
+  </div>
       );
     } else if (selectedCard === "seen") {
       return (
@@ -112,7 +119,7 @@ function UserProfileActivity() {
               </Typography>
             </div>
           </div>
-          <div  
+          {/* <div  
             className={`w-36 h-24 mt-3 bg-blue-gray-50 shadow-2xl cursor-pointer border-1 border-blue-gray-800 border-opacity-5 transition duration-75 hover:border-blue-500 rounded ${
               selectedCard === "seen" ? "border-blue-500  bg-blue-100" : ""
             }`}
@@ -131,7 +138,7 @@ function UserProfileActivity() {
                 Properties
               </Typography>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {renderAdditionalContent()}
