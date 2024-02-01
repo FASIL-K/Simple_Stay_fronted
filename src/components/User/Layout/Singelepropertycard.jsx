@@ -44,28 +44,25 @@ function Singelepropertycard() {
   const userId = decode.id;
   const tokenData = JSON.parse(token);
   const accessToken = tokenData ? tokenData.access : null;
- 
+
   const handleHeartClick = async () => {
     try {
       if (isSaved) {
         await Unsave(userId, propertyId);
         SetisSaved(false);
-        toast.success('Property removed from wishlist!');
+        toast.success("Property removed from wishlist!");
       } else {
         const values = { user: userId, post: propertyId };
         await CreateSaved(values);
         SetisSaved(true);
 
-        toast.success('Property added from wishlist!');
-
-
+        toast.success("Property added from wishlist!");
       }
     } catch (error) {
-      console.error('Error handling heart click:', error);
-      toast.error('Error processing your request. Please try again later.');
+      console.error("Error handling heart click:", error);
+      toast.error("Error processing your request. Please try again later.");
     }
   };
-
 
   const propertyDetails = [
     { label: "Security", value: postData.security_deposit },
@@ -82,7 +79,7 @@ function Singelepropertycard() {
         const isSavedResponse = await IsSave(userId, propertyId);
         SetisSaved(isSavedResponse.data.saved);
       } catch (error) {
-        console.error('Error checking saved status:', error);
+        console.error("Error checking saved status:", error);
       }
     };
 
@@ -111,8 +108,6 @@ function Singelepropertycard() {
       </div>
     );
   }
-
- 
 
   const shareUrl = `${window.location.origin}/property/${propertyId}`;
   const title = `${postData.bhk_type} ${postData.property_type} for ${postData.looking_to} in ${postData.locality}, ${postData.house_name}, ${postData.city}`;
@@ -144,7 +139,7 @@ function Singelepropertycard() {
                     onClick={handleHeartClick}
                   />
                 )}
-                
+
                 <Menu
                   animate={{
                     mount: { y: 0 },
@@ -154,38 +149,35 @@ function Singelepropertycard() {
                   <MenuHandler>
                     <Typography>
                       <IoShareSocialOutline
-                  size={"1.5rem"}
-                  className="cursor-pointer"
-                />
-                </Typography>
-                    
+                        size={"1.5rem"}
+                        className="cursor-pointer"
+                      />
+                    </Typography>
                   </MenuHandler>
                   <MenuList>
-                    <MenuItem><FacebookShareButton url={shareUrl} quote={title}>
-                    <FaFacebook size={24} className="cursor-pointer" />
-                  </FacebookShareButton>
-                  </MenuItem>
-                    <MenuItem><TwitterShareButton url={shareUrl} title={title}>
-                    <FaTwitter size={24} className="cursor-pointer" />
-                  </TwitterShareButton>
-                  </MenuItem>
                     <MenuItem>
-                    <WhatsappShareButton url={shareUrl} title={title}>
-                    <FaWhatsapp size={24} className="cursor-pointer" />
-                  </WhatsappShareButton>
-                  </MenuItem>
-                    
-                  <MenuItem>
-                  <EmailShareButton url={shareUrl} subject={title}>
-                    <FaEnvelope size={24} className="cursor-pointer" />
-                  </EmailShareButton>
+                      <FacebookShareButton url={shareUrl} quote={title}>
+                        <FaFacebook size={24} className="cursor-pointer" />
+                      </FacebookShareButton>
+                    </MenuItem>
+                    <MenuItem>
+                      <TwitterShareButton url={shareUrl} title={title}>
+                        <FaTwitter size={24} className="cursor-pointer" />
+                      </TwitterShareButton>
+                    </MenuItem>
+                    <MenuItem>
+                      <WhatsappShareButton url={shareUrl} title={title}>
+                        <FaWhatsapp size={24} className="cursor-pointer" />
+                      </WhatsappShareButton>
+                    </MenuItem>
 
-                  </MenuItem>
-
-                  
+                    <MenuItem>
+                      <EmailShareButton url={shareUrl} subject={title}>
+                        <FaEnvelope size={24} className="cursor-pointer" />
+                      </EmailShareButton>
+                    </MenuItem>
                   </MenuList>
                 </Menu>
-                
               </div>
             </div>
 
@@ -334,6 +326,7 @@ function Singelepropertycard() {
                 )}
               </div>
             ))}
+
             <div>
               <Typography
                 variant="h6"
@@ -345,6 +338,22 @@ function Singelepropertycard() {
               <Typography variant="paragraph" className="ml-12 mt-4">
                 daslfkdasjfdoisajdjasiojkdnaskcnoik
               </Typography>
+
+              {/* Display Amenities under "About this Property" */}
+              <div className="ml-8 mt-4">
+                <Typography variant="h6" color="black" className="text-lg">
+                  Amenities
+                </Typography>
+                <ul className="list-disc ml-4">
+                  {postData.amenities.map((amenity, index) => (
+                    <li key={index}>
+                      <Typography variant="paragraph">
+                        {amenity.name}
+                      </Typography>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </CardBody>
@@ -367,7 +376,7 @@ function Singelepropertycard() {
                 color="blue-gray"
                 className="ml-4 md:ml-10"
               >
-                Furnishing
+                Furnishing And Aminities
               </Typography>
               <hr className="border-t border-blue-gray-300 absolute w-full  md:mt-14" />
             </div>

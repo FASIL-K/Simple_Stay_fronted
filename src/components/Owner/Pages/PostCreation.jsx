@@ -8,7 +8,11 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { EditProperty, OwnerPostCreation, PropertyEdit } from "../../../services/ownerApi";
+import {
+  EditProperty,
+  OwnerPostCreation,
+  PropertyEdit,
+} from "../../../services/ownerApi";
 import axios, { Axios } from "axios";
 import { jwtDecode } from "jwt-decode";
 import { OwnerUrl } from "../../../Constants/Constants";
@@ -16,8 +20,9 @@ import { useNavigate } from "react-router-dom";
 import { formatISO } from "date-fns";
 import { format } from "date-fns";
 import { useParams } from "react-router-dom";
-import Select from 'react-select';
-
+import Select from "react-select";
+import DialogCustomAnimation from "./Layouts/AminitisModal";
+import ScrollDialog from "./Layouts/AminitisModal";
 
 const validationSchemas = [
   Yup.object().shape({
@@ -41,7 +46,19 @@ const validationSchemas = [
   }),
 ];
 
+
 function PropertyForm({ isEditing, initialValues }) {
+  const [selectedAmenities, setSelectedAmenities] = useState([]);
+console.log(selectedAmenities,"dasddddddddddddddddddddddd");
+  const handleAmenitiesSelect = (selectedAmenities) => {
+    const amenityNames = selectedAmenities.map((amenity) => amenity.name);
+    console.log('Selected Amenity Names:', amenityNames);
+
+
+    setSelectedAmenities(selectedAmenities)
+    // Do something with the selected amenities data, e.g., store it in the component state
+    console.log('Selected Amenitiessdasdasdasda:', selectedAmenities);
+  };
   const navigate = useNavigate();
   const { propertyId } = useParams();
   console.log(propertyId, "sadasdcassad");
@@ -50,7 +67,7 @@ function PropertyForm({ isEditing, initialValues }) {
 
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [selectedLookingTo, setSelectedLookingTo] = useState("");
-  const [selectedPropertyType, setSelectedPropertyType] = useState("");
+  const [selectedPropertyType, setSelectedPropertyType] = useState(""); 
   const [selectedFurnishedType, setSelectedFurnishedType] = useState("");
   const [selectedBhkType, setSelectedBhkType] = useState("");
   const [selectedSecurityDeposit, setSelectedSecurityDeposit] = useState("");
@@ -64,23 +81,22 @@ function PropertyForm({ isEditing, initialValues }) {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [images, setImages] = useState([]);
 
-
   const handleDeleteImage = (imageId) => {
-    setImages(images.filter(id => id !== imageId));
+    setImages(images.filter((id) => id !== imageId));
   };
   useEffect(() => {
     const fetchCityNames = async () => {
       try {
-        const geonamesUsername = 'Fasil';
+        const geonamesUsername = "Fasil";
         const response = await axios.get(
           `http://api.geonames.org/searchJSON?country=IN&maxRows=1000&username=${geonamesUsername}`
         );
 
         // Extract city names from the response
-        const cities = response.data.geonames.map(city => city.name);
+        const cities = response.data.geonames.map((city) => city.name);
         setCityNames(cities);
       } catch (error) {
-        console.error('Error fetching cities:', error);
+        console.error("Error fetching cities:", error);
       }
     };
 
@@ -90,8 +106,7 @@ function PropertyForm({ isEditing, initialValues }) {
     const fetchPostData = async () => {
       if (propertyId) {
         try {
-
-          const response = await PropertyEdit(userId, propertyId)
+          const response = await PropertyEdit(userId, propertyId);
           // const response = await axios.get(
           //   `${OwnerUrl}property-post/${userId}/${propertyId}/`
           // );
@@ -144,14 +159,17 @@ function PropertyForm({ isEditing, initialValues }) {
     validationSchema: validationSchemas[activeStep],
     onSubmit: async (values) => {
       try {
-        
-      const formattedDate = format(
+        const formattedDate = format(
           new Date(values.available_from),
           "yyyy-MM-dd"
         );
         values.available_from = formattedDate;
+        console.log('Form Data:', values);  // Add this line to log the form data
+        const amenityNames = selectedAmenities.map((amenity) => amenity.name);
 
         const formData = new FormData();
+        formData.append("amenities",(amenityNames  ));
+
         Object.entries(values).forEach(([key, value]) => {
           if (key === "images") {
             // Handle multiple images separately
@@ -162,16 +180,20 @@ function PropertyForm({ isEditing, initialValues }) {
             formData.append(key, value);
           }
         });
+        
+        console.log('Form Data:');
+      for (const pair of formData.entries()) {
+        console.log(pair[0] + ', ' + pair[1]);
+      }
         console.log(formData, "asdfasfdasd form data");
         const apiUrl = isEditing
-        ? EditProperty(userId, propertyId, formData) // Pass values to EditProperty
-        : OwnerPostCreation(userId, formData ); 
+          ? EditProperty(userId, propertyId, formData) // Pass values to EditProperty
+          : OwnerPostCreation(userId, formData);
 
-      console.log(apiUrl, "Constructed API URL");
+        console.log(apiUrl, "Constructed API URL");
         const response = isEditing
-        ? await apiUrl // apiUrl is already a function
-
-        : await apiUrl
+          ? await apiUrl // apiUrl is already a function
+          : await apiUrl;
         console.log(response, "Response from API");
 
         console.log(response, "anzil");
@@ -290,18 +312,24 @@ function PropertyForm({ isEditing, initialValues }) {
       </div>
 
       <div className="flex flex-col gap-6 w-full md:w-[500px]">
-      <Select
-        placeholder="Select City"
-        options={cityNames.map(city => ({ label: city, value: city }))}
-        value={formik.values.city ? { label: formik.values.city, value: formik.values.city } : null}
-        onChange={(selectedOption) => formik.setFieldValue('city', selectedOption?.value || '')}
-      />
-      {formik.touched.city && formik.errors.city && (
-        <Typography variant="small" className="text-red-500">
-          {formik.errors.city}
-        </Typography>
-      )}
-    </div>
+        <Select
+          placeholder="Select City"
+          options={cityNames.map((city) => ({ label: city, value: city }))}
+          value={
+            formik.values.city
+              ? { label: formik.values.city, value: formik.values.city }
+              : null
+          }
+          onChange={(selectedOption) =>
+            formik.setFieldValue("city", selectedOption?.value || "")
+          }
+        />
+        {formik.touched.city && formik.errors.city && (
+          <Typography variant="small" className="text-red-500">
+            {formik.errors.city}
+          </Typography>
+        )}
+      </div>
 
       <Button type="button" onClick={handleNext}>
         Next
@@ -546,6 +574,9 @@ function PropertyForm({ isEditing, initialValues }) {
       </div>
 
       <div className="flex flex-col gap-6 w-full md:w-[500px]">
+        <Typography variant="small" className="opacity-90 mt-3 font-semibold">
+          Building/House Name
+        </Typography>
         <Input
           variant="standard"
           placeholder="Building/House Name"
@@ -560,6 +591,9 @@ function PropertyForm({ isEditing, initialValues }) {
           </Typography>
         )}
 
+        <Typography variant="small" className="opacity-90 mt-3 font-semibold">
+          Locality
+        </Typography>
         <Input
           variant="standard"
           placeholder="Locality"
@@ -573,7 +607,9 @@ function PropertyForm({ isEditing, initialValues }) {
             {formik.errors.locality}
           </Typography>
         )}
-
+        <Typography variant="small" className="opacity-90 mt-3 font-semibold">
+          Built up area
+        </Typography>
         <Input
           variant="standard"
           type="number"
@@ -589,12 +625,18 @@ function PropertyForm({ isEditing, initialValues }) {
           </Typography>
         )}
       </div>
-
-      <Button type="button" onClick={handleNext}>
+     
+    <div className="flex flex-col justify-start items-start">
+    <ScrollDialog
+        onAmenitiesSelect={handleAmenitiesSelect}
+      />
+            <Button type="button" className="mt-3" onClick={handleNext}>
         Next
       </Button>
+    </div>
     </form>
   );
+  console.log(selectedAmenities,"fdasdsadasd");
 
   const renderPropertyPrice = () => (
     <form onSubmit={formik.handleSubmit} className="space-y-6">
@@ -616,7 +658,7 @@ function PropertyForm({ isEditing, initialValues }) {
         )}
         {isEditing && formik.values.available_from ? (
           <div className="mt-2">
-            <Typography variant="small" className="opacity-90 font-semibold">
+            <Typography variant="small" className="opacity font-semibold">
               Available From
             </Typography>
             <div className="mt-1">
@@ -755,50 +797,48 @@ function PropertyForm({ isEditing, initialValues }) {
     </form>
   );
 
-    const renderImageUplode = () => (
-      <>
-        <form onSubmit={formik.handleSubmit} className="space-y-6 ">
-          <Typography variant="h4">Upload Images</Typography>
+  const renderImageUplode = () => (
+    <>
+      <form onSubmit={formik.handleSubmit} className="space-y-6 ">
+        <Typography variant="h4">Upload Images</Typography>
 
-          <div className="flex flex-col gap-6 w-full md:w-[500px]">
-            <input
-              type="file"
-              name="images"
-              accept="image/*"
-              onChange={handleImageChange}
-              multiple
-            />
+        <div className="flex flex-col gap-6 w-full md:w-[500px]">
+          <input
+            type="file"
+            name="images"
+            accept="image/*"
+            onChange={handleImageChange}
+            multiple
+          />
+        </div>
 
-          
+        <Button type="submit">Submit</Button>
+      </form>
+      {isEditing && existingPostData && (
+        <div>
+          <Typography variant="h4">Existing Images</Typography>
+          <div className="flex flex-wrap gap-4 mt-4">
+            {existingPostData.images.map((image, index) => (
+              <div key={index} className="relative">
+                <img
+                  src={`${import.meta.env.VITE_USER_URL}${image.image}`}
+                  alt={`Image ${index}`}
+                  className="h-[100px] w-[100px] object-cover rounded-t-lg"
+                />
+                <button
+                  type="button"
+                  className="absolute top-0 right-0 p-1 bg-red-500 text-white rounded-full"
+                  onClick={() => handleDeleteImage(image.id)}
+                >
+                  X
+                </button>
+              </div>
+            ))}
           </div>
-
-          <Button type="submit">Submit</Button>
-        </form>
-        {isEditing && existingPostData && (
-          <div>
-            <Typography variant="h4">Existing Images</Typography>
-            <div className="flex flex-wrap gap-4 mt-4">
-              {existingPostData.images.map((image, index) => (
-                <div key={index} className="relative">
-                  <img
-                    src={`${import.meta.env.VITE_USER_URL}${image.image}`}
-                    alt={`Image ${index}`}
-                    className="h-[100px] w-[100px] object-cover rounded-t-lg"
-                  />
-                  <button
-                    type="button"
-                    className="absolute top-0 right-0 p-1 bg-red-500 text-white rounded-full"
-                    onClick={() => handleDeleteImage(image.id)}
-                  >
-                    X
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </>
-    );
+        </div>
+      )}
+    </>
+  );
 
   const renderStepContent = (step) => {
     switch (step) {
@@ -850,4 +890,3 @@ function PropertyForm({ isEditing, initialValues }) {
 }
 
 export default PropertyForm;
-  

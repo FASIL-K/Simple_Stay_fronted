@@ -63,7 +63,7 @@ const EditPropertyImages = (id , value) =>{
 
 
 
-const PropertyListing = (id) => {
+const   PropertyListing = (id) => {
   return OwnerAxiosInstant.get("/property-post/" + id + "/", {
     withCredentials: true,
   })
