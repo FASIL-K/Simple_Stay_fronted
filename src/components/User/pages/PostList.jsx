@@ -6,6 +6,7 @@ import { UserUrl } from '../../../Constants/Constants';
 import { Input } from '@material-tailwind/react';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import { toast } from 'react-toastify';
+import FilterBar from '../Layout/FilterBar';
 
 function PostList() {
   // const [post, setPost] = useState([]);
@@ -37,11 +38,13 @@ function PostList() {
 
                 
                   icon={<MagnifyingGlassIcon className="h-5 w-5" />}
+                  
                 />
-      <div className="flex justify-center mt-14">
-        <div className="text-center ">
+      <div className="mt-3">
+        <FilterBar postData={postData} setPostData={setPostData} />
+        {/* <div className="text-center ">
           <HorizontalCard postData={postData} setPostData={setPostData}  />
-        </div>
+        </div> */}
       </div>
     </div>
   );

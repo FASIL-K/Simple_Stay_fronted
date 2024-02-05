@@ -8,8 +8,10 @@ import PrivateRoute from "./ProtectedRoutes/PrivateRoute";
 import UserLoginPage from "./pages/User/UserLoginPage";
 import UserSignupPage from "./pages/User/UserSignupPage";
 import EmailCheck from "./components/User/login/EmailCheck";
-// import IndiaCityDropdown from "./pages/Test";
-// import LocationPage from "./pages/Test";
+import Map from "./pages/Test";
+import NearbyRestaurantsMap from "./pages/User/MapComponet";
+import LocationSearch from "./pages/User/MapComponet";
+import UserChat from "./components/Chat/ChatList";
 
 function App() {
   return (
@@ -20,12 +22,11 @@ function App() {
 
           <Route element={<PrivateRoute />}>
             <Route path="/" exact element={<UserLoginPage />} />
-            {/* <Route path="/city" exact element={<IndiaCityDropdown />} /> */}
+            <Route path="/map" exact element={<NearbyRestaurantsMap/>} />
             <Route path="/login/" exact element={<UserLoginPage />} />
             <Route path="/signup/" exact element={<UserSignupPage />} />
             <Route path="/usertype/" exact element={<UserType />} />
             <Route path="/emailcheck/" exact element={ <EmailCheck/>  } />
-            {/* <Route path="/location/" exact element={ <LocationPage/>  } /> */}
             
           </Route>
 

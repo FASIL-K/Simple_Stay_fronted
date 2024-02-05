@@ -1,0 +1,39 @@
+/* Add this CSS to your component's stylesheet or a global stylesheet */
+
+/* Hide the scrollbar */
+::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Optional: Handle Firefox scrollbar */
+  /* You may need to adjust the styles based on your specific design */
+  /* This is necessary for Firefox since it doesn't support ::-webkit-scrollbar */
+  /* It might not be perfect, but it's a workaround */
+  /* Make sure to test it in different browsers */
+  
+  /* For Firefox */
+  .scroll-container {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+  }
+  
+  /* Optional: Add styles to mimic the scrollbar in Firefox */
+  .scroll-container:hover {
+    scrollbar-color: #ced4da #f8f9fa;
+    transition: scrollbar-color 0.5s;
+  }
+  
+  .scroll-container::-webkit-scrollbar {
+    width: 12px;
+  }
+  
+  .scroll-container::-webkit-scrollbar-thumb {
+    background-color: #ced4da;
+    border-radius: 6px;
+  }
+  
+  .scroll-container::-webkit-scrollbar-track {
+    background-color: #f8f9fa;
+    border-radius: 6px;
+  }
+  

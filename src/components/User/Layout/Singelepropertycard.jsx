@@ -6,6 +6,7 @@ import { FiMessageSquare } from "react-icons/fi";
 import home from "../../../assets/home1.svg";
 import { useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import marker from "../../../assets/marker.png";
 
 import {
   Card,
@@ -34,16 +35,98 @@ import { FaFacebook, FaTwitter, FaWhatsapp, FaEnvelope } from "react-icons/fa";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import {
+  GoogleMap,
+  useLoadScript,
+  Marker,
+  MarkerF,
+  InfoWindow,
+} from "@react-google-maps/api";
+import CustomCarousel from "./ArouyndThisPropertycard";
+import { Link } from "react-router-dom/dist";
 
 function Singelepropertycard() {
   const [isSaved, SetisSaved] = useState(false);
   const { propertyId } = useParams();
   const [postData, setPostData] = useState("");
+  const [showMap, setShowMap] = useState(false);
+  const [selectedPlace, setSelectedPlace] = useState(null);
+
   const token = localStorage.getItem("token");
   const decode = jwtDecode(token);
   const userId = decode.id;
   const tokenData = JSON.parse(token);
   const accessToken = tokenData ? tokenData.access : null;
+
+  const getIconColor = (category) => {
+    switch (category) {
+      case "school":
+        return "#00F"; // Blue color for school
+      case "hospital":
+        return "#F00"; // Red color for hospital
+      case "pharmacy":
+        return "#0F0"; // Green color for pharmacy
+      case "movie_theater":
+        return "#FF0"; // Yellow color for movie theater
+      case "hotel":
+        return "#F80"; // Orange color for hotel
+      case "park":
+        return "#0FF"; // Cyan color for park
+      default:
+        return "#000"; // Default color
+    }
+  };
+
+  const libraries = ["places"];
+  const mapContainerStyle = {
+    width: "50vw",
+    height: "50vh",
+  };
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: "AIzaSyDH8DKerF4jGQdGzE77cAN3or2rU7CiBJw",
+    libraries,
+  });
+  const handleMapButtonClick = () => {
+    setShowMap(!showMap);
+  };
+  const [nearbyPlaces, setNearbyPlaces] = useState([]);
+  console.log(
+    postData.lat,
+    postData.long,
+    "longggggggggggggggggggggggggggggggggggggggggggg"
+  );
+  const lat = postData.lat;
+  const long = postData.long;
+  console.log(lat, long, "fafdasddddddddddddddd");
+
+  useEffect(() => {
+    const apiUrl = `${OwnerUrl}post/${propertyId}/  `;
+    axios
+      .get(apiUrl)
+      .then((response) => {
+        setPostData(response.data);
+        console.log(response.data, "dasdsadasdsadas");
+        console.log(postData, "dadadasda");
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, [propertyId]);
+
+  // const fetchNearbyPlaces = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=11.421585208597453,75.93509357861727&radius=5000&type=hospital,school&key="
+  //     );AIzaSyDH8DKerF4jGQdGzE77cAN3or2rU7CiBJw
+  //     const user = await response.json();
+
+  //     setNearbyPlaces(response.data.results);
+  //     console.log(response,"responnnnnnnnnnnnnnnnnnn");
+  //     console.log(nearbyPlaces,"nearbyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
+  //   } catch (error) {
+  //     console.error("Error fetching nearby places:", error);
+  //   }
+  // };
 
   const handleHeartClick = async () => {
     try {
@@ -87,18 +170,29 @@ function Singelepropertycard() {
   }, [userId, propertyId]);
 
   useEffect(() => {
-    const apiUrl = `${OwnerUrl}post/${propertyId}/  `;
-    axios
-      .get(apiUrl)
-      .then((response) => {
-        setPostData(response.data);
-        console.log(response.data, "dasdsadasdsadas");
-        console.log(postData, "dadadasda");
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, [propertyId]);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${OwnerUrl}fetch_nearby_places/`, {
+          params: {
+            location: `${postData.lat},${postData.long}`,
+            radius: "4000",
+            place_type: "hospital,school,Shoppingmall,restaurent",
+          },
+        });
+        console.log(response, "");
+
+        setNearbyPlaces(response.data);
+
+        console.log(nearbyPlaces, "nearbyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
+      } catch (error) {
+        console.error("Error fetching nearby places:", error);
+      }
+    };
+
+    if (postData.lat && postData.long) {
+      fetchData();
+    }
+  }, [postData.lat, postData.long]);
   if (!postData) {
     return (
       <div className="flex w-auto h-auto justify-center items-center">
@@ -218,14 +312,18 @@ function Singelepropertycard() {
               >
                 Date of post
               </Typography>
+              <Link to="/user/chat/">
               <div className=" gap-3 cursor-pointer w-[15rem] h-12 bg-light-green-400 rounded-md flex justify-center items-center text-white mt-4 mr-8  ">
                 <FiMessageSquare />
                 <Typography>Message Owner</Typography>
               </div>
+
+            </Link>
+              
             </div>
           </div>
         </div>
-        <div className="flex justify-center items-center h-64 w-2/3 mx-auto">
+        <div className="flex justify-center items-center h-64 w-2/3 mx-auto ">
           <Carousel
             className="rounded-xl h-64 w-2/3 mb-11 "
             navigation={({ setActiveIndex, activeIndex, length }) => (
@@ -276,16 +374,81 @@ function Singelepropertycard() {
               <div className="5 flex items-center gap-0"></div>
             </div>
             <Typography variant="h5" color="blue-gray">
-              Address
+              {postData.locality},{postData.city}
             </Typography>
           </div>
         </CardHeader>
         <CardBody className="mb-6 p-0">
-          <Typography>
-            &quot;I found solution to all my design needs from Creative Tim. I
-            use them as a freelancer in my hobby projects for fun! And its
-            really affordable, very humble guys !!!&quot;
-          </Typography>
+          <Typography className="ml-7 -mb-7">Around This Property</Typography>
+          <CustomCarousel nearbyPlaces={nearbyPlaces} />
+          <div className="flex justify-center">
+            <Typography
+              className=" text-lg text-light-blue-900 px-4 py-2 rounded"
+              onClick={handleMapButtonClick}
+            >
+              {showMap ? "Hide Map" : "Show Map"}
+            </Typography>
+          </div>
+          {showMap && (
+            <div className="flex justify-center items-center h-96">
+              <GoogleMap
+                mapContainerStyle={{
+                  width: "100%",
+                  height: "100%",
+                }}
+                center={{
+                  lat: parseFloat(postData.lat),
+                  lng: parseFloat(postData.long),
+                }}
+                zoom={15}
+              >
+                <MarkerF
+                  position={{
+                    lat: parseFloat(postData.lat),
+                    lng: parseFloat(postData.long),
+                  }}
+                  
+                />
+
+                {nearbyPlaces.results &&
+                  nearbyPlaces.results.map(
+                    (place, index) =>
+                      place.geometry && (
+                        <MarkerF
+                          key={index}
+                          position={{
+                            lat: parseFloat(place.geometry.lat),
+                            lng: parseFloat(place.geometry.lng),
+                          }}
+                          icon={{
+                            path: "M5 0C2.239 0 0 2.239 0 5s2.239 5 5 5 5-2.239 5-5S7.761 0 5 0zm0 7c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z",
+                            fillColor: getIconColor(place.category),
+                            fillOpacity: 1,
+                            scale: 2,
+                          }}
+                          onClick={() => setSelectedPlace(place)}
+                        />
+                      )
+                  )}
+
+                {selectedPlace && (
+                  <InfoWindow
+                    position={{
+                      lat: parseFloat(selectedPlace.geometry.lat),
+                      lng: parseFloat(selectedPlace.geometry.lng),
+                    }}
+                    onCloseClick={() => setSelectedPlace(null)}
+                  >
+                    <div>
+                      <h2>{selectedPlace.name}</h2>
+                      <p>Category: {selectedPlace.category}</p>
+                      <p>Distance: {selectedPlace.distance} km</p>
+                    </div>
+                  </InfoWindow>
+                )}
+              </GoogleMap>
+            </div>
+          )}
         </CardBody>
       </Card>
 

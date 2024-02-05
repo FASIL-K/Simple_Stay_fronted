@@ -9,6 +9,7 @@ import PropertyList from '../pages/User/PropertyList';
 import PropertySinglePages from '../pages/User/PropertySinglePage';
 import UserProfile from '../pages/User/UserProfile';
 import UserProfileActivity from '../pages/User/UserProfileActivity';
+import UserChat from '../components/Chat/ChatList';
 
 function UsersRoutes() {
     
@@ -25,6 +26,8 @@ function UsersRoutes() {
         <Route path='/userprofile/myactivity/' element = {<UserProfileActivity/>}/>
         <Route path='/property_list/' element = {<PropertyList/>}/>
         <Route path='/property/:propertyId' element={<PropertySinglePages />} />
+        <Route path="/chat/"  element={ <UserChat/>  } />
+
 
         </Route>
          

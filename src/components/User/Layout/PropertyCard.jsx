@@ -11,7 +11,7 @@ import axios from "axios";
 import { Carousel } from "@material-tailwind/react";
 import { FaRegHeart } from "react-icons/fa";
 import { IoShareSocialOutline } from "react-icons/io5";
-import { Avatar } from "@material-tailwind/react";
+import { Avatar } from "@material-tailwind/react";  
 import { FiMessageSquare } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
@@ -221,7 +221,10 @@ export function HorizontalCard({ postData, setPostData }) {
           </CardBody>
           <div className="absolute gap-3 cursor-pointer bottom-9 right-20 w-[15rem] h-12 bg-light-green-400 rounded-md flex justify-center items-center text-white">
             <FiMessageSquare />
+            <Link to="/user/chat/">
             <Typography>Message Owner</Typography>
+
+            </Link>
           </div>
         </Card>
       ))}

@@ -11,7 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import {
   EditProperty,
   OwnerPostCreation,
-  PropertyEdit,
+  PropertyEdit, 
 } from "../../../services/ownerApi";
 import axios, { Axios } from "axios";
 import { jwtDecode } from "jwt-decode";
@@ -23,6 +23,7 @@ import { useParams } from "react-router-dom";
 import Select from "react-select";
 import DialogCustomAnimation from "./Layouts/AminitisModal";
 import ScrollDialog from "./Layouts/AminitisModal";
+import Map from "../../../pages/Test";
 
 const validationSchemas = [
   Yup.object().shape({
@@ -46,18 +47,16 @@ const validationSchemas = [
   }),
 ];
 
-
 function PropertyForm({ isEditing, initialValues }) {
   const [selectedAmenities, setSelectedAmenities] = useState([]);
-console.log(selectedAmenities,"dasddddddddddddddddddddddd");
+  console.log(selectedAmenities, "dasddddddddddddddddddddddd");
   const handleAmenitiesSelect = (selectedAmenities) => {
     const amenityNames = selectedAmenities.map((amenity) => amenity.name);
-    console.log('Selected Amenity Names:', amenityNames);
+    console.log("Selected Amenity Names:", amenityNames);
 
-
-    setSelectedAmenities(selectedAmenities)
+    setSelectedAmenities(selectedAmenities);
     // Do something with the selected amenities data, e.g., store it in the component state
-    console.log('Selected Amenitiessdasdasdasda:', selectedAmenities);
+    console.log("Selected Amenitiessdasdasdasda:", selectedAmenities);
   };
   const navigate = useNavigate();
   const { propertyId } = useParams();
@@ -67,7 +66,7 @@ console.log(selectedAmenities,"dasddddddddddddddddddddddd");
 
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [selectedLookingTo, setSelectedLookingTo] = useState("");
-  const [selectedPropertyType, setSelectedPropertyType] = useState(""); 
+  const [selectedPropertyType, setSelectedPropertyType] = useState("");
   const [selectedFurnishedType, setSelectedFurnishedType] = useState("");
   const [selectedBhkType, setSelectedBhkType] = useState("");
   const [selectedSecurityDeposit, setSelectedSecurityDeposit] = useState("");
@@ -80,6 +79,23 @@ console.log(selectedAmenities,"dasddddddddddddddddddddddd");
   const [activeStep, setActiveStep] = useState(0);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [images, setImages] = useState([]);
+  const [showAdditionalComponent, setShowAdditionalComponent] = useState(false);
+  const [showAddLocationButton, setShowAddLocationButton] = useState(true);
+  const [markerLocation, setMarkerLocation] = useState(null);
+
+
+  const handleMarkerChange = (newPosition) => {
+    setMarkerLocation(newPosition);
+    console.log(markerLocation,"markeddddddddddddddddddddddddddlocationnnnnnnnnnnnnnn");
+    // You can perform any additional logic here based on the new marker location
+  };
+  const lat = markerLocation?.lat;
+  const long = markerLocation?.lng;
+  console.log(markerLocation,lat,long,"lattttttttttttttttlonddgggggggggggggggggg");
+  const handleAddLocationClick = () => {
+    setShowAdditionalComponent(true);
+    setShowAddLocationButton(false); // Hide the "Add Location" button
+  };
 
   const handleDeleteImage = (imageId) => {
     setImages(images.filter((id) => id !== imageId));
@@ -164,11 +180,13 @@ console.log(selectedAmenities,"dasddddddddddddddddddddddd");
           "yyyy-MM-dd"
         );
         values.available_from = formattedDate;
-        console.log('Form Data:', values);  // Add this line to log the form data
+        console.log("Form Data:", values); // Add this line to log the form data
         const amenityNames = selectedAmenities.map((amenity) => amenity.name);
 
         const formData = new FormData();
-        formData.append("amenities",(amenityNames  ));
+        formData.append("amenities", amenityNames);
+        formData.append("lat", lat);
+        formData.append("long", long);
 
         Object.entries(values).forEach(([key, value]) => {
           if (key === "images") {
@@ -180,11 +198,11 @@ console.log(selectedAmenities,"dasddddddddddddddddddddddd");
             formData.append(key, value);
           }
         });
-        
-        console.log('Form Data:');
-      for (const pair of formData.entries()) {
-        console.log(pair[0] + ', ' + pair[1]);
-      }
+
+        console.log("Form Data:");
+        for (const pair of formData.entries()) {
+          console.log(pair[0] + ", " + pair[1]);
+        }
         console.log(formData, "asdfasfdasd form data");
         const apiUrl = isEditing
           ? EditProperty(userId, propertyId, formData) // Pass values to EditProperty
@@ -258,6 +276,65 @@ console.log(selectedAmenities,"dasddddddddddddddddddddddd");
     setActiveStep(value);
   };
 
+
+  const getGeocode = async (cityName) => {
+    try {
+      // Make a request to Google Maps Geocoding API
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${cityName}&key=`
+      );
+        console.log(response,'resssssssssssssssssssssssssssssspoooooooooooo');
+      if (!response.ok) {
+        throw new Error('Geocoding request failed');
+      }
+  
+      const data = await response.json();
+  
+      // Check if the response contains results
+      if (data.results.length > 0) {
+        const { lat, lng } = data.results[0].geometry.location;
+        return { latitude: lat, longitude: lng };
+      } else {
+        throw new Error('No results found for the given city');
+      }
+    } catch (error) {
+      console.error('Error during geocoding:', error);
+      // Handle error appropriately (e.g., show a message to the user)
+    }
+  };
+
+  const handleCityChange = async (selectedCity) => {
+    try {
+      const coordinates = await getGeocode(selectedCity);
+  
+      // Make a request to Google Maps Geocoding API to get additional information
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coordinates.latitude},${coordinates.longitude}&key=YOUR_GOOGLE_MAPS_API_KEY`
+      );
+  
+      if (!response.ok) {
+        throw new Error('Additional Geocoding request failed');
+      }
+  
+      const data = await response.json();
+  
+      // Extract landmarks and localities from the response
+      const landmarks = data.results
+        .filter((result) => result.types.includes('point_of_interest'))
+        .map((result) => result.formatted_address);
+  
+      const localities = data.results
+        .filter((result) => result.types.includes('locality'))
+        .map((result) => result.formatted_address);
+  
+      // Display the information in your form or handle it as needed
+      console.log('Landmarks:', landmarks);
+      console.log('Localities:', localities);
+    } catch (error) {
+      console.error('Error during additional geocoding:', error);
+      // Handle error appropriately (e.g., show a message to the user)
+    }
+  };
   const renderBasicDetails = () => (
     <form onSubmit={formik.handleSubmit} className="space-y-6">
       <Typography variant="h4">Add Property Basic Detail</Typography>
@@ -312,24 +389,25 @@ console.log(selectedAmenities,"dasddddddddddddddddddddddd");
       </div>
 
       <div className="flex flex-col gap-6 w-full md:w-[500px]">
-        <Select
-          placeholder="Select City"
-          options={cityNames.map((city) => ({ label: city, value: city }))}
-          value={
-            formik.values.city
-              ? { label: formik.values.city, value: formik.values.city }
-              : null
-          }
-          onChange={(selectedOption) =>
-            formik.setFieldValue("city", selectedOption?.value || "")
-          }
-        />
-        {formik.touched.city && formik.errors.city && (
-          <Typography variant="small" className="text-red-500">
-            {formik.errors.city}
-          </Typography>
-        )}
-      </div>
+      <Select
+        placeholder="Select City"
+        options={cityNames.map((city) => ({ label: city, value: city }))}
+        value={
+          formik.values.city
+            ? { label: formik.values.city, value: formik.values.city }
+            : null
+        }
+        onChange={async (selectedOption) => {
+          await formik.setFieldValue("city", selectedOption?.value || "");
+          await handleCityChange(selectedOption?.value || "");
+        }}
+      />
+      {formik.touched.city && formik.errors.city && (
+        <Typography variant="small" className="text-red-500">
+          {formik.errors.city}
+        </Typography>
+      )}
+    </div>
 
       <Button type="button" onClick={handleNext}>
         Next
@@ -625,18 +703,25 @@ console.log(selectedAmenities,"dasddddddddddddddddddddddd");
           </Typography>
         )}
       </div>
-     
-    <div className="flex flex-col justify-start items-start">
-    <ScrollDialog
-        onAmenitiesSelect={handleAmenitiesSelect}
-      />
-            <Button type="button" className="mt-3" onClick={handleNext}>
-        Next
-      </Button>
-    </div>
+
+      <div className="flex flex-col justify-start items-start">
+        <ScrollDialog onAmenitiesSelect={handleAmenitiesSelect} />
+        {showAddLocationButton && (
+          <Button
+            type="button"
+            className="mt-3"
+            onClick={handleAddLocationClick}
+          >
+            Add Location
+          </Button>
+        )}
+        {showAdditionalComponent && <Map onMarkerChange={handleMarkerChange} />}
+        <Button type="button" className="mt-3" onClick={handleNext}>
+          Next
+        </Button>
+      </div>
     </form>
   );
-  console.log(selectedAmenities,"fdasdsadasd");
 
   const renderPropertyPrice = () => (
     <form onSubmit={formik.handleSubmit} className="space-y-6">
