@@ -75,28 +75,41 @@ function classNames(...classes) {
 export default function FilterBar({ postData, setPostData }) {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState({
- 
+    BHK: [],            // Default to an empty array
+    PropertyType: [],   // Default to an empty array
+    FurnishType: [],    // Default to an empty array
   });
-
+  
   useEffect(() => {
     // Fetch filtered post data when selected filters change
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${UserUrl}user/filterpost/?bhk_type=${selectedFilters.BHK.join(
-            ","
-          )}&property_type=${selectedFilters.PropertyType.join(
-            ","
-          )}&furnished_type=${selectedFilters.FurnishType.join(",")}`
-        );
+        const bhkFilter = selectedFilters.BHK.length > 0
+          ? `bhk_type=${selectedFilters.BHK.join(",")}`
+          : '';
+        
+        const propertyTypeFilter = selectedFilters.PropertyType.length > 0
+          ? `property_type=${selectedFilters.PropertyType.join(",")}`
+          : '';
+  
+        const furnishTypeFilter = selectedFilters.FurnishType.length > 0
+          ? `furnished_type=${selectedFilters.FurnishType.join(",")}`
+          : '';
+  
+        const filtersQueryString = [bhkFilter, propertyTypeFilter, furnishTypeFilter]
+          .filter(Boolean) // Remove empty filters
+          .join('&');
+  
+        const response = await axios.get(`${UserUrl}user/filterpost/?${filtersQueryString}`);
         setPostData(response.data);
       } catch (error) {
         console.error("Error fetching filtered data:", error);
       }
     };
-
+  
     fetchData();
   }, [selectedFilters, setPostData]);
+  
   console.log(selectedFilters,"fdsafdad");
 
   const handleFilterChange = (filterType, value) => {
