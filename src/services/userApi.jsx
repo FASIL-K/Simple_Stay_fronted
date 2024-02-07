@@ -97,6 +97,13 @@ export const getUserDetails = async (accessToken) => {
   }
 };
 
+
+
+
+const GetChatList = (sender_id , search) =>{
+  return UserAxiosInstant.get(`chat/chatlistusers/${sender_id}/?search=${search}`, {withCredentials:true})
+}
+
 //Edit//------------------------------------------------------------------------
 
 export const updateUserProfile = async (ownerId, form, accessToken) => {
@@ -170,4 +177,5 @@ export {
   RefreshToken,
   UserResendEmail,
   logout,
+  GetChatList,
 };

@@ -146,7 +146,7 @@ function PostLists() {
                             <img
                               src={
                                 singlePost.images.length > 0
-                                  ? `${import.meta.env.VITE_USER_URL}${
+                                  ? `${import.meta.env.VITE_USER1_URL}${
                                       singlePost.images[0].image
                                     }`
                                   : "no image"

@@ -36,7 +36,7 @@ const PostDetailsModal = ({ isOpen, onClose, post }) => {
         {post.images.map((image, index) => (
           <img
             key={index}
-            src={`${import.meta.env.VITE_USER_URL}${image.image}`}
+            src={`${import.meta.env.VITE_USER1_URL}${image.image}`}
             alt={`Image ${index}`}
             className="h-[18rem] w-[18rem] object-cover"
           />

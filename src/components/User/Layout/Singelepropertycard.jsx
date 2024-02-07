@@ -7,6 +7,8 @@ import home from "../../../assets/home1.svg";
 import { useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import marker from "../../../assets/marker.png";
+import ChatBox from "../../Chat/ChatBox"; 
+
 
 import {
   Card,
@@ -312,14 +314,11 @@ function Singelepropertycard() {
               >
                 Date of post
               </Typography>
-              <Link to="/user/chat/">
-              <div className=" gap-3 cursor-pointer w-[15rem] h-12 bg-light-green-400 rounded-md flex justify-center items-center text-white mt-4 mr-8  ">
-                <FiMessageSquare />
-                <Typography>Message Owner</Typography>
-              </div>
 
-            </Link>
-              
+             
+                <div className="">
+                  <ChatBox PostData={postData} />
+                </div>
             </div>
           </div>
         </div>
@@ -343,7 +342,7 @@ function Singelepropertycard() {
             {postData.images.map((image, index) => (
               <img
                 key={index}
-                src={`${import.meta.env.VITE_USER_URL}${image.image}`}
+                src={`${import.meta.env.VITE_USER1_URL}${image.image}`}
                 alt={`image ${index + 1}`}
                 className="h-full w-full object-cover"
               />
@@ -407,7 +406,6 @@ function Singelepropertycard() {
                     lat: parseFloat(postData.lat),
                     lng: parseFloat(postData.long),
                   }}
-                  
                 />
 
                 {nearbyPlaces.results &&

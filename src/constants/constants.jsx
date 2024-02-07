@@ -17,3 +17,8 @@ export const wsApiUrl = import.meta.env.VITE_Ws_URL;
 
 
 export const Premiumurl = import.meta.env.VITE_PREMIUM_URL;
+
+export const Previouschat = import.meta.env.VITE_PREVIOUS_CHAT;
+export const Websocket = import.meta.env.VITE_WEB_SOCKET;
+
+

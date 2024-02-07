@@ -18,7 +18,7 @@ function Premium() {
 
   const paymentOfPremium = async (selectedPlan) => {
     try {
-		const responsed = await fetch(`${UserUrl}/premium/checkpremiumstatus/${userData.user_id}/`);
+		const responsed = await fetch(`${UserUrl}premium/checkpremiumstatus/${userData.user_id}/`);
     	const premiumStatus = await responsed.json();
 		if (premiumStatus.isPremium) {
 			// Show a toast or a message indicating that the user is already a premium user

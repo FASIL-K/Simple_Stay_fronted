@@ -140,6 +140,7 @@ function Profile() {
           <Typography variant="h5" color="black">
             Premium PackageDetails
           </Typography>
+          
           <CardHeader
             color="transparent"
             floated={false}

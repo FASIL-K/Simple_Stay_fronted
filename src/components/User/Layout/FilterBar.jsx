@@ -255,7 +255,8 @@ useEffect(() => {
           </Dialog>
         </Transition.Root>
 
-        <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 position-relative overflow-hidden sticky">
+            
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
             <h1 className="text-4xl font-bold tracking-tight  text-gray-900">
               Filter
@@ -288,9 +289,9 @@ useEffect(() => {
                       <Menu.Item key={option.name}>
                       {({ active }) => (
                         <a
-                          href="#"
+                          
                           className={classNames(
-                            active ? 'bg-gray-100' : '',
+                            active ? 'bg-gray-100 cursor-pointer' : '',
                             'block px-4 py-2 text-sm'
                           )}
                           onClick={() => handleSortChange(option.value)}
@@ -404,14 +405,21 @@ useEffect(() => {
               </form>
 
               {/* Product grid */}
-              <div className="lg:col-span-3">
-                {/* Wrapper for HorizontalCard */}
+                <div className="lg:col-span-3">
+              {/* Check if postData is empty */}
+              {postData?.length === 0 ? (
+                <div className="text-center text-gray-600 py-8">
+                  No posts found matching the selected filters.
+                </div>
+              ) : (
                 <div className="max-h-[500px] overflow-y-auto">
+                  {/* Render HorizontalCard component with postData */}
                   <HorizontalCard postData={postData} setPostData={setPostData} />
                 </div>
-              </div>
+              )}
             </div>
-          </section>
+            </div>
+          </section> 
         </main>
       </div>
     </div>

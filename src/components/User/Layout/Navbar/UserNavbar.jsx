@@ -65,6 +65,13 @@ export function StickyNavbar() {
               List Propertys
             </div>
             </Link>
+
+            <Link to="/user/chat/" style={{ textDecoration: 'none' }}>
+            <div className="flex items-center gap-x-1 mb-3" >
+              Chat
+            </div>
+            </Link>
+            
             
 
             <div className="mr-4">{renderNavList()}</div>

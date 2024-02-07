@@ -151,7 +151,7 @@ export function HorizontalCard({ postData, setPostData }) {
               {post.images.map((image) => (
                 <img
                   key={image.id}
-                  src={`${import.meta.env.VITE_USER_URL}${image.image}`}
+                  src={`${import.meta.env.VITE_USER1_URL}${image.image}`}
                   alt={image.altText}
                   className="h-[18rem] w-[18rem] object-cover"
                 />

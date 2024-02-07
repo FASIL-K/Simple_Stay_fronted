@@ -14,7 +14,6 @@ const navItems = [
   { path: "/owner/list-properties/", label: "Listing" },
   { path: "/owner/profile/", label: "Profile" },
   { path: "/owner/premium/", label: "Packages" },
-  
 ];
 
 function Navbar() {
@@ -25,19 +24,18 @@ function Navbar() {
   const userId = decode.user_id;
   const isPremium = decode.is_premium; // Assuming you have a field indicating premium status
 
- const DataListing = async() =>{
+  const DataListing = async () => {
     try {
-      const response = await PropertyListing(userId)
-      console.log(response,"dsadsadas");
+      const response = await PropertyListing(userId);
+      console.log(response, "dsadsadas");
       setPostData(response.data);
-      console.log(postData,"posttttttttttttttttttttdsaaaaaaaaadsa");
+      console.log(postData, "posttttttttttttttttttttdsaaaaaaaaadsa");
     } catch (error) {
       console.log(error);
     }
-  }
+  };
   useEffect(() => {
-    DataListing()
-  
+    DataListing();
   }, []);
   useEffect(() => {
     console.log(postData, "posttttttttttttttttttttdsaaaaaaaaadsa");
@@ -80,7 +78,7 @@ function Navbar() {
           </Link>
         ))}
         <DropDown />
-     
+
         {canAddPost() ? (
           <Link to="/owner/add-properties">
             <Button className="bg-green-600 hover:bg-black w-44">
@@ -94,6 +92,9 @@ function Navbar() {
             </Button>
           </Link>
         )}
+        <Link to="/owner/chat/   ">
+        <Button className="bg-blue-gray-500 hover:bg-yellow-400 w-44">Chat</Button>
+        </Link>
       </div>
     </div>
   );

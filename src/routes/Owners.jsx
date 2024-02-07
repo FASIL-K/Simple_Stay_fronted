@@ -12,6 +12,7 @@ import EditPropertys from '../pages/Owner/EditPropertys'
 import OwnerPremium from '../pages/Owner/OwnerPremium'
 import SuccessfulPayment from '../components/Owner/Pages/Payment/SuccessfullPayment'
 import CanceledPayment from '../components/Owner/Pages/Payment/Cancellpayment'
+import UserChat from '../components/Chat/ChatList'
 
 function OwnersRoutes() {
     return (
@@ -29,6 +30,8 @@ function OwnersRoutes() {
             <Route path='/premium/' element = {<OwnerPremium/>}/>
             <Route path='/payment/success' element={<SuccessfulPayment />} />
             <Route path='/payment/canceled' element={<CanceledPayment />} />
+            <Route path="/chat/"  element={ <UserChat/>  } />
+
 
             
         </Route>

@@ -105,12 +105,12 @@ function ListPropertys() {
               <img
                 src={
                   property.images.length > 0
-                    ? `${import.meta.env.VITE_USER_URL}${
+                    ? `${import.meta.env.VITE_USER1_URL}${
                         property.images[0].image
                       }`
                     : NoImage
                 }
-                alt=""
+                alt="no image"
                 className="h-full w-full object-cover rounded-t-lg"
               />
             </CardHeader>
