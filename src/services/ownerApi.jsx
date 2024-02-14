@@ -63,19 +63,29 @@ const EditPropertyImages = (id , value) =>{
 
 
 
-const   PropertyListing = (id) => {
-  return OwnerAxiosInstant.get("/property-post/" + id + "/", {
+const PropertyListing = (id, filters) => {
+  console.log(filters);
+  // Construct query params string based on provided filters
+  let queryParams = "";
+  if (filters) {
+    const { bhk_type, property_type, furnished_type } = filters;
+    if (bhk_type) queryParams += `&bhk_type=${bhk_type}`;
+    if (property_type) queryParams += `&property_type=${property_type}`;
+    if (furnished_type) queryParams += `&furnished_type=${furnished_type}`;
+  }
+
+  return OwnerAxiosInstant.get("/property-post/" + id + "/?" + queryParams, {
     withCredentials: true,
   })
-    .catch((error) => {
-      if (error.response && (error.response.status === 403 || error.response.status === 401)) {
-        RefreshToken(); // Call RefreshToken on 403 or 401 status codes
-      } else {
-        // Handle other errors or propagate them further
-        console.error('Error:', error.response);
-        throw error;
-      }
-    });
+  .catch((error) => {
+    if (error.response && (error.response.status === 403 || error.response.status === 401)) {
+      RefreshToken(); // Call RefreshToken on 403 or 401 status codes
+    } else {
+      // Handle other errors or propagate them further
+      console.error('Error:', error.response);
+      throw error;
+    }
+  });
 };
 
 

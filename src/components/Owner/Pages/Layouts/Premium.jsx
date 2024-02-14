@@ -48,7 +48,7 @@ function Premium() {
       console.log("Complete data object:", data); // Log the complete data object
 
       // Make a request to your backend to initiate the Stripe payment
-      const response = await axios.post(`${UserUrl}/premium/payment/`, data);
+      const response = await axios.post(`${UserUrl}premium/payment/`, data);
 
       // Redirect to the Stripe checkout session URL
       window.location.href = response.data.message.url;

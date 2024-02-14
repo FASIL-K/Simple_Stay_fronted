@@ -131,7 +131,7 @@ function Profile() {
           </CardHeader>
         </Card>
       )}
-      {userDetails?.premium_owner_details ? (
+      {userDetails?.user_details?.is_premium ? (
         <Card
           color="white"
           shadow={true}
@@ -176,6 +176,8 @@ function Profile() {
       ) : (
         ""
       )}
+
+
 
       {isPModalOpen && (
         <PackageDetailsModal

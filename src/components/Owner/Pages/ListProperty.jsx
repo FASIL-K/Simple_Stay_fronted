@@ -11,13 +11,16 @@ import axios from "axios";
 import Example from "./Layouts/DeleteAlertModal";
 import NoImage from "../../../assets/House-image.svg";
 import { Link } from "react-router-dom";
-import { DeactivateProperty, PropertyListing } from "../../../services/ownerApi";
-import { Checkmark } from 'react-checkmark'
-import "./ListProperty.css"
+import {
+  DeactivateProperty,
+  PropertyListing,
+} from "../../../services/ownerApi";
+import { Checkmark } from "react-checkmark";
+import "./ListProperty.css";
 
-
-function ListPropertys() {
-  const [postData, setPostData] = useState(null);
+function ListPropertys({postData,setPostData}) {
+  console.log(postData,"postssfaaaaaaaaaaaaaaaaaaaaaaaaa")
+  // const [postData, setPostData] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [propertyToDelete, setPropertyToDelete] = useState(null);
   const token = localStorage.getItem("token");
@@ -25,27 +28,27 @@ function ListPropertys() {
   const userId = decode.user_id;
   const [modalKey, setModalKey] = useState(0); // Add a key to force remounting the modal
 
-  useEffect(() => {
-    DataListing()
-    // const apiUrl = `${OwnerUrl}property-post/${userId}/`;
-    // axios
-    //   .get(apiUrl)
-    //   .then((response) => {
-    //     setPostData(response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error fetching data:", error);
-    //   });
-  }, [userId]);
+  // useEffect(() => {
+  //   DataListing();
+  //   // const apiUrl = `${OwnerUrl}property-post/${userId}/`;
+  //   // axios
+  //   //   .get(apiUrl)
+  //   //   .then((response) => {
+  //   //     setPostData(response.data);
+  //   //   })
+  //   //   .catch((error) => {
+  //   //     console.error("Error fetching data:", error);
+  //   //   });
+  // }, [userId]);
 
-  const DataListing = async() =>{
-    try {
-      const response = await PropertyListing(userId)
-      setPostData(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  // const DataListing = async () => {
+  //   try {
+  //     const response = await PropertyListing(userId);
+  //     setPostData(response.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const handleActivateClick = (property) => {
     setPropertyToDelete(property);
@@ -59,19 +62,23 @@ function ListPropertys() {
   const handleDeleteConfirmation = async () => {
     try {
       const isAvailable = !propertyToDelete.is_available;
-      const res = await DeactivateProperty(userId,propertyToDelete.id,{is_available: isAvailable })
-      if (res.status===200){
+      const res = await DeactivateProperty(userId, propertyToDelete.id, {
+        is_available: isAvailable,
+      });
+      if (res.status === 200) {
         setPostData((prevData) =>
-        prevData.map((p) =>
-          p.id === propertyToDelete.id ? { ...p, is_available: isAvailable } : p
-        )
-      );
+          prevData.map((p) =>
+            p.id === propertyToDelete.id
+              ? { ...p, is_available: isAvailable }
+              : p
+          )
+        );
 
-      // Reset state
-      setPropertyToDelete(null);
-      setShowDeleteModal(false);
-      // Increment the key to force remounting the modal
-      setModalKey((prevKey) => prevKey + 1);
+        // Reset state
+        setPropertyToDelete(null);
+        setShowDeleteModal(false);
+        // Increment the key to force remounting the modal
+        setModalKey((prevKey) => prevKey + 1);
       }
       // console.log("Activating/Deactivating property:", propertyToDelete);
 
@@ -80,9 +87,7 @@ function ListPropertys() {
 
       // await axios.put(apiUrl, { is_available: isAvailable });
 
-
       // Update the local state to mark the post as active/inactive
-      
     } catch (error) {
       console.error("Error activating/deactivating property:", error);
     }
@@ -90,8 +95,8 @@ function ListPropertys() {
 
   return (
     <div>
-      <Navbar />
-      <div className="flex justify-center items-center flex-col ">
+      
+      <div className="flex justify-center items-center  flex-col ">
         {postData?.map((property) => (
           <Card
             key={property.id}
@@ -115,15 +120,27 @@ function ListPropertys() {
               />
             </CardHeader>
             <CardBody className="p-4">
-            {property.is_verify?(
-              
-              
-              <div className="flex">
-                <Typography variant="h6" className="mr-1">Verified</Typography>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="blue" fill-rule="evenodd" d="M4.252 14H4a2 2 0 1 1 0-4h.252c.189-.734.48-1.427.856-2.064l-.18-.179a2 2 0 1 1 2.83-2.828l.178.179A7.952 7.952 0 0 1 10 4.252V4a2 2 0 1 1 4 0v.252c.734.189 1.427.48 2.064.856l.179-.18a2 2 0 1 1 2.828 2.83l-.179.178c.377.637.667 1.33.856 2.064H20a2 2 0 1 1 0 4h-.252a7.952 7.952 0 0 1-.856 2.064l.18.179a2 2 0 1 1-2.83 2.828l-.178-.179a7.952 7.952 0 0 1-2.064.856V20a2 2 0 1 1-4 0v-.252a7.952 7.952 0 0 1-2.064-.856l-.179.18a2 2 0 1 1-2.828-2.83l.179-.178A7.952 7.952 0 0 1 4.252 14M9 10l-2 2l4 4l6-6l-2-2l-4 4z"/></svg>              </div>
-              
-
-            ):""}
+              {property.is_verify ? (
+                <div className="flex">
+                  <Typography variant="h6" className="mr-1">
+                    Verified
+                  </Typography>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill="blue"
+                      fill-rule="evenodd"
+                      d="M4.252 14H4a2 2 0 1 1 0-4h.252c.189-.734.48-1.427.856-2.064l-.18-.179a2 2 0 1 1 2.83-2.828l.178.179A7.952 7.952 0 0 1 10 4.252V4a2 2 0 1 1 4 0v.252c.734.189 1.427.48 2.064.856l.179-.18a2 2 0 1 1 2.828 2.83l-.179.178c.377.637.667 1.33.856 2.064H20a2 2 0 1 1 0 4h-.252a7.952 7.952 0 0 1-.856 2.064l.18.179a2 2 0 1 1-2.83 2.828l-.178-.179a7.952 7.952 0 0 1-2.064.856V20a2 2 0 1 1-4 0v-.252a7.952 7.952 0 0 1-2.064-.856l-.179.18a2 2 0 1 1-2.828-2.83l.179-.178A7.952 7.952 0 0 1 4.252 14M9 10l-2 2l4 4l6-6l-2-2l-4 4z"
+                    />
+                  </svg>{" "}
+                </div>
+              ) : (
+                ""
+              )}
               <div className="absolute flex top-14 right-3 mt-4 mr-2">
                 {property.is_available ? (
                   <>
@@ -150,7 +167,6 @@ function ListPropertys() {
                 )}
               </div>
               <div className="absolute top-0 right-0 h-10 w-44 flex justify-around mt-4 mr-3 ">
-                
                 {property.is_available && (
                   <>
                     {/* <Typography

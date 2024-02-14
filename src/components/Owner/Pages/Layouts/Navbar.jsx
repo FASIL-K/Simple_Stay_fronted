@@ -17,7 +17,6 @@ const navItems = [
 ];
 
 function Navbar() {
-  const [arrowRotation, setArrowRotation] = useState(0);
   const [postData, setPostData] = useState(null);
   const token = localStorage.getItem("token");
   const decode = jwtDecode(token);
@@ -41,9 +40,7 @@ function Navbar() {
     console.log(postData, "posttttttttttttttttttttdsaaaaaaaaadsa");
   }, [postData]);
 
-  const rotateArrow = () => {
-    setArrowRotation(arrowRotation + 180);
-  };
+
   const canAddPost = () => {
     if (isPremium) {
       // Premium user can add posts without any limit
@@ -67,7 +64,7 @@ function Navbar() {
           Owner
         </Typography>
       </div>
-      <div className="absolute flex justify-center top-14 left-2/4 transform -translate-x-1/2 -translate-y-1/2 space-x-16">
+      <div className="absolute flex  lg:flex-row justify-center top-14 left-0 lg:left-1/4 transform lg:translate-x(-50) space-y-4 lg:space-y-0 lg:space-x-16 lg:items-center">
         {navItems.map((item, index) => (
           <Link
             key={index}
@@ -78,23 +75,26 @@ function Navbar() {
           </Link>
         ))}
         <DropDown />
-
-        {canAddPost() ? (
-          <Link to="/owner/add-properties">
-            <Button className="bg-green-600 hover:bg-black w-44">
-              + ADD Properties
+        <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4">
+          {canAddPost() ? (
+            <Link to="/owner/add-properties">
+              <Button className="bg-green-600 hover:bg-black lg:w-auto">
+                + ADD Properties
+              </Button>
+            </Link>
+          ) : (
+            <Link to="/owner/premium/">
+              <Button className="bg-yellow-500 hover:bg-yellow-400 lg:w-auto">
+                Upgrade to Premium
+              </Button>
+            </Link>
+          )}
+          <Link to="/owner/chat/">
+            <Button className="bg-blue-gray-500 hover:bg-yellow-400 lg:w-auto">
+              Chat
             </Button>
           </Link>
-        ) : (
-          <Link to="/owner/premium/   ">
-            <Button className="bg-yellow-500 hover:bg-yellow-400 w-44">
-              Upgrade to Premium
-            </Button>
-          </Link>
-        )}
-        <Link to="/owner/chat/   ">
-        <Button className="bg-blue-gray-500 hover:bg-yellow-400 w-44">Chat</Button>
-        </Link>
+        </div>
       </div>
     </div>
   );

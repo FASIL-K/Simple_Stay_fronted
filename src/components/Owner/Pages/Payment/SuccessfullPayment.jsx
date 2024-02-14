@@ -69,7 +69,7 @@ function SuccessfulPayment() {
             textAnchor="middle"
             fontSize="20"
           >
-            {success ? "✅" : "❌"}
+            {success ? "✅" : "   "}
           </text>
         </svg>
         <div className="text-center">

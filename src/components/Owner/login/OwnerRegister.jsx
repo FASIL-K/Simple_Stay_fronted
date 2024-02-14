@@ -26,7 +26,7 @@ function UserSignup() {
           console.log(values, "jjjjjjjjjjjjjjjjjjj");
           setLoading(true);
           const response = await axios.post(
-            import.meta.env.VITE_USER_URL + "/owner/register/",
+            import.meta.env.VITE_USER_URL + "owner/register/",
             values
           );
 
