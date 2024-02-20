@@ -6,6 +6,7 @@ import AdminProtect from '../ProtectedRoutes/AdminProtect'
 import PrivateRoute from '../ProtectedRoutes/PrivateRoute'
 import UserLists from '../pages/Admin/UserListing'
 import PostList from '../pages/Admin/PostList'
+import PremiumSalesReport from '../pages/Admin/PremiumSalesReport'
 
 function AdminsRoute() {
     return (
@@ -14,11 +15,11 @@ function AdminsRoute() {
           <Route path='/adminlogin/' element={<AdminLoginPage/>}/>
         </Route>
         <Route element={<AdminProtect/>}>
-            <Route path='/adminhomepage/' element={<AdminHomePage/>}/>
+            <Route path='adminhomepage' element={<AdminHomePage/>}/>
             <Route path='/users/' element={<UserLists/>} />
             <Route path='/posts/' element={<PostList/>} />
-   
-            
+            <Route path='/premuimsales/' element={<PremiumSalesReport/>} />
+             
         </Route>
     </Routes>
     )

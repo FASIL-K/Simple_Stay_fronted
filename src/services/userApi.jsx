@@ -7,18 +7,7 @@ const UserSignin = async (values) => {
     });
     return response.data;
   } catch (error) {
-    if (
-      error.response &&
-      (error.response.status === 401 || error.response.status === 403)
-    ) {
-      await RefreshToken();
-      const retryResponse = await UserAxiosInstant.post("user/token/", values, {
-        withCredentials: true,
-      });
-      return retryResponse.data;
-    } else {
-      throw error;
-    }
+   
   }
 };
 

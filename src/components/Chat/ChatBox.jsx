@@ -13,6 +13,7 @@ import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { Typography } from "@material-tailwind/react";
 import { Websocket } from "../../Constants/Constants";
 import profile from"../../assets/profileavatar.png";
+import Draggable from 'react-draggable';
 
 export default function ChatBox({ PostData }) {
   const [senderdetails, setSenderDetails] = useState({});
@@ -150,7 +151,7 @@ export default function ChatBox({ PostData }) {
         <Transition show={isOpen}>
           <Dialog
             as="div"
-            className="fixed inset-0 flex items-center justify-center z-50"
+            className="fixed inset-0 flex items-center justify-end z-50"
             onClose={onClose}
           >
             <div className="w-96 h-108 bg-gray-50 rounded-lg shadow-lg">

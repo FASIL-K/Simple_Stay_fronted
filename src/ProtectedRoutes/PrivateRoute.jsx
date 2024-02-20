@@ -12,11 +12,13 @@ function PrivateRoute() {
   if (token) {
     const decode = jwtDecode(token);
     if (decode.user_type === "owner") {
-      return <OwnerHomePage />;
+      return <Navigate to={'/owner/ownerhome/'}/>;
     } else if (decode.user_type === "user") {
-      return <UserHomePage />;
+      return <Navigate to={'/user/userhome/'}/>;
+
     } else if (decode.user_type === "admin") {
-      return <AdminHomePage />;
+      return <Navigate to={'/admin/adminhomepage/'}/>;
+
     }
   } else {
     return <Outlet />;

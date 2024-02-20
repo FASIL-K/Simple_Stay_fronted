@@ -6,7 +6,7 @@ import axios from "axios";
 import { GetChatList, getUserDetails } from "../../services/userApi";
 import { UserAxiosInstant } from "../../utils/axiosUtils";
 import profile from "../../assets/profileavatar.png";
-
+import { timeAgo } from "./TimeStamp";
 
 function UserChat() {
   const token = localStorage.getItem("token");
@@ -50,16 +50,13 @@ function UserChat() {
           email: senderDetailsResponse.user_details.email,
           profile_image: senderDetailsResponse.user_details.profile_photo,
         });
-      }else if(senderDetailsResponse){
+      } else if (senderDetailsResponse) {
         setSenderDetails({
-            id: senderDetailsResponse.id,
-            email: senderDetailsResponse.email,
-            profile_image: senderDetailsResponse.profile_photo,
-          });
-        
-      } 
-      
-      else {
+          id: senderDetailsResponse.id,
+          email: senderDetailsResponse.email,
+          profile_image: senderDetailsResponse.profile_photo,
+        });
+      } else {
         console.error("Sender details not found");
       }
     } catch (error) {
@@ -325,43 +322,55 @@ function UserChat() {
                   <div className="p-10 overflow-auto h-[83vh]">
                     {messages.map((message, index) =>
                       senderdetails.email === message.sender_email ? (
-                        <>
-                          <div class="flex justify-end mb-2" key={index}>
-                            <div class=" shadow  text-white  bg-[#262626] py-1 px-4 rounded-md max-w-xs">
+                        <div
+                          className="flex flex-col items-end mb-2"
+                          key={index}
+                        >
+                          <div className="flex justify-end">
+                            <div className="shadow text-white bg-[#262626] py-1 px-4 rounded-md max-w-xs mb-1">
                               {message.message}
                             </div>
-                            <div className="rounded-full flex justify-center items-center -me-3 ms-2 w-10 h-10 ">
+                            <div className="rounded-full flex justify-center items-center -me-3 ms-2 w-10 h-10">
                               <img
-                                src={
-                                  senderdetails.profile_image
-                                    ? senderdetails.profile_image
-                                    : profile
-                                }
+                                src={senderdetails.profile_image || profile}
                                 alt=""
                                 className="rounded-full w-10 h-10"
                               />
                             </div>
                           </div>
-                        </>
+                          <div>
+                            <h1 className="text-xs">
+                              {timeAgo(message.timestamp) === "NaN years ago"
+                                ? "just now"
+                                : timeAgo(message.timestamp)}
+                            </h1>
+                          </div>
+                        </div>
                       ) : (
-                        <>
-                          <div class="flex mb-2" key={index}>
-                            <div className="rounded-full flex justify-center items-center -ms-4 me-1 w-10 h-10 ">
+                        <div
+                          className="flex flex-col items-start mb-2"
+                          key={index}
+                        >
+                          <div className="flex">
+                            <div className="rounded-full flex justify-center items-center -ms-4 me-1 w-10 h-10">
                               <img
-                                src={
-                                  recipientdetails.profile_image
-                                    ? recipientdetails.profile_image
-                                    : profile
-                                }
+                                src={recipientdetails.profile_image || profile}
                                 alt=""
                                 className="rounded-full w-10 h-10"
                               />
                             </div>
-                            <div class="shadow py-1 px-4  text-white bg-[#262626] rounded-md max-w-xs">
+                            <div className="shadow py-1 px-4 text-white bg-[#262626] rounded-md max-w-xs">
                               {message.message}
                             </div>
                           </div>
-                        </>
+                          <div>
+                            <h1 className="text-xs">
+                              {timeAgo(message.timestamp) === "NaN years ago"
+                                ? "just now"
+                                : timeAgo(message.timestamp)}
+                            </h1>
+                          </div>
+                        </div>
                       )
                     )}
                   </div>
@@ -374,7 +383,7 @@ function UserChat() {
                           ref={messageRef}
                           className="bg-transparent w-full text-white placeholder-gray-700 text-sm focus:outline-none"
                         />
-                         <svg
+                        <svg
                           onClick={onButtonClicked}
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 24 24"
@@ -384,7 +393,6 @@ function UserChat() {
                           <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
                         </svg>
                       </div>
-                      
                     </div>
                   </div>
                 </div>

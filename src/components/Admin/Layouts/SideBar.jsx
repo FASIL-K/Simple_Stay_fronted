@@ -24,14 +24,19 @@ import { useNavigate } from "react-router-dom";
 
 export function SideBar() {
   const navigate = useNavigate()
-
-
+  
+  const handledashboard = ()=>{
+    navigate("/admin/adminhomepage/")
+  }
   const handleUserList = () =>{
     navigate("/admin/users/")
 
   }
   const handlePostList = ()=>{
     navigate("/admin/posts/")
+  }
+  const handlePremiumSales =()=>{
+    navigate("/admin/premuimsales/")
   }
   
   const handleLogout = () =>{
@@ -49,7 +54,7 @@ export function SideBar() {
       <List>
         
        
-        <ListItem>
+        <ListItem onClick={handledashboard}>
           <ListItemPrefix>
             <InboxIcon className="h-5 w-5" />
           </ListItemPrefix>
@@ -69,11 +74,11 @@ export function SideBar() {
           </ListItemPrefix>
           Post
         </ListItem>
-        <ListItem>
+        <ListItem onClick={handlePremiumSales}>
           <ListItemPrefix>
             <UserCircleIcon className="h-5 w-5" />
           </ListItemPrefix>
-          Profile
+          Premium Sales Report
         </ListItem>
         <ListItem>
           <ListItemPrefix>

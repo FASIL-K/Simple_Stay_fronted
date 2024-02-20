@@ -11,7 +11,7 @@ import axios from "axios";
 import { Carousel } from "@material-tailwind/react";
 import { FaRegHeart } from "react-icons/fa";
 import { IoShareSocialOutline } from "react-icons/io5";
-import { Avatar } from "@material-tailwind/react";  
+import { Avatar } from "@material-tailwind/react";
 import { FiMessageSquare } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
@@ -22,6 +22,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
+import profile from "../../../assets/profileavatar.png"
 
 export function HorizontalCard({ postData, setPostData }) {
   console.log(postData, "posttttttttttttttttttttttttttttttttt");
@@ -61,14 +62,13 @@ export function HorizontalCard({ postData, setPostData }) {
   };
 
   const handleHeartClick = async (postId) => {
-
     setSelectedPostId(postId);
 
     try {
       const isSaved = await IsSave(userId, postId);
       if (isSaved.data.saved) {
         // If already saved, call the Unsave API to remove the post from wishlist
-         await Unsave(userId, postId);
+        await Unsave(userId, postId);
 
         // Update savedProperties state by removing the postId
         setSavedProperties((prevSavedProperties) =>
@@ -117,17 +117,17 @@ export function HorizontalCard({ postData, setPostData }) {
     }
   }, [postData, userId]);
 
-  useEffect(() => {
-    const apiUrl = `${OwnerUrl}post/`;
-    axios
-      .get(apiUrl)
-      .then((response) => {
-        setPostData(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   const apiUrl = `${OwnerUrl}post/`;
+  //   axios
+  //     .get(apiUrl)
+  //     .then((response) => {
+  //       setPostData(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching data:", error);
+  //     });
+  // }, []);
 
   if (!postData) {
     return (
@@ -141,10 +141,12 @@ export function HorizontalCard({ postData, setPostData }) {
 
   return (
     <div>
-      {postData.map((post) => (
+     {postData
+  .filter((post) => post.is_verify) // Filter out posts where is_verify is false
+  .map((post) => (
         <Card
           key={post.id}
-          className="w-full max-w-[68rem] flex-row shadow-2xl mb-36 rounded-3xl relative"
+          className="w-full  max-w-[68rem] flex-row shadow-2xl mb-36 rounded-3xl relative"
         >
           <CardHeader shadow={false} floated={false} className="m-0 shrink-0">
             <Carousel className="rounded-xl h-[18rem] w-[18rem] mb-7 ml-3 mt-2">
@@ -160,21 +162,21 @@ export function HorizontalCard({ postData, setPostData }) {
 
             <div className="flex justify-start ml-6 mb-6 gap-3">
               <Avatar
-                src={post.owner_detail.profile_photo}
+                
+                src={post.owner_detail.profile_photo||profile }
                 alt="avatar"
                 size="lg"
               />
               <div>
                 <Typography variant="h6" color="black">
                   {post.owner_detail.email}
-                  {post.owner_detail.is_premium ?
-                   <CheckCircleOutlineOutlinedIcon 
-                    className="text-blue-700 ml-3" />:""
-}
-
+                  {post.owner_detail.is_premium ? (
+                    <CheckCircleOutlineOutlinedIcon className="text-blue-700 ml-3" />
+                  ) : (
+                    ""
+                  )}
                 </Typography>
-                
-                
+
                 <Typography
                   color="gray"
                   className="-mt-1 flex justify-start"
@@ -222,8 +224,7 @@ export function HorizontalCard({ postData, setPostData }) {
           <div className="absolute gap-3 cursor-pointer bottom-9 right-20 w-[15rem] h-12 bg-light-green-400 rounded-md flex justify-center items-center text-white">
             <FiMessageSquare />
             <Link to="/user/chat/">
-            <Typography>Message Owner</Typography>
-
+              <Typography>Message Owner</Typography>
             </Link>
           </div>
         </Card>

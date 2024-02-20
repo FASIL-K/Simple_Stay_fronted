@@ -26,7 +26,7 @@ function UserSignup() {
     onSubmit: async (values) => {
       try {
         setLoading(true);
-        const response = await axios.post(import.meta.env.VITE_USER_URL + '/user/register/', values);
+        const response = await axios.post(import.meta.env.VITE_USER_URL + 'user/register/', values);
         setEmail(values.email);
         setLoading(false);
         toast.success(response.data.msg);

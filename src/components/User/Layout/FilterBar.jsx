@@ -15,7 +15,7 @@
 
 import { Fragment, useEffect, useState } from "react";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import {
   ChevronDownIcon,
   FunnelIcon,
@@ -26,13 +26,15 @@ import {
 import { HorizontalCard } from "./PropertyCard";
 import axios from "axios";
 import { UserUrl } from "../../../Constants/Constants";
+import { useLocation } from "react-router-dom";
+import { Input } from "@material-tailwind/react";
 
 const sortOptions = [
-    { name: "Oldest", value: "created_at" },
-    { name: "Newest", value: "-created_at" },
-    { name: "Price: Low to High", value: "monthly_rent" },
-    { name: "Price: High to Low", value: "-monthly_rent" },
-  ];
+  { name: "Oldest", value: "created_at" },
+  { name: "Newest", value: "-created_at" },
+  { name: "Price: Low to High", value: "monthly_rent" },
+  { name: "Price: High to Low", value: "-monthly_rent" },
+];
 
 const filters = [
   {
@@ -72,47 +74,90 @@ function classNames(...classes) {
 }
 
 export default function FilterBar({ postData, setPostData }) {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const city = queryParams.get("city");
+  const type = queryParams.get("type");
+  console.log(city, type, "ssssssssssssssssssssssss");
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
- const [selectedFilters, setSelectedFilters] = useState({
-  BHK: [],            // Default to an empty array
-  PropertyType: [],   // Default to an empty array
-  FurnishType: [],    // Default to an empty array
-});
-const [selectedSortOption, setSelectedSortOption] = useState(null);
+  const [selectedFilters, setSelectedFilters] = useState({
+    BHK: [], // Default to an empty array
+    PropertyType: [], // Default to an empty array
+    FurnishType: [], // Default to an empty array
+  });
 
+  const [selectedSortOption, setSelectedSortOption] = useState(null);
 
-const handleSortChange = (option) => {
+  const handleSortChange = (option) => {
     setSelectedSortOption(option);
   };
-  
-  
-console.log(selectedSortOption,"edeededd");
 
+  console.log(selectedSortOption, "edeededd");
 
-const fetchDatas = async () => {
+  const searchPost = async (keyword) => {
+    if (keyword !== "") {
+      try {
+      const cityParam = city ? `city=${city}` : '';
+      const typeParam = type ? `type=${type}` : '';
+      const request = await axios.get(
+        `${UserUrl}user/filterpost/?search=${keyword}&${cityParam}&${typeParam}`
+      );
+      const postData = request.data;
+      setPostData(postData);
+      } catch (error) {
+        console.error("Error searching for users:", error);
+        toast.error("An error occurred while searching for users.");
+      }
+    } else {
+      // Handle case when keyword is empty
+    }
+  };
+
+  const fetchDatas = async () => {
     try {
       // Construct the URL with the selected sort option and filters
-      const sortParam = selectedSortOption ? `ordering=${selectedSortOption}` : '';
-      const bhkFilter = selectedFilters.BHK.length > 0 ? `bhk_type=${selectedFilters.BHK.join(",")}` : '';
-      const propertyTypeFilter = selectedFilters.PropertyType.length > 0 ? `property_type=${selectedFilters.PropertyType.join(",")}` : '';
-      const furnishTypeFilter = selectedFilters.FurnishType.length > 0 ? `furnished_type=${selectedFilters.FurnishType.join(",")}` : '';
-  
-      const filtersQueryString = [bhkFilter, propertyTypeFilter, furnishTypeFilter].filter(Boolean).join('&');
-  
-      const response = await axios.get(`${UserUrl}user/filterpost/?${filtersQueryString}&${sortParam}`);
-  
+      const sortParam = selectedSortOption
+        ? `ordering=${selectedSortOption}`
+        : "";
+      const bhkFilter =
+        selectedFilters.BHK.length > 0
+          ? `bhk_type=${selectedFilters.BHK.join(",")}`
+          : "";
+      const propertyTypeFilter =
+        selectedFilters.PropertyType.length > 0
+          ? `property_type=${selectedFilters.PropertyType.join(",")}`
+          : "";
+      const furnishTypeFilter =
+        selectedFilters.FurnishType.length > 0
+          ? `furnished_type=${selectedFilters.FurnishType.join(",")}`
+          : "";
+      // Construct the city and type query parameters
+      const cityParam = city ? `city=${city}` : "";
+      const typeParam = type ? `type=${type}` : "";
+      const filtersQueryString = [
+        bhkFilter,
+        propertyTypeFilter,
+        furnishTypeFilter,
+        cityParam,
+        typeParam,
+      ]
+        .filter(Boolean)
+        .join("&");
+
+      const response = await axios.get(
+        `${UserUrl}user/filterpost/?${filtersQueryString}&${sortParam}`
+      );
       setPostData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
-useEffect(() => {
+  useEffect(() => {
+    fetchDatas();
+  }, [selectedSortOption, selectedFilters, setPostData]);
 
-  fetchDatas();
-}, [selectedSortOption,selectedFilters, setPostData]);
-
-  console.log(selectedFilters,"fdsafdad");
+  console.log(selectedFilters, "fdsafdad");
 
   const handleFilterChange = (filterType, value) => {
     setSelectedFilters((prevFilters) => ({
@@ -256,12 +301,19 @@ useEffect(() => {
         </Transition.Root>
 
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 position-relative overflow-hidden sticky">
-            
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
             <h1 className="text-4xl font-bold tracking-tight  text-gray-900">
               Filter
             </h1>
 
+            <div className="flex bg-blue-gray-50 rounded">
+              <Input
+                variant="standard"
+                placeholder="Search"
+                onChange={(e) => searchPost(e.target.value)}
+                icon={<MagnifyingGlassIcon className="h-5 w-5" />}
+              />
+            </div>
             <div className="flex items-center">
               <Menu as="div" className="relative inline-block text-left">
                 <div>
@@ -286,20 +338,19 @@ useEffect(() => {
                   <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="py-1">
                       {sortOptions.map((option) => (
-                      <Menu.Item key={option.name}>
-                      {({ active }) => (
-                        <a
-                          
-                          className={classNames(
-                            active ? 'bg-gray-100 cursor-pointer' : '',
-                            'block px-4 py-2 text-sm'
+                        <Menu.Item key={option.name}>
+                          {({ active }) => (
+                            <a
+                              className={classNames(
+                                active ? "bg-gray-100 cursor-pointer" : "",
+                                "block px-4 py-2 text-sm"
+                              )}
+                              onClick={() => handleSortChange(option.value)}
+                            >
+                              {option.name}
+                            </a>
                           )}
-                          onClick={() => handleSortChange(option.value)}
-                        >
-                          {option.name}
-                        </a>
-                      )}
-                    </Menu.Item>
+                        </Menu.Item>
                       ))}
                     </div>
                   </Menu.Items>
@@ -405,21 +456,24 @@ useEffect(() => {
               </form>
 
               {/* Product grid */}
-                <div className="lg:col-span-3">
-              {/* Check if postData is empty */}
-              {postData?.length === 0 ? (
-                <div className="text-center text-gray-600 py-8">
-                  No posts found matching the selected filters.
-                </div>
-              ) : (
-                <div className="max-h-[500px] overflow-y-auto">
-                  {/* Render HorizontalCard component with postData */}
-                  <HorizontalCard postData={postData} setPostData={setPostData} />
-                </div>
-              )}
+              <div className="lg:col-span-3">
+                {/* Check if postData is empty */}
+                {postData?.length === 0 ? (
+                  <div className="text-center text-gray-600 py-8">
+                    No posts found matching the selected filters.
+                  </div>
+                ) : (
+                  <div className="max-h-[500px] overflow-y-auto">
+                    {/* Render HorizontalCard component with postData */}
+                    <HorizontalCard
+                      postData={postData}
+                      setPostData={setPostData}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
-            </div>
-          </section> 
+          </section>
         </main>
       </div>
     </div>

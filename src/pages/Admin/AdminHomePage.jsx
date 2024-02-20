@@ -1,5 +1,6 @@
 import React from 'react'
 import { SideBar } from '../../components/Admin/Layouts/SideBar'
+import AdminLandingPage from '../../components/Admin/Pages/AdminLandingPage'
 
 function AdminHomePage() {
   return (
@@ -7,6 +8,7 @@ function AdminHomePage() {
     <div className="flex">
 
     <SideBar/>
+  <AdminLandingPage/>
     </div>
 
   )

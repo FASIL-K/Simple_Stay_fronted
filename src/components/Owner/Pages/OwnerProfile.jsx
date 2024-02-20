@@ -12,6 +12,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { PackageDetailsModal } from "./Layouts/PackageDetailsModal";
+import profile from "../../../assets/profileavatar.png"
+import { OwnerUrl } from "../../../Constants/Constants";
 
 function Profile() {
   const [userDetails, setUserDetails] = useState(null);
@@ -47,9 +49,10 @@ function Profile() {
 
   useEffect(() => {
     const fetchUserDetails = async () => {
+      
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/owner/user-details/",
+          `${OwnerUrl}user-details/`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -93,10 +96,10 @@ function Profile() {
               size="xxl"
               className="left-3"
               variant="circular"
+             
               src={
-                userDetails && userDetails.user_details
-                  ? userDetails.user_details.profile_photo
-                  : userDetails.profile_photo
+                userDetails?.user_details?.profile_photo
+                  || userDetails?.profile_photo||profile
               }
               alt="User Avatar"
             />
@@ -113,9 +116,10 @@ function Profile() {
               </div>
               <div className="flex items-center justify-between ">
                 <Typography variant="h5" color="blue-gray">
-                  {userDetails && userDetails.user_details
-                    ? userDetails.user_details.name
-                    : userDetails.name}
+                  {/* {userDetails && userDetails.user_details
+                    ? userDetails.user_details.name ||userDetails.email
+                    : userDetails.name} */}
+                    {userDetails?.name || userDetails?.email|| userDetails?.user_details?.name||userDetails?.user_details?.email ||""}
                 </Typography>
 
                 <div className="flex items-center gap-0 absolute right-3">
@@ -123,9 +127,9 @@ function Profile() {
                 </div>
               </div>
               <Typography color="blue-gray">
-                {userDetails && userDetails.user_details
-                  ? userDetails.user_details.phone
-                  : userDetails.phone}
+                
+                  {userDetails?.phone ||  userDetails?.user_details?.phone||""}
+
               </Typography>
             </div>
           </CardHeader>

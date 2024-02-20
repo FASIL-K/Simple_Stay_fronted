@@ -22,7 +22,8 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Example() {
+export default function Example(city,searchPost) {
+  console.log(city,"dsadasdsadx");
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const toggleDrawer = () => {
@@ -66,23 +67,18 @@ export default function Example() {
                   <img className="h-8 w-auto" src={logo} alt="Your Company" />
                 </div>
                 </Link>
-                <div className="hidden sm:ml-6 sm:block ml-2">
-                  <Input
-                    variant="standard"
-                    icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-                  />
-                </div>
+               
               </div>
 
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                <div className="flex items-center gap-x-1">
+                <div className="flex items-center gap-x-1 mt">
                   <Link to="/user/userprofile/myactivity/">
                     <Button
                       variant="text"
                       size="sm"
                       className="hidden sm:inline-block"
                     >
-                      <FaRegHeart className="h-6 w-9 mb-3 text-white" />
+                      <FaRegHeart className="h-6 w-9  text-white" />
                     </Button>
                   </Link>
                   <div className="flex ml-auto mr-2 mt-3">

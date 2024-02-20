@@ -11,6 +11,8 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from 'react'
 import { Link } from "react-router-dom";
+import profile from "../../../assets/profileavatar.png"
+import { OwnerUrl } from "../../../Constants/Constants";
 
 function OwnerHome() {
   const [userDetails, setUserDetails] = useState(null);
@@ -27,7 +29,7 @@ function OwnerHome() {
     const fetchUserDetails = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/owner/user-details/",
+          `${OwnerUrl}user-details/`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -82,7 +84,8 @@ function OwnerHome() {
               size="xxl"
               className="left-3"
               variant="circular"
-              src={userDetails&&userDetails.profile_photo}
+              src={userDetails?.profile_photo || userDetails?.user_details?.profile_photo || profile}
+
               alt="User Avatar"
             />
 
@@ -92,12 +95,14 @@ function OwnerHome() {
               </div>
               <div className="flex items-center justify-between ">
                 <Typography variant="h5" color="blue-gray">
-                 {userDetails && userDetails.name}
+                 {/* {userDetails && userDetails.name?userDetails.name :userDetails&&userDetails.user_details.name} */}
+                 {userDetails?.name || userDetails?.email|| userDetails?.user_details?.email||userDetails?.user_details?.name||""}
                 </Typography>
 
               </div>
               <Typography color="blue-gray">
-              {userDetails&& userDetails.phone ? userDetails.phone :userDetails&&    userDetails.email}
+              {/* {userDetails&& userDetails.phone ? userDetails.phone :userDetails&& userDetails.user_details.email} */}
+              {userDetails?.phone ||userDetails?.user_details?.phone ||""}
               </Typography>
             </div>
           </CardHeader>

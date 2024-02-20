@@ -11,6 +11,8 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { Loader } from "../../../Loader/Loading";
 import { set } from "date-fns";
+import profile from "../../../../assets/profileavatar.png";
+import { OwnerUrl } from "../../../../Constants/Constants";
 
 const customStyles = {
   overlay: {
@@ -30,9 +32,11 @@ const validationSchema = Yup.object().shape({
 
 const UserProfileModal = ({ isOpen, onClose, userDetails, setUserDetails }) => {
   const [loading, setLoading] = useState(false);
-  const [profileImage, setProfileImage] = useState(userDetails?.profileImage || "");
+  const [profileImage, setProfileImage] = useState(
+    userDetails?.profileImage || ""
+  );
   const [selectedImage, setSelectedImage] = useState(null);
-  const [emailField, setEmailField] = useState(userDetails?.email || "");
+  const [emailField, setEmailField] = useState(userDetails?.email || userDetails?.user_details?.email || "");
   const [formChanged, setFormChanged] = useState(false);
 
   const token = localStorage.getItem("token");
@@ -63,9 +67,10 @@ const UserProfileModal = ({ isOpen, onClose, userDetails, setUserDetails }) => {
         // Only append the image if it's selected
         formData.append("profile_photo", selectedImage);
       }
+      OwnerUrl
 
       const response = await axios.patch(
-        `http://127.0.0.1:8000/owner/profileEdit/${ownerId}/`,
+        `${OwnerUrl}profileEdit/${ownerId}/`,
         formData,
         {
           headers: {
@@ -95,11 +100,11 @@ const UserProfileModal = ({ isOpen, onClose, userDetails, setUserDetails }) => {
 
   useEffect(() => {
     if (userDetails) {
-      setEmailField(userDetails.email || "");
+      setEmailField(userDetails.email ||userDetails?.user_details?.email  ||"");
     }
   }, [userDetails]);
 
-  console.log(userDetails,'dusereeeeeeeeeeeeeeeee');
+  console.log(userDetails, "dusereeeeeeeeeeeeeeeee");
   const handleModalClose = (formik) => {
     formik.resetForm(); // Reset the form when the modal is closed
     onClose();
@@ -128,10 +133,13 @@ const UserProfileModal = ({ isOpen, onClose, userDetails, setUserDetails }) => {
           </Typography>
           <Formik
             initialValues={{
-                name: userDetails?.name || "",
+              name: userDetails?.name || userDetails?.user_details?.name   || "",
               email: emailField,
-              phone: userDetails?.phone || "",
-              profileImage: userDetails?.profileImage || "",
+              phone: userDetails?.phone || userDetails?.user_details?.phone || "",
+              profileImage:
+                userDetails?.profile_photo ||
+                userDetails?.user_details?.profile_photo ||
+                profile,
             }}
             validationSchema={validationSchema}
             onSubmit={(values, helpers) => EditProfiles(values, helpers)}
@@ -149,7 +157,10 @@ const UserProfileModal = ({ isOpen, onClose, userDetails, setUserDetails }) => {
                       />
                     ) : (
                       <Avatar
-                        src={userDetails ? userDetails.profile_photo : ""}
+                        src={
+                          userDetails?.profile_photo
+                            || userDetails?.user_details?.profile_photo || profile
+                        }
                         alt="avatar"
                         size="xxl"
                       />

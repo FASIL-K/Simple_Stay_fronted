@@ -63,9 +63,9 @@ function Premium() {
     const fetchPackages = async () => {
       try {
         const response = await PremiumAxiosInstant.get(
-          "http://127.0.0.1:8000/premium/packagesview/"
+          "packagesview/"
         );
-        console.log(response);
+        console.log(response,"dxasddddddddddddddddd");
         setPackages(response.data);
         setLoading(false);
       } catch (error) {
@@ -188,13 +188,13 @@ function Premium() {
 					  
                     </li>
                   </ul>
-                  <a
+                  <button
                     rel="noopener noreferrer"
                     onClick={() => paymentOfPremium(pkg)}
-                    className="inline-block w-full px-5 py-3 font-semibold tracki text-center rounded dark:bg-violet-400 dark:text-gray-900"
+                    className="inline-block w-full px-5 py-3 font-semibold tracki text-center rounded dark:bg-violet-400 dark:text-gray-900 hover:text-blue-900 transform transition"
                   >
                     BuyNow
-                  </a>
+                  </button>
                 </div>
               </div>
             ))}
