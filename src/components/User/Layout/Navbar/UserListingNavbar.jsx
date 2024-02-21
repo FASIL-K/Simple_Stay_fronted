@@ -8,7 +8,7 @@ import { FaRegHeart } from "react-icons/fa";
 import avatar from "../../../../assets/profileavatar.png";
 import { Button, Input } from "@material-tailwind/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import { UserUrl } from "../../../../Constants/Constants";
+import { UserUrl } from "../../../../constants/constant";
 import { Link } from "react-router-dom/dist";
 
 const navigation = [

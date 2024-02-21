@@ -15,7 +15,8 @@ import {
     Tab,
     IconButton,
     Tooltip,
-  } from "@material-tailwind/react";import { UserUrl } from "../../../Constants/Constants";
+  } from "@material-tailwind/react";
+import { UserUrl } from "../../../constants/constant";
 import PackageDetailsModal from "../Layouts/PremiumPackageDetailModal";
   
 function PremiumSalesReports() {

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Example from "../Layout/Navbar/UserListingNavbar";
 import { HorizontalCard } from "../Layout/PropertyCard";
 import axios from "axios";
-import { UserUrl } from "../../../Constants/Constants";
+import { UserUrl } from "../../../constants/constant";
 import { Breadcrumbs, Input } from "@material-tailwind/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { toast } from "react-toastify";

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { UserUrl, OwnerUrl, AdminUrl, SavedPostUrl, Premiumurl } from '../Constants/Constants';
+import { UserUrl, OwnerUrl, AdminUrl, SavedPostUrl, Premiumurl } from '../constants/constant';
 
 const CreateAxiosClient = (baseURL) => {
   const client = axios.create({

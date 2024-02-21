@@ -5,7 +5,7 @@ import Navbar from "./Layouts/Navbar";
 import { Typography } from "@material-tailwind/react";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import { Card, CardHeader, CardBody } from "@material-tailwind/react";
-import { OwnerUrl } from "../../../Constants/Constants";
+import { OwnerUrl } from "../../../constants/constant";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import Example from "./Layouts/DeleteAlertModal";

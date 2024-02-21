@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import { UserUrl } from "../../../../Constants/Constants";
+import { UserUrl } from "../../../../constants/constant";
 
 function SuccessfulPayment() {
   const queryParameters = new URLSearchParams(window.location.search);

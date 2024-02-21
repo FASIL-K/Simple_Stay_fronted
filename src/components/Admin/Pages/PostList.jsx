@@ -20,7 +20,7 @@ import {
 
 import { toast } from "react-toastify";
 import axios from "axios";
-import { AdminUrl } from "../../../Constants/Constants";
+import { AdminUrl } from "../../../constants/constant";
 import PostDetailsModal from "../Layouts/PostModalDetails";
 
 function PostLists() {

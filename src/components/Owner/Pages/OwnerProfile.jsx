@@ -13,7 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { PackageDetailsModal } from "./Layouts/PackageDetailsModal";
 import profile from "../../../assets/profileavatar.png"
-import { OwnerUrl } from "../../../Constants/Constants";
+import { OwnerUrl } from "../../../constants/constant";
 
 function Profile() {
   const [userDetails, setUserDetails] = useState(null);
