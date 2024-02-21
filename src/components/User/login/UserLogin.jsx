@@ -8,11 +8,11 @@ import { useGoogleLogin } from '@react-oauth/google';
 import { UserGoogleSignin, UserGoogleSignup, UserSignin} from "../../../services/userApi";
 import axios from "axios";
 import {jwtDecode} from 'jwt-decode';
-import { UserUrl } from "../../../constants/constants/"
 import logoImage from "../../../assets/main-logo.svg"; 
 import {Loader} from '../../Loader/Loading'
 import { setUserDetails } from "../../../redux/User";
 import { useDispatch } from "react-redux";
+import { UserUrl } from "../../../constants/constants";
 
 
 function UserLogin() {
