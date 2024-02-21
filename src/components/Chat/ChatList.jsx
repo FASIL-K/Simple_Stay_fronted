@@ -6,7 +6,7 @@ import { GetChatList, getUserDetails } from "../../services/userApi";
 import { UserAxiosInstant } from "../../utils/axiosUtils";
 import profile from "../../assets/profileavatar.png";
 import { timeAgo } from "./TimeStamp";
-import { Websocket } from "../../Constants/Constants";
+import { Websocket } from "../../Constants/Constants.jsx";
 
 function UserChat() {
   const token = localStorage.getItem("token");
