@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import { Previouschat, Websocket } from "../../Constants/Constants";
 import { w3cwebsocket as W3CWebSocket, client } from "websocket";
 import axios from "axios";
 import { GetChatList, getUserDetails } from "../../services/userApi";
 import { UserAxiosInstant } from "../../utils/axiosUtils";
 import profile from "../../assets/profileavatar.png";
 import { timeAgo } from "./TimeStamp";
+import { Websocket } from "../../Constants/Constants";
 
 function UserChat() {
   const token = localStorage.getItem("token");
