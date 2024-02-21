@@ -5,7 +5,7 @@ import {
     Typography,
     CardFooter,
   } from "@material-tailwind/react";
-  import { OwnerUrl } from "../../../constants/constant";
+  import { OwnerUrl } from "../../../constants/constants";
   import { useEffect, useState } from "react";
   import axios from "axios";
   import { Carousel } from "@material-tailwind/react";

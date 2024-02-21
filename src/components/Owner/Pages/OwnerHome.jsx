@@ -12,7 +12,7 @@ import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from 'react'
 import { Link } from "react-router-dom";
 import profile from "../../../assets/profileavatar.png"
-import { OwnerUrl } from "../../../constants/constant";
+import { OwnerUrl } from "../../../constants/constants";
 
 function OwnerHome() {
   const [userDetails, setUserDetails] = useState(null);

@@ -26,7 +26,7 @@ import {
 
 import { toast } from "react-toastify";
 import axios from "axios";
-import { AdminUrl } from "../../../constants/constant";
+import { AdminUrl } from "../../../constants/constants";
 
 
 

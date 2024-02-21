@@ -12,7 +12,7 @@ import axios from "axios";
 import { Loader } from "../../../Loader/Loading";
 import { set } from "date-fns";
 import profile from "../../../../assets/profileavatar.png";
-import { OwnerUrl } from "../../../../constants/constant";
+import { OwnerUrl } from "../../../../constants/constants";
 
 const customStyles = {
   overlay: {

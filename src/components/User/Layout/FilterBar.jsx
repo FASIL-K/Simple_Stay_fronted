@@ -25,7 +25,7 @@ import {
 } from "@heroicons/react/20/solid";
 import { HorizontalCard } from "./PropertyCard";
 import axios from "axios";
-import { UserUrl } from "../../../constants/constant";
+import { UserUrl } from "../../../constants/constants";
 import { useLocation } from "react-router-dom";
 import { Input } from "@material-tailwind/react";
 

@@ -5,7 +5,7 @@ import Navbar from './Layouts/Navbar';
 import PropertyForm from '../../../components/Owner/Pages/PostCreation';
 import { useParams } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
-import { OwnerUrl } from '../../../constants/constant';
+import { OwnerUrl } from '../../../constants/constants';
 import { PropertyEdit } from '../../../services/ownerApi';
 
 function EditProperty() {

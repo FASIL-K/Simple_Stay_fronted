@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import axios from "axios";
-import { UserUrl } from "../../../constants/constant";
+import { UserUrl } from "../../../constants/constants";
 
 
 function AdminLandingPage() {

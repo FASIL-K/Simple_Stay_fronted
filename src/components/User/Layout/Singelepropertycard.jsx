@@ -24,7 +24,7 @@ import {
   MenuItem,
   Button,
 } from "@material-tailwind/react";
-import { OwnerUrl } from "../../../constants/constant";
+import { OwnerUrl } from "../../../constants/constants";
 import axios from "axios";
 import { CreateSaved, IsSave, Unsave } from "../../../services/postApi";
 import {

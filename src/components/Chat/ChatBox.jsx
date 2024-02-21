@@ -13,7 +13,7 @@ import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { Typography } from "@material-tailwind/react";
 // import profile from"../../assets/profileavatar.png";
 import Draggable from 'react-draggable';
-import { Websocket } from "../../constants/constant";
+import { Websocket } from "../../constants/constants";
 Websocket
 export default function ChatBox({ PostData }) {
   const [senderdetails, setSenderDetails] = useState({});

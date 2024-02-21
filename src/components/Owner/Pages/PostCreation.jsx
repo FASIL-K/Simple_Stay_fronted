@@ -15,7 +15,7 @@ import {
 } from "../../../services/ownerApi";
 import axios, { Axios } from "axios";
 import { jwtDecode } from "jwt-decode";
-import { OwnerUrl } from "../../../constants/constant";
+import { OwnerUrl } from "../../../constants/constants";
 import { useNavigate } from "react-router-dom";
 import { formatISO } from "date-fns";
 import { format } from "date-fns";

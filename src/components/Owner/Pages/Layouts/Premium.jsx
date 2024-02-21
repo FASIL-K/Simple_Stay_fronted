@@ -4,7 +4,7 @@ import { PackageList } from "../../../../services/premiumApi";
 import { PremiumAxiosInstant } from "../../../../utils/axiosUtils";
 import axios from "axios";
 import {jwtDecode} from "jwt-decode";
-import { UserUrl } from "../../../../constants/constant";
+import { UserUrl } from "../../../../constants/constants";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
