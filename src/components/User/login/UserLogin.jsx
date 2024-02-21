@@ -12,7 +12,6 @@ import logoImage from "../../../assets/main-logo.svg";
 import {Loader} from '../../Loader/Loading'
 import { setUserDetails } from "../../../redux/User";
 import { useDispatch } from "react-redux";
-import { UserUrl } from "../../../constants/constants";
 
 
 function UserLogin() {
@@ -50,7 +49,7 @@ function UserLogin() {
     const Regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     return Regex.test(email);
   }
-  UserUrl
+  
 
   // After form submission
   const FormHandlerLogin = async (e) => {
