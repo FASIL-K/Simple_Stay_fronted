@@ -30,6 +30,7 @@ function App() {
             
           </Route>
 
+
           <Route path="/admin/*" element={<AdminsRoute />} />
           <Route path="/owner/*" element={<OwnersRoutes />} />
           <Route path="/user/*" element={<UsersRoutes />} />
