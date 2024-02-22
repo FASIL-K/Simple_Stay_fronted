@@ -32,6 +32,7 @@ function UserSignup() {
         toast.success(response.data.msg);
         navigate('/emailcheck', { state: { email: values.email } }); // Pass email as a parameter
       } catch (error) {
+        console.log(error.response.data,"dsadsadas");
         setLoading(false);
 
         if (error.response && error.response.data) {
