@@ -185,7 +185,6 @@ export {
   PropertyListing,
   DeactivateProperty,
   PropertyEdit,
-  OwnerLogout,
   EditProfile,
 }
 
