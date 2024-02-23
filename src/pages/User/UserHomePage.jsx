@@ -1,7 +1,7 @@
 import React from 'react';
 import UserHome from '../../components/User/pages/UserHome';
-import { StickyNavbar } from '../../components/User/Layout/Navbar/UserNavbar/';
 import Footer from '../../components/User/Layout/Footer/Footer';
+import { StickyNavbar } from '../../components/User/Layout/Navbar/UserNavbar';
 
 function UserHomePage() {
   return (
