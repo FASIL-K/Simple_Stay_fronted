@@ -10,6 +10,7 @@ import PropertySinglePages from '../pages/User/PropertySinglePage';
 import UserProfile from '../pages/User/UserProfile';
 import UserProfileActivity from '../pages/User/UserProfileActivity';
 import UserChat from '../components/Chat/ChatList';
+import ErrorPage from '../pages/404Page/404';
 
 function UsersRoutes() {
     
@@ -30,6 +31,8 @@ function UsersRoutes() {
 
 
         </Route>
+        <Route element={<ErrorPage />} path='/*' />
+
          
         </Routes>
         

@@ -7,6 +7,7 @@ import PrivateRoute from '../ProtectedRoutes/PrivateRoute'
 import UserLists from '../pages/Admin/UserListing'
 import PostList from '../pages/Admin/PostList'
 import PremiumSalesReport from '../pages/Admin/PremiumSalesReport'
+import ErrorPage from '../pages/404Page/404'
 
 function AdminsRoute() {
     return (
@@ -19,8 +20,10 @@ function AdminsRoute() {
             <Route path='/users/' element={<UserLists/>} />
             <Route path='/posts/' element={<PostList/>} />
             <Route path='/premuimsales/' element={<PremiumSalesReport/>} />
-             
+
         </Route>
+        <Route element={<ErrorPage />} path='/*' />
+
     </Routes>
     )
 }

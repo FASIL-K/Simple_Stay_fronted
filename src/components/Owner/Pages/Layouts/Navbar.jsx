@@ -20,6 +20,7 @@ function Navbar() {
   const [postData, setPostData] = useState(null);
   const token = localStorage.getItem("token");
   const decode = jwtDecode(token);
+  console.log(decode,"decodddddddddddddddd");
   const userId = decode.user_id;
   const isPremium = decode.is_premium; // Assuming you have a field indicating premium status
 

@@ -13,6 +13,7 @@ import OwnerPremium from '../pages/Owner/OwnerPremium'
 import SuccessfulPayment from '../components/Owner/Pages/Payment/SuccessfullPayment'
 import CanceledPayment from '../components/Owner/Pages/Payment/Cancellpayment'
 import UserChat from '../components/Chat/ChatList'
+import ErrorPage from '../pages/404Page/404'
 
 function OwnersRoutes() {
     return (
@@ -35,6 +36,8 @@ function OwnersRoutes() {
 
             
         </Route>
+        <Route element={<ErrorPage />} path='/*' />
+
     </Routes>
     
       )
