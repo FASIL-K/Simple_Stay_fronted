@@ -106,7 +106,7 @@ function ListPropertys({ postData, setPostData }) {
               floated={false}
               className="m-4 w-2/5 shrink-0  rounded relative"
             >
-              {/* <img
+              <img
                 src={
                   property.images.length > 0
                     ? `${import.meta.env.VITE_USER1_URL}${
@@ -116,17 +116,17 @@ function ListPropertys({ postData, setPostData }) {
                 }
                 alt="no image"
                 className="h-full w-full object-cover rounded-t-lg"
-              /> */}
+              />
 
-            <img
+            {/* <img
               src={
-                property.images.length > 0
-                  ? `https://simplestayback.molla.cloud/${property.images[0].image}`
+                property.images.length > 
+                  ? `https://simplestayback.molla.cloud${property.images[0].image}`
                   : NoImage
               }
               alt="no image"
               className="h-full w-full object-cover rounded-t-lg"
-            />
+            /> */}
 
             </CardHeader>
             <CardBody className="p-4">
