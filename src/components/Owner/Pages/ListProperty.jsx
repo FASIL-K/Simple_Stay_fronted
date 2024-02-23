@@ -27,7 +27,7 @@ function ListPropertys({ postData, setPostData }) {
   const decode = jwtDecode(token);
   const userId = decode.user_id;
   const [modalKey, setModalKey] = useState(0); // Add a key to force remounting the modal
-  const User1Url ='https://simplestayback.molla.cloud'
+  // const User1Url ='https://simplestayback.molla.cloud'
   // useEffect(() => {
   //   DataListing();
   //   // const apiUrl = `${OwnerUrl}property-post/${userId}/`;
@@ -118,15 +118,16 @@ function ListPropertys({ postData, setPostData }) {
                 className="h-full w-full object-cover rounded-t-lg"
               /> */}
 
-              <img
-                src={
-                  property.images.length > 0
-                    ? `${User1Url}${property.images[0].image}`
-                    : NoImage
-                }
-                alt="no image"
-                className="h-full w-full object-cover rounded-t-lg"
-              />
+            <img
+              src={
+                property.images.length > 0
+                  ? `https://simplestayback.molla.cloud${property.images[0].image}`
+                  : NoImage
+              }
+              alt="no image"
+              className="h-full w-full object-cover rounded-t-lg"
+            />
+
             </CardHeader>
             <CardBody className="p-4">
               {property.is_verify ? (
