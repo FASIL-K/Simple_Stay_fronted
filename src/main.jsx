@@ -16,14 +16,12 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={Store}>
     <PersistGate loading={null} persistor={persistor}>
       <GoogleOAuthProvider clientId="234749252477-m0eslhuqqefrmq44rm37nqp5aedpsi8n.apps.googleusercontent.com">
-        <React.StrictMode>
           <TailwindThemeProvider>
             <MuiThemeProvider theme={theme}>
               <CssBaseline />
               <App />
             </MuiThemeProvider>
           </TailwindThemeProvider>
-        </React.StrictMode>
       </GoogleOAuthProvider>
     </PersistGate>
   </Provider>
