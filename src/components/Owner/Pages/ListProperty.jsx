@@ -5,7 +5,7 @@ import Navbar from "./Layouts/Navbar";
 import { Typography } from "@material-tailwind/react";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import { Card, CardHeader, CardBody } from "@material-tailwind/react";
-import { OwnerUrl, User1Url } from "../../../constants/constants";
+import { OwnerUrl } from "../../../constants/constants";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import Example from "./Layouts/DeleteAlertModal";
@@ -27,7 +27,7 @@ function ListPropertys({ postData, setPostData }) {
   const decode = jwtDecode(token);
   const userId = decode.user_id;
   const [modalKey, setModalKey] = useState(0); // Add a key to force remounting the modal
-
+  const User1Url ='https://simplestayback.molla.cloud'
   // useEffect(() => {
   //   DataListing();
   //   // const apiUrl = `${OwnerUrl}property-post/${userId}/`;
