@@ -121,7 +121,7 @@ function ListPropertys({ postData, setPostData }) {
             <img
               src={
                 property.images.length > 0
-                  ? `https://simplestayback.molla.cloud${property.images[0].image}`
+                  ? `https://simplestayback.molla.cloud/${property.images[0].image}`
                   : NoImage
               }
               alt="no image"
