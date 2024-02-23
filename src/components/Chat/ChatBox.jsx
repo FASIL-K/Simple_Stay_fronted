@@ -11,7 +11,7 @@ import { UserAxiosInstant } from "../../utils/axiosUtils";
 import {jwtDecode} from "jwt-decode";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { Typography } from "@material-tailwind/react";
-// import profile from"../../assets/profileavatar.png";
+import profile from"../../assets/profileavatar.png";
 import Draggable from 'react-draggable';
 import { Websocket } from "../../constants/constants";
 Websocket
