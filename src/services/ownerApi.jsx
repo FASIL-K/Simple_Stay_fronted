@@ -104,14 +104,14 @@ const PropertyEdit = (userId,propertyId) =>{
 
 
 
-const OwnerLogout = () =>{
-  let authToken = localStorage.getItem('token');
-  const refreshToken = JSON.parse(authToken);
-  return OwnerAxiosInstant.post("logout/",{refresh_token : refreshToken.refresh}, {withCredentials:true})
-  .catch((error) => {
-      error.response;
-  });
-}
+// const OwnerLogout = () =>{
+//   let authToken = localStorage.getItem('token');
+//   const refreshToken = JSON.parse(authToken);
+//   return OwnerAxiosInstant.post("logout/",{refresh_token : refreshToken.refresh}, {withCredentials:true})
+//   .catch((error) => {
+//       error.response;
+//   });
+// }
 
 
 

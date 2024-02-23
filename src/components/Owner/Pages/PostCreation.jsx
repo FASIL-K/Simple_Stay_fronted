@@ -106,7 +106,8 @@ function PropertyForm({ isEditing, initialValues }) {
       try {
         const geonamesUsername = "Fasil";
         const response = await axios.get(
-          `http://api.geonames.org/searchJSON?country=IN&maxRows=1000&username=${geonamesUsername}`
+          `https://secure.geonames.org/searchJSON?country=IN&maxRows=1000&username=${geonamesUsername}`
+
         );
 
         // Extract city names from the response

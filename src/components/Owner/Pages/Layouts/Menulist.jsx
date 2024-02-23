@@ -12,8 +12,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { resetState } from "../../../../redux/User";
-import { OwnerLogout } from "../../../../services/ownerApi";
 import { toast } from "react-toastify";
+import { logout } from "../../../../services/userApi";
 
 export default function DropDown() {
   const navigate = useNavigate()
@@ -22,10 +22,11 @@ export default function DropDown() {
   
   const handlelogout = async () => {
     try {
-      const res = await OwnerLogout()
-        localStorage.removeItem('token');
+      const res = await logout()
+        console.log("logouttttttttttttttt"); // Redirect to the login page after logout
+
         dispatch(resetState());
-        navigate('/login'); // Redirect to the login page after logout
+        navigate('/login');
     } catch (error) {
       console.log(error);
       toast.error("somthing error")
