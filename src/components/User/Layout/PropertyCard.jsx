@@ -142,7 +142,7 @@ export function HorizontalCard({ postData, setPostData }) {
   return (
     <div>
      {postData
-  .filter((post) => post.is_verify) // Filter out posts where is_verify is false
+  .filter((post) => post.is_verify&& post.is_available  ) // Filter out posts where is_verify is false
   .map((post) => (
         <Card
           key={post.id}
