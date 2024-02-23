@@ -7,6 +7,8 @@
 
 export const UserUrl = import.meta.env.VITE_USER_URL;
 
+export const User1Url = import.meta.env.VITE_USER1_URL;
+
 export const OwnerUrl = import.meta.env.VITE_OWNER_URL;
 
 export const AdminUrl = import.meta.env.VITE_ADMIN_URL;

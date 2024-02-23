@@ -5,7 +5,7 @@ import Navbar from "./Layouts/Navbar";
 import { Typography } from "@material-tailwind/react";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import { Card, CardHeader, CardBody } from "@material-tailwind/react";
-import { OwnerUrl } from "../../../constants/constants";
+import { OwnerUrl, User1Url } from "../../../constants/constants";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import Example from "./Layouts/DeleteAlertModal";
@@ -18,8 +18,8 @@ import {
 import { Checkmark } from "react-checkmark";
 import "./ListProperty.css";
 
-function ListPropertys({postData,setPostData}) {
-  console.log(postData,"postssfaaaaaaaaaaaaaaaaaaaaaaaaa")
+function ListPropertys({ postData, setPostData }) {
+  console.log(postData, "postssfaaaaaaaaaaaaaaaaaaaaaaaaa");
   // const [postData, setPostData] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [propertyToDelete, setPropertyToDelete] = useState(null);
@@ -95,7 +95,6 @@ function ListPropertys({postData,setPostData}) {
 
   return (
     <div>
-      
       <div className="flex justify-center items-center  flex-col ">
         {postData?.map((property) => (
           <Card
@@ -107,12 +106,22 @@ function ListPropertys({postData,setPostData}) {
               floated={false}
               className="m-4 w-2/5 shrink-0  rounded relative"
             >
-              <img
+              {/* <img
                 src={
                   property.images.length > 0
                     ? `${import.meta.env.VITE_USER1_URL}${
                         property.images[0].image
                       }`
+                    : NoImage
+                }
+                alt="no image"
+                className="h-full w-full object-cover rounded-t-lg"
+              /> */}
+
+              <img
+                src={
+                  property.images.length > 0
+                    ? `${User1Url}${property.images[0].image}`
                     : NoImage
                 }
                 alt="no image"
