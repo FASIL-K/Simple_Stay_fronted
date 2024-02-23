@@ -36,6 +36,7 @@ function UserChat() {
     }
   }, [senderdetails.id]);
 
+  console.log(ChatList,"chat listrtrtrtrtrtrtrtrtrtrtrtrtrtr");
   const RecieverChat = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -280,7 +281,7 @@ function UserChat() {
                       </div>
                       <div className="flex justify-start items-center">
                         <p className="text-gray-800 capitalize">
-                          {user?.username}
+                          {user?.username||user.email}
                         </p>
                       </div>
                       <div>{user?.someValue}</div>
