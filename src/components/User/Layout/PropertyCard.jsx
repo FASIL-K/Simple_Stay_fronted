@@ -32,7 +32,7 @@ export function HorizontalCard({ postData, setPostData }) {
 
   const token = localStorage.getItem("token");
   const decode = jwtDecode(token);
-  const userId = decode.id;
+  const userId = decode.user_id;
   const tokenData = JSON.parse(token);
   const accessToken = tokenData ? tokenData.access : null;
 
