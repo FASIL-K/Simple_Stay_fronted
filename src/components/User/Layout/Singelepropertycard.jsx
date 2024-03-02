@@ -344,7 +344,7 @@ function Singelepropertycard() {
                 key={index}
                 src={`${import.meta.env.VITE_USER1_URL}${image.image}`}
                 alt={`image ${index + 1}`}
-                className="h-full w-full object-cover"
+                className="h-full w-full object-fill"
               />
             ))}
           </Carousel>
