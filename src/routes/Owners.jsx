@@ -20,6 +20,8 @@ function OwnersRoutes() {
         <Routes>
         <Route exact element={<PrivateRoute/>}>
             <Route path='/signup/' element={<OwnerSignupPage/>} />
+            <Route element={<ErrorPage />} path='/*' />
+
         </Route>
         <Route exact element = {<OwnerProtect/>}>
             

@@ -14,6 +14,7 @@ function AdminsRoute() {
         <Routes>
         <Route element={<PrivateRoute/>}>
           <Route path='/adminlogin/' element={<AdminLoginPage/>}/>
+          <Route element={<ErrorPage />} path='/*' />
         </Route>
         <Route element={<AdminProtect/>}>
             <Route path='adminhomepage' element={<AdminHomePage/>}/>

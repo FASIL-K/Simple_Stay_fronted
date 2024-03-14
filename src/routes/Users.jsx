@@ -19,6 +19,8 @@ function UsersRoutes() {
          <Route exact element = {<PrivateRoute/>}>
             <Route path='/login/' element={<UserLoginPage/>}/> 
             <Route path='/signup/' element={<UserSignupPage/>}/> 
+            <Route element={<ErrorPage />} path='/*' />
+
         </Route>
         <Route exact element = {<UserProtect/>}>
 
